@@ -97,7 +97,7 @@ export default function ProjectsPage() {
       <section className="p-section">
         <div className="p-section-head">
           <h1 className="p-h1">Projects</h1>
-          <p>Hackathon builds, personal tools, and coursework — all focused on practical impact.</p>
+          <p>Hackathon builds, personal tools, and coursework. Focused on practical impact.</p>
         </div>
 
         <div
