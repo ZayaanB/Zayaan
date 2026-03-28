@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Leaf, Zap } from 'lucide-react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
+import { CursorDrivenParticleTypography } from '@/components/ui/cursor-driven-particles-typography';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -21,9 +22,20 @@ export default function Nav() {
     <nav className="p-nav">
       <div className="p-container p-nav-inner">
         {/* Brand */}
-        <Link className="p-brand" href="/">
+        <Link className="p-brand" href="/" style={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
           <Image className="p-brand-icon" src="/favicon.svg" alt="Z logo" width={36} height={36} />
-          <span>Zayaan Bhanwadia</span>
+          
+          <div className="hidden sm:block w-[155px] h-[30px] ml-2 relative overflow-hidden shrink-0">
+            <CursorDrivenParticleTypography 
+              text="Zayaan Bhanwadia" 
+              fontSize={18} 
+              particleDensity={1} 
+              particleSize={0.7}
+              dispersionStrength={8}
+              color="#ffffff" 
+            />
+          </div>
+          <span className="sm:hidden ml-2 font-bold text-[var(--p-text)] text-sm shrink-0">Zayaan Bhanwadia</span>
         </Link>
 
         {/* Links */}
