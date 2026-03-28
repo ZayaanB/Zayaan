@@ -109,8 +109,6 @@ export function CursorDrivenParticleTypography({
       containerWidth = container.clientWidth;
       containerHeight = container.clientHeight;
 
-      // Guard against zero-sized containers (e.g., hidden or initial mount) 
-      // to prevent IndexSizeError in getImageData.
       if (containerWidth === 0 || containerHeight === 0) return;
 
       const dpr = window.devicePixelRatio || 1;
