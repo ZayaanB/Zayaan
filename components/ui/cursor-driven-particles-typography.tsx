@@ -153,14 +153,22 @@ export function CursorDrivenParticleTypography({
 
       ctx.clearRect(0, 0, containerWidth, containerHeight);
 
-      const effectiveFontSize = Math.min(fontSize, containerWidth * 0.8);
+      // Dynamically auto-scale the font to fit perfectly within the container horizontally
+      let effectiveFontSize = fontSize;
+      ctx.font = `bold ${effectiveFontSize}px ${fontFamily}`;
+      let textWidth = ctx.measureText(text).width;
+      
+      if (textWidth > containerWidth * 0.95) {
+        effectiveFontSize = effectiveFontSize * ((containerWidth * 0.95) / textWidth);
+      }
+
       ctx.fillStyle = textColor;
       ctx.font = `bold ${effectiveFontSize}px ${fontFamily}`;
-      ctx.textAlign = "left";
+      ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // Align cleanly left for standard navbar flow
-      ctx.fillText(text, 0, containerHeight / 2 + 2); // Minor pixel adjustment for baseline centering
+      // Align perfectly center mathematically
+      ctx.fillText(text, containerWidth / 2, containerHeight / 2 + 2);
 
       const textCoordinates = ctx.getImageData(
         0,
@@ -229,8 +237,12 @@ export function CursorDrivenParticleTypography({
       if (isLiteModeRef.current) return;
       
       const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      
+      // We pass global mouse movements through to the canvas relatively to avoid pointer-event blocking underneath
+      mouseX = clientX - rect.left;
+      mouseY = clientY - rect.top;
     };
 
     const handleMouseLeave = () => {
@@ -252,14 +264,15 @@ export function CursorDrivenParticleTypography({
       resizeObserver.observe(containerRef.current);
     }
 
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
+    // Attach to Window instead of Canvas so we don't need pointer-events-auto blocking the 3D layer
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       clearTimeout(timeoutId);
       resizeObserver.disconnect();
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
   }, [
@@ -277,7 +290,7 @@ export function CursorDrivenParticleTypography({
     <div
       ref={containerRef}
       className={cn(
-        "w-full h-full flex items-center justify-start relative touch-none",
+        "w-full h-full flex items-center justify-start relative touch-none pointer-events-none",
         className
       )}
     >

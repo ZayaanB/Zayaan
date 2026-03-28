@@ -23,7 +23,7 @@ export default function Nav() {
       <div className="p-container p-nav-inner">
         {/* Brand */}
         <Link className="p-brand" href="/" style={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-          <Image className="p-brand-icon" src="/favicon.svg" alt="Z logo" width={36} height={36} />
+          <Image className="p-brand-icon" src="/ZayaanBhanwadia/favicon.svg" alt="Z logo" width={36} height={36} />
           
           <div className="hidden sm:block w-[155px] h-[30px] ml-2 relative overflow-hidden shrink-0">
             <CursorDrivenParticleTypography 
@@ -66,7 +66,7 @@ export default function Nav() {
             {isLiteMode ? <Leaf size={16} color="var(--p-primary)" /> : <Zap size={16} color="var(--p-accent-cyan)" />}
             <span className="hidden sm:inline">{isLiteMode ? 'Lite' : 'Full'}</span>
           </button>
-          <a className="p-btn p-btn-secondary" href="/documents/resume.pdf" download>
+          <a className="p-btn p-btn-secondary" href="/ZayaanBhanwadia/documents/resume.pdf" download>
             Download Resume
           </a>
         </div>

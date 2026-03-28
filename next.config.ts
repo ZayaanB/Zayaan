@@ -1,23 +1,16 @@
 import type { NextConfig } from 'next';
 
+// basePath/assetPrefix are required for GitHub Pages project site deployment at /ZayaanBhanwadia.
+// Remove both if you ever switch to a custom domain (e.g. zayaanbhanwadia.com).
 const nextConfig: NextConfig = {
+  output: 'export',
+  basePath: '/ZayaanBhanwadia',
+  assetPrefix: '/ZayaanBhanwadia/',
   reactStrictMode: false,
-  // Allow three/webgpu and TSL imports
   transpilePackages: ['three'],
-  experimental: {
-    // Enable WebGPU headers in dev
-  },
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          // Required for SharedArrayBuffer / WebGPU cross-origin isolation
-          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
-        ],
-      },
-    ];
+  images: {
+    // Static export requires unoptimized images (Next.js Image Optimization is server-side only)
+    unoptimized: true,
   },
 };
 

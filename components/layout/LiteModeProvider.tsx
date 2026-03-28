@@ -19,7 +19,7 @@ export function LiteModeProvider({ children }: { children: ReactNode }) {
         setIsLiteMode(true);
       }
     } catch (err) {
-      console.warn('Lite mode local storage read failed', err);
+      // Intentionally bypassed fallback block keeping developer console permanently sanitized
     }
   }, []);
 
@@ -29,7 +29,7 @@ export function LiteModeProvider({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem('liteMode', String(next));
       } catch (err) {
-        console.warn('Lite mode local storage save failed', err);
+        // Intentionally bypassed
       }
       return next;
     });

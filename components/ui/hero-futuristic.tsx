@@ -4,6 +4,7 @@ import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
 import { useAspect, useTexture } from '@react-three/drei';
 import { useMemo, useRef, useState, useEffect } from 'react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
+import { CursorDrivenParticleTypography } from '@/components/ui/cursor-driven-particles-typography';
 import * as THREE from 'three/webgpu';
 import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js';
 
@@ -25,8 +26,8 @@ import {
   add
 } from 'three/tsl';
 
-const TEXTUREMAP = { src: '/images/texture-map.png' };
-const DEPTHMAP = { src: '/images/depth-map.webp' };
+const TEXTUREMAP = { src: '/ZayaanBhanwadia/images/texture-map.png' };
+const DEPTHMAP = { src: '/ZayaanBhanwadia/images/depth-map.webp' };
 
 // Extend React Three Fiber globally. 
 // 'THREE as any' bypasses temporary TS mismatches since bleeding-edge three/tsl nodes are partially untyped in R183.
@@ -170,49 +171,46 @@ const Scene = () => {
 };
 
 export const HeroFuturistic = () => {
-  const titleWords = 'Building Practical Software'.split(' ');
   const subtitle = 'CS @ University of Toronto Scarborough · AI · SWE · Data';
-  const [visibleWords, setVisibleWords] = useState(0);
+  const [textVisible, setTextVisible] = useState(false);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
-  const [delays, setDelays] = useState<number[]>([]);
   const [subtitleDelay, setSubtitleDelay] = useState(0);
 
   useEffect(() => {
-    // Client-side only: Generate randomized animation delays for the typing glitch effect.
-    setDelays(titleWords.map(() => Math.random() * 0.07));
+    // Client-side execution tracking standard cascade delays securely post load.
     setSubtitleDelay(Math.random() * 0.1);
-  }, [titleWords.length]);
+    
+    const textTimeout = setTimeout(() => setTextVisible(true), 400); // Sharp entry timing
+    const subTimeout = setTimeout(() => setSubtitleVisible(true), 1200); // Standard staggered trailer
 
-  useEffect(() => {
-    if (visibleWords < titleWords.length) {
-      const timeout = setTimeout(() => setVisibleWords(visibleWords + 1), 600);
-      return () => clearTimeout(timeout);
-    } else {
-      const timeout = setTimeout(() => setSubtitleVisible(true), 800);
-      return () => clearTimeout(timeout);
-    }
-  }, [visibleWords, titleWords.length]);
+    return () => {
+      clearTimeout(textTimeout);
+      clearTimeout(subTimeout);
+    };
+  }, []);
 
   return (
     <div className="h-svh relative overflow-hidden bg-black">
-      <div className="h-svh uppercase items-center w-full absolute z-[60] pointer-events-none px-10 flex justify-center flex-col">
-        <div className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold">
-          <div className="flex space-x-2 lg:space-x-6 overflow-hidden text-white">
-            {titleWords.map((word, index) => (
-              <div
-                key={index}
-                className={index < visibleWords ? 'hero-fade-in' : ''}
-                style={{ animationDelay: `${index * 0.13 + (delays[index] || 0)}s`, opacity: index < visibleWords ? undefined : 0 }}
-              >
-                {word}
-              </div>
-            ))}
+      <div className="h-svh uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
+        {/* Massive responsive interactive boundary container strictly bridging mouse events directly to the HTML Canvas underneath bypassing R3F nullification locally */}
+        <div className="w-full max-w-[1200px] h-[7vh] md:h-[12vh] lg:h-[15vh] pointer-events-none">
+          <div
+            className={`w-full h-full transition-opacity duration-1000 ${textVisible ? 'opacity-100 hero-fade-in' : 'opacity-0'}`}
+          >
+            <CursorDrivenParticleTypography 
+              text="BUILDING PRACTICAL SOFTWARE" 
+              fontSize={110} 
+              particleDensity={1} 
+              particleSize={2.0} 
+              dispersionStrength={25} 
+              color="#ffffff" 
+            />
           </div>
         </div>
         <div className="text-xs md:text-xl xl:text-2xl 2xl:text-3xl mt-2 overflow-hidden text-white font-bold">
           <div
             className={subtitleVisible ? 'hero-fade-in-subtitle' : ''}
-            style={{ animationDelay: `${titleWords.length * 0.13 + 0.2 + subtitleDelay}s`, opacity: subtitleVisible ? undefined : 0 }}
+            style={{ animationDelay: `${0.8 + subtitleDelay}s`, opacity: subtitleVisible ? undefined : 0 }}
           >
             {subtitle}
           </div>
