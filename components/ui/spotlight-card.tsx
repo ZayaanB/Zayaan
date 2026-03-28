@@ -27,7 +27,7 @@ const sizeMap = {
   lg: 'w-80 h-96',
 };
 
-// Uses scroll (element-relative) coords — works from both INSIDE and OUTSIDE the card
+// Uses element-relative coords to ensure accurate mouse tracking both inside and outside the card boundary.
 const beforeAfterStyles = `
   [data-glow]::before,
   [data-glow]::after {
@@ -99,7 +99,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
     if (!card) return;
 
     const syncPointer = (e: PointerEvent) => {
-      // Element-relative coordinates — correct from both inside and outside
+      // Calculate element-relative coordinates for accurate spotlight rendering
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;

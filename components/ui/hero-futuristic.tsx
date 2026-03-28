@@ -27,9 +27,11 @@ import {
 const TEXTUREMAP = { src: '/texture-map.png' };
 const DEPTHMAP = { src: '/depth-map.webp' };
 
+// Extend React Three Fiber globally. 
+// 'THREE as any' bypasses temporary TS mismatches since bleeding-edge three/tsl nodes are partially untyped in R183.
 extend(THREE as any);
 
-// Post Processing component
+// Post Processing Component
 const PostProcessing = ({
   strength = 1,
   threshold = 1,
@@ -52,7 +54,7 @@ const PostProcessing = ({
     const uScanProgress = uniform(0);
     progressRef.current = uScanProgress;
 
-    // Create a green overlay that follows the scan line (accent color)
+    // Create a green/cyan overlay that follows the scan line to match the site's branding.
     const scanPos = float(uScanProgress.value);
     const uvY = uv().y;
     const scanWidth = float(0.05);
@@ -161,7 +163,7 @@ export const HeroFuturistic = () => {
   const [subtitleDelay, setSubtitleDelay] = useState(0);
 
   useEffect(() => {
-    // Только на клиенте: генерируем случайные задержки для глитча
+    // Client-side only: Generate randomized animation delays for the typing glitch effect.
     setDelays(titleWords.map(() => Math.random() * 0.07));
     setSubtitleDelay(Math.random() * 0.1);
   }, [titleWords.length]);
@@ -218,6 +220,8 @@ export const HeroFuturistic = () => {
       <Canvas
         flat
         gl={async (props) => {
+          // IMPORTANT: forceWebGL bypasses a native swap-chain conflict between R3F's requestAnimationFrame and three/webgpu hooks,
+          // ensuring the 3D element morphs correctly on all devices without freezing.
           const renderer = new (THREE as any).WebGPURenderer({ ...(props as any), forceWebGL: true });
           await renderer.init();
           return renderer;
