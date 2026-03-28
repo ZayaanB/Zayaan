@@ -13,6 +13,9 @@ export default function Footer() {
           <a href="https://devpost.com/zayaan1509" target="_blank" rel="noopener noreferrer">
             Devpost
           </a>
+          <a href="mailto:zayaan1509@gmail.com">
+            Contact
+          </a>
         </div>
       </div>
     </footer>
