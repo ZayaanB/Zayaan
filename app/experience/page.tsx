@@ -17,7 +17,7 @@ const experience = [
     ],
   },
   {
-    title: 'DECA International Career Development Conference Qualifier',
+    title: 'International Career Development Conference Qualifier — DECA',
     org: 'DECA Inc. — International',
     date: 'Sep 2024 – Jun 2025',
     bullets: [
