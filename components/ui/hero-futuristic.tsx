@@ -1,131 +1,141 @@
 'use client';
 
-// ─── 3D Hero: WebGPU blob with post-processing scan overlay ───────────────────
-import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
-import { useAspect, useTexture } from '@react-three/drei';
-import { useMemo, useRef, useState, useEffect } from 'react';
+// ─── Hero: binary globe background + particle title overlay ───────────────────
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
 import { CursorDrivenParticleTypography } from '@/components/ui/cursor-driven-particles-typography';
-import * as THREE from 'three/webgpu';
-import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js';
-import {
-  abs, blendScreen, float, mod, mx_cell_noise_float,
-  oneMinus, smoothstep, texture, uniform, uv, vec2, vec3, pass, mix, add,
-} from 'three/tsl';
 
-// GitHub Pages basePath prefix applied to public assets
-const TEXTUREMAP = { src: '/ZayaanBhanwadia/images/texture-map.png' };
-const DEPTHMAP = { src: '/ZayaanBhanwadia/images/depth-map.webp' };
+// Renders a single character as a canvas texture (used for 0/1 sprites)
+function createCharTexture(char: string, color: string): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, 64, 64);
+  ctx.font = 'bold 48px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = color;
+  ctx.fillText(char, 32, 32);
+  return new THREE.CanvasTexture(canvas);
+}
 
-// 'THREE as any' bypasses TS mismatches — three/tsl nodes are partially untyped in R183
-extend(THREE as any);
-
-// ─── Post-processing: bloom + animated scan line ──────────────────────────────
-const PostProcessing = ({
-  strength = 1,
-  threshold = 1,
-  fullScreenEffect = true,
-}: {
-  strength?: number;
-  threshold?: number;
-  fullScreenEffect?: boolean;
-}) => {
-  const { gl, scene, camera } = useThree();
+// ─── Binary Globe: sphere of 1s and 0s ───────────────────────────────────────
+const BinaryGlobe = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const { isLiteMode } = useLiteMode();
-  const progressRef = useRef({ value: 0 });
-  const renderOnce = useRef(false);
+  const isLiteModeRef = useRef(isLiteMode);
 
-  const render = useMemo(() => {
-    const postProcessing = new (THREE as any).PostProcessing(gl as any);
-    const scenePass = pass(scene, camera);
-    const scenePassColor = scenePass.getTextureNode('output');
-    const bloomPass = bloom(scenePassColor, strength, 0.5, threshold);
+  useEffect(() => { isLiteModeRef.current = isLiteMode; }, [isLiteMode]);
 
-    const uScanProgress = uniform(0);
-    progressRef.current = uScanProgress;
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-    // Neon green (#00ff88) scan overlay tuned to match the site accent
-    const uvY = uv().y;
-    const scanWidth = float(0.05);
-    const scanLine = smoothstep(0, scanWidth, abs(uvY.sub(float(uScanProgress.value))));
-    const greenOverlay = vec3(0, 1, 0.533).mul(oneMinus(scanLine)).mul(0.4);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 2000);
+    camera.position.set(0, 0, 500);
 
-    const withScanEffect = mix(
-      scenePassColor,
-      add(scenePassColor, greenOverlay),
-      fullScreenEffect ? smoothstep(0.9, 1.0, oneMinus(scanLine)) : 1.0
-    );
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
 
-    postProcessing.outputNode = withScanEffect.add(bloomPass);
-    return postProcessing;
-  }, [camera, gl, scene, strength, threshold, fullScreenEffect]);
+    // Neon green sprites matching site accent colour
+    const COLOR = '#00ff88';
+    const tex0 = createCharTexture('0', COLOR);
+    const tex1 = createCharTexture('1', COLOR);
 
-  useFrame(({ clock }) => {
-    if (isLiteMode) {
-      if (!renderOnce.current) { render.render(); renderOnce.current = true; }
-      return;
+    // Position particles uniformly on a sphere using the golden angle
+    const PARTICLE_COUNT = 1500;
+    const RADIUS = Math.min(container.clientWidth, container.clientHeight) * 0.28;
+    const goldenAngle = Math.PI * (1 + Math.sqrt(5));
+
+    const pos0: number[] = [];
+    const pos1: number[] = [];
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const phi = Math.acos(1 - (2 * i) / PARTICLE_COUNT);
+      const theta = goldenAngle * i;
+      const x = RADIUS * Math.sin(phi) * Math.cos(theta);
+      const y = RADIUS * Math.cos(phi);
+      const z = RADIUS * Math.sin(phi) * Math.sin(theta);
+      (Math.random() > 0.5 ? pos1 : pos0).push(x, y, z);
     }
-    renderOnce.current = false;
-    progressRef.current.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
-    render.render();
-  }, 1);
 
-  return null;
+    const makePoints = (positions: number[], tex: THREE.CanvasTexture) => {
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      return new THREE.Points(geo, new THREE.PointsMaterial({
+        size: 18, map: tex, transparent: true, opacity: 0.85,
+        sizeAttenuation: true, depthWrite: false,
+      }));
+    };
+
+    const globe = new THREE.Group();
+    globe.add(makePoints(pos0, tex0));
+    globe.add(makePoints(pos1, tex1));
+    scene.add(globe);
+
+    // Subtle mouse tilt
+    let targetTiltX = 0;
+    let targetTiltZ = 0;
+    const onMouseMove = (e: MouseEvent) => {
+      targetTiltX = (e.clientY / window.innerHeight - 0.5) * -0.4;
+      targetTiltZ = (e.clientX / window.innerWidth - 0.5) * 0.15;
+    };
+    window.addEventListener('mousemove', onMouseMove);
+
+    let hasRenderedLite = false;
+    let animId = 0;
+
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+
+      if (isLiteModeRef.current) {
+        if (!hasRenderedLite) { renderer.render(scene, camera); hasRenderedLite = true; }
+        return;
+      }
+      hasRenderedLite = false;
+
+      globe.rotation.y += 0.003;
+      globe.rotation.x += (targetTiltX - globe.rotation.x) * 0.03;
+      globe.rotation.z += (targetTiltZ - globe.rotation.z) * 0.03;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      if (!container) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('resize', handleResize);
+      globe.traverse((obj) => {
+        if (obj instanceof THREE.Points) {
+          obj.geometry.dispose();
+          (obj.material as THREE.PointsMaterial).map?.dispose();
+          (obj.material as THREE.PointsMaterial).dispose();
+        }
+      });
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={containerRef} className="absolute inset-0 pointer-events-none" />;
 };
 
-// ─── Scene: depth-mapped texture with pointer distortion ─────────────────────
-const WIDTH = 300;
-const HEIGHT = 300;
-
-const Scene = () => {
-  const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src]);
-  const { isLiteMode } = useLiteMode();
-
-  const { material, uniforms } = useMemo(() => {
-    const uPointer = uniform(new THREE.Vector2(0));
-    const uProgress = uniform(0);
-    const strength = 0.01;
-
-    const tDepthMap = texture(depthMap);
-    const tMap = texture(rawMap, uv().add(tDepthMap.r.mul(uPointer).mul(strength)));
-
-    const aspect = float(WIDTH).div(HEIGHT);
-    const tUv = vec2(uv().x.mul(aspect), uv().y);
-    const tiling = vec2(120.0);
-    const tiledUv = mod(tUv.mul(tiling), 2.0).sub(1.0);
-    const brightness = mx_cell_noise_float(tUv.mul(tiling).div(2));
-    const dist = float(tiledUv.length());
-    const dot = float(smoothstep(0.5, 0.49, dist)).mul(brightness);
-    const depth = tDepthMap.r;
-    const flow = oneMinus(smoothstep(0, 0.02, abs(depth.sub(uProgress))));
-    const mask = dot.mul(flow).mul(vec3(0, 10, 5.33));
-    const final = blendScreen(tMap, mask);
-
-    const material = new (THREE as any).MeshBasicNodeMaterial({ colorNode: final });
-    return { material, uniforms: { uPointer, uProgress } };
-  }, [rawMap, depthMap]);
-
-  const [w, h] = useAspect(WIDTH, HEIGHT);
-
-  useFrame(({ clock }) => {
-    if (isLiteMode) return;
-    uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
-  });
-
-  useFrame(({ pointer }) => {
-    if (isLiteMode) return;
-    uniforms.uPointer.value = pointer;
-  });
-
-  const scaleFactor = 0.3;
-  return (
-    <mesh scale={[w * scaleFactor, h * scaleFactor, 1]} material={material}>
-      <planeGeometry />
-    </mesh>
-  );
-};
-
-// ─── HeroFuturistic: particle title + Canvas 3D blob ─────────────────────────
+// ─── HeroFuturistic: particle title + binary globe ────────────────────────────
 export const HeroFuturistic = () => {
   const subtitle = 'CS @ University of Toronto Scarborough · AI · SWE · Data';
   const [textVisible, setTextVisible] = useState(false);
@@ -141,7 +151,7 @@ export const HeroFuturistic = () => {
 
   return (
     <div className="h-svh relative overflow-hidden bg-black">
-      {/* Overlay: particle title + subtitle — pointer-events-none lets mouse reach 3D canvas below */}
+      {/* Text overlay — pointer-events-none lets mouse tilt reach the globe below */}
       <div className="h-svh uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
         <div className="w-full max-w-[1200px] h-[7vh] md:h-[12vh] lg:h-[15vh] pointer-events-none">
           <div className={`w-full h-full transition-opacity duration-1000 ${textVisible ? 'opacity-100 hero-fade-in' : 'opacity-0'}`}>
@@ -175,19 +185,8 @@ export const HeroFuturistic = () => {
         </span>
       </button>
 
-      {/* IMPORTANT: forceWebGL resolves a swap-chain conflict between R3F and three/webgpu hooks */}
-      <Canvas
-        flat
-        gl={async (props) => {
-          const renderer = new (THREE as any).WebGPURenderer({ ...(props as any), forceWebGL: true });
-          await renderer.init();
-          return renderer;
-        }}
-        className="absolute inset-0"
-      >
-        <PostProcessing fullScreenEffect={true} />
-        <Scene />
-      </Canvas>
+      {/* Binary globe — standard WebGL, no WebGPU dependency */}
+      <BinaryGlobe />
     </div>
   );
 };
