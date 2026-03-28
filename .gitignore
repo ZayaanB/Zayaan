@@ -40,6 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# AI Assistant artifacts
+# static export output — built by GitHub Actions, not committed
+/out
+
+# AI assistant scaffolding — not part of the website
 AGENTS.md
 CLAUDE.md
+README.md

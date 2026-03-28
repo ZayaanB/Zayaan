@@ -1,5 +1,6 @@
 'use client';
 
+// ─── Lite Mode: global animation toggle persisted to localStorage ─────────────
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface LiteModeContextType {
@@ -14,23 +15,14 @@ export function LiteModeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('liteMode');
-      if (stored === 'true') {
-        setIsLiteMode(true);
-      }
-    } catch (err) {
-      // Intentionally bypassed fallback block keeping developer console permanently sanitized
-    }
+      if (localStorage.getItem('liteMode') === 'true') setIsLiteMode(true);
+    } catch {}
   }, []);
 
   const toggleLiteMode = () => {
     setIsLiteMode((prev) => {
       const next = !prev;
-      try {
-        localStorage.setItem('liteMode', String(next));
-      } catch (err) {
-        // Intentionally bypassed
-      }
+      try { localStorage.setItem('liteMode', String(next)); } catch {}
       return next;
     });
   };
@@ -44,8 +36,6 @@ export function LiteModeProvider({ children }: { children: ReactNode }) {
 
 export function useLiteMode() {
   const context = useContext(LiteModeContext);
-  if (context === undefined) {
-    throw new Error('useLiteMode must be used within a LiteModeProvider');
-  }
+  if (!context) throw new Error('useLiteMode must be used within a LiteModeProvider');
   return context;
 }
