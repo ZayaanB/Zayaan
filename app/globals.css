@@ -246,7 +246,7 @@
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Sora', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--p-text);
@@ -274,7 +274,6 @@
   text-decoration: none;
   color: var(--p-muted);
   border-radius: 10px;
-  font-family: 'Times New Roman', Times, serif;
   font-weight: 500;
   transition: all var(--p-transition-smooth);
   position: relative;
@@ -350,7 +349,7 @@
 
 /* Headings */
 .p-h1 {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Sora', sans-serif;
   font-size: clamp(2rem, 3.5vw, 3.25rem);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -362,7 +361,7 @@
   background-clip: text;
 }
 .p-h2 {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Sora', sans-serif;
   font-size: clamp(1.5rem, 2.4vw, 2.1rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -404,7 +403,7 @@
   transform: translateY(-4px);
 }
 .p-card h3 {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: 'Sora', sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--p-text);
