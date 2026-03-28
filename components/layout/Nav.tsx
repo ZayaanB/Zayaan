@@ -53,7 +53,7 @@ export default function Nav() {
           <button
             onClick={toggleLiteMode}
             className="p-btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'transparent', border: 'none', color: 'var(--p-muted)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'transparent', border: 'none', color: 'var(--p-muted)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, fontFamily: "'Times New Roman', Times, serif" }}
             title={isLiteMode ? 'Enable Animations' : 'Disable Animations (Lite Mode)'}
           >
             {isLiteMode ? <Leaf size={16} color="var(--p-primary)" /> : <Zap size={16} color="var(--p-accent-cyan)" />}

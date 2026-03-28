@@ -314,7 +314,7 @@
   border-radius: 12px;
   padding: 0.6rem 1.15rem;
   font-weight: 600;
-  font-family: inherit;
+  font-family: 'Times New Roman', Times, serif;
   border: 1px solid transparent;
   transition: all var(--p-transition-bounce);
   position: relative;

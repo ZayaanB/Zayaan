@@ -67,7 +67,7 @@ export default function HomePage() {
             {profileCards.map((c) => (
               <GlowCard key={c.title} customSize className="w-full flex flex-col gap-2">
                 <h3 style={{
-                  fontFamily: "'Sora', sans-serif",
+                  fontFamily: "'Times New Roman', Times, serif",
                   fontSize: '1.05rem',
                   fontWeight: 700,
                   color: 'var(--p-text)',
