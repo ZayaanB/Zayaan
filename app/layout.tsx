@@ -27,13 +27,21 @@ export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
 };
 
+import { LiteModeProvider } from '@/components/layout/LiteModeProvider';
+import { GlobalDottedSurface } from '@/components/ui/global-dotted-surface';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${sora.variable} ${jetbrains.variable}`}>
-        <Nav />
-        {children}
-        <Footer />
+      <body className={`${outfit.variable} ${sora.variable} ${jetbrains.variable} min-h-screen flex flex-col`}>
+        <LiteModeProvider>
+          <GlobalDottedSurface />
+          <Nav />
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </LiteModeProvider>
       </body>
     </html>
   );
