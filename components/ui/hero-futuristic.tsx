@@ -24,8 +24,8 @@ import {
   add
 } from 'three/tsl';
 
-const TEXTUREMAP = { src: '/texture-map.png' };
-const DEPTHMAP = { src: '/depth-map.webp' };
+const TEXTUREMAP = { src: '/images/texture-map.png' };
+const DEPTHMAP = { src: '/images/depth-map.webp' };
 
 // Extend React Three Fiber globally. 
 // 'THREE as any' bypasses temporary TS mismatches since bleeding-edge three/tsl nodes are partially untyped in R183.

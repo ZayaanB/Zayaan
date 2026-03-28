@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { JetBrains_Mono, Outfit, Sora } from 'next/font/google';
 import './globals.css';
-import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
+import Nav from '@/components/layout/Nav';
+import Footer from '@/components/layout/Footer';
 
 const outfit = Outfit({
   subsets: ['latin'],

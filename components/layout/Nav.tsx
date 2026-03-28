@@ -38,7 +38,7 @@ export default function Nav() {
 
         {/* Actions */}
         <div className="p-nav-actions">
-          <a className="p-btn p-btn-secondary" href="/resume.pdf" download>
+          <a className="p-btn p-btn-secondary" href="/documents/resume.pdf" download>
             Download Resume
           </a>
         </div>
