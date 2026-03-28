@@ -1,11 +1,11 @@
 'use client';
 
-// Hero section: word-by-word title reveal + cobe globe with CSS scan sweep
+// Hero: word-by-word title reveal + cobe globe with CSS scan sweep
 import { useEffect, useState } from 'react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
 import { CobePulseGlobe } from '@/components/ui/cobe-globe-pulse';
 
-// Green scan line clipped to the globe circle; mix-blend-mode: screen brightens globe dots
+// mix-blend-mode: screen makes the scan line brighten globe dots as it passes
 const GlobeScanEffect = () => (
   <div className="globe-scan-container">
     <div className="globe-scan-sweep" />
@@ -18,7 +18,7 @@ export const HeroFuturistic = () => {
 
   const [visibleWords, setVisibleWords] = useState(0);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
-  // Client-only jitter to avoid SSR/hydration mismatch
+  // Jitter set client-side only to avoid SSR/hydration mismatch
   const [delays, setDelays] = useState<number[]>([]);
   const [subtitleDelay, setSubtitleDelay] = useState(0);
   const { isLiteMode } = useLiteMode();
@@ -40,10 +40,8 @@ export const HeroFuturistic = () => {
 
   return (
     <div className="h-svh relative overflow-hidden bg-black">
-      {/* Text overlay — pointer-events-none so globe drag still works */}
+      {/* pointer-events-none keeps globe drag functional beneath the text */}
       <div className="h-svh uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
-
-        {/* Word-by-word title — each word reveals independently */}
         <div className="flex flex-nowrap justify-center gap-x-4 md:gap-x-6 w-full">
           {titleWords.map((word, i) => (
             <span
@@ -66,14 +64,13 @@ export const HeroFuturistic = () => {
           ))}
         </div>
 
-        {/* Subtitle */}
-        <div className="mt-3 overflow-hidden text-white font-bold text-center w-full" style={{ whiteSpace: 'nowrap', fontSize: 'clamp(0.7rem, 1.4vw, 1.2rem)' }}>
+        <div
+          className="mt-3 overflow-hidden text-white font-bold text-center w-full"
+          style={{ whiteSpace: 'nowrap', fontSize: 'clamp(0.7rem, 1.4vw, 1.2rem)' }}
+        >
           <div
             className={subtitleVisible ? 'hero-fade-in-subtitle' : ''}
-            style={{
-              animationDelay: `${0.2 + subtitleDelay}s`,
-              opacity: subtitleVisible ? undefined : 0,
-            }}
+            style={{ animationDelay: `${0.2 + subtitleDelay}s`, opacity: subtitleVisible ? undefined : 0 }}
           >
             {subtitle}
           </div>
@@ -90,14 +87,13 @@ export const HeroFuturistic = () => {
         </span>
       </button>
 
-      {/* Cobe globe + scan overlay */}
+      {/* Globe — pointer events disabled in Lite Mode */}
       <div
         className="absolute inset-0 flex items-center justify-center z-[10]"
         style={{ pointerEvents: isLiteMode ? 'none' : 'auto' }}
       >
         <div style={{ width: 'min(52vh, 52vw)', position: 'relative' }}>
           <CobePulseGlobe speed={0.003} />
-          {/* Scan sweep is hidden in Lite Mode */}
           {!isLiteMode && <GlobeScanEffect />}
         </div>
       </div>

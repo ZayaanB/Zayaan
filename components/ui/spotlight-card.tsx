@@ -99,13 +99,11 @@ const GlowCard: React.FC<GlowCardProps> = ({
     if (!card) return;
 
     const syncPointer = (e: PointerEvent) => {
-      // Calculate element-relative coordinates for accurate spotlight rendering
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       card.style.setProperty('--x', x.toFixed(2));
       card.style.setProperty('--y', y.toFixed(2));
-      // Keep viewport-relative percentages for hue shift
       card.style.setProperty('--xp', (e.clientX / window.innerWidth).toFixed(2));
       card.style.setProperty('--yp', (e.clientY / window.innerHeight).toFixed(2));
     };
@@ -129,7 +127,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
     '--border-size': 'calc(var(--border, 2) * 1px)',
     '--spotlight-size': 'calc(var(--size, 150) * 1px)',
     '--hue': 'calc(var(--base) + (var(--xp, 0) * var(--spread, 0)))',
-    // Element-relative background (no background-attachment: fixed)
+    // element-relative background spotlight (avoids background-attachment: fixed)
     backgroundImage: `radial-gradient(
       var(--spotlight-size) var(--spotlight-size) at
       calc(var(--x, 50%) * 1px)

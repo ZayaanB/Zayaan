@@ -156,16 +156,14 @@
   }
 }
 
-/* ─── Hero Futuristic animations ───────────────────────────────── */
-.hero-fade-in {
-  animation: heroFadeGlitch 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-.hero-fade-in-subtitle {
-  animation: heroFadeGlitch 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-/* Word-by-word reveal — same glitch keyframe, applied per span */
+/* ─── Hero animations ─────────────────────────────────────────── */
+/* per-word staggered reveal */
 .hero-word-in {
   animation: heroFadeGlitch 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+/* subtitle fades in after all words */
+.hero-fade-in-subtitle {
+  animation: heroFadeGlitch 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 /* Globe scan line — clipped to sphere, blends via screen mode */
