@@ -13,8 +13,8 @@ const GlobeScanEffect = () => (
 );
 
 export const HeroFuturistic = () => {
-  const titleWords = ['BUILDING', 'PRACTICAL', 'SOFTWARE'];
-  const subtitle = 'CS @ University of Toronto Scarborough · AI · SWE · Data';
+  const titleWords = ['ZAYAAN', 'BHANWADIA', ' · SOFTWARE'];
+  const subtitle = 'CS @ UOFT · SWE · AI · Data';
 
   const [visibleWords, setVisibleWords] = useState(0);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
