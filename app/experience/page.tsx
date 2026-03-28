@@ -66,7 +66,7 @@ export default function ExperiencePage() {
                 gap: '0.5rem',
               }}>
                 <h2 style={{
-                  fontFamily: "'Times New Roman', Times, serif",
+                  fontFamily: "'Sora', sans-serif",
                   fontSize: '1.05rem',
                   fontWeight: 700,
                   color: 'var(--p-text)',

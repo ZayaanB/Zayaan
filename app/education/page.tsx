@@ -52,7 +52,7 @@ export default function EducationPage() {
           {education.map((e) => (
             <GlowCard key={e.school} customSize className="w-full flex flex-col gap-2">
               <h3 style={{
-                fontFamily: "'Times New Roman', Times, serif",
+                fontFamily: "'Sora', sans-serif",
                 fontSize: '1.05rem',
                 fontWeight: 700,
                 color: 'var(--p-text)',

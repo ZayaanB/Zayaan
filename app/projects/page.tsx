@@ -112,7 +112,7 @@ export default function ProjectsPage() {
               {/* Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
                 <h3 style={{
-                  fontFamily: "'Times New Roman', Times, serif",
+                  fontFamily: "'Sora', sans-serif",
                   fontSize: '1.05rem',
                   fontWeight: 700,
                   color: 'var(--p-text)',
