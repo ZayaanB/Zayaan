@@ -86,7 +86,7 @@ export function CobePulseGlobe({
       const width = canvas.offsetWidth
       if (width === 0 || globe) return
 
-      // Color scheme: site neon green (#00ff88) on near-black
+      // neon green (#00ff88) colour scheme on near-black base
       globe = createGlobe(canvas, {
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         width, height: width,
@@ -94,9 +94,9 @@ export function CobePulseGlobe({
         dark: 1, diffuse: 4.0,
         mapSamples: 20000,
         mapBrightness: 30,
-        baseColor:   [0.05, 0.2, 0.1],    // visible green base so dots show through
-        markerColor: [0.0, 1.0,  0.533],  // neon green #00ff88
-        glowColor:   [0.0, 0.35, 0.18],   // green atmospheric glow
+        baseColor:   [0.05, 0.2,  0.1],
+        markerColor: [0.0,  1.0,  0.533],
+        glowColor:   [0.0,  0.35, 0.18],
         markerElevation: 0,
         markers: markers.map((m) => ({ location: m.location, size: 0.04, id: m.id })),
         arcs: [], arcColor: [0, 1, 0.533],
@@ -152,7 +152,7 @@ export function CobePulseGlobe({
         }}
       />
 
-      {/* Pulse markers — show '1' or '0' instead of solid dots */}
+      {/* Pulse markers — each shows a '1' or '0' with pulsing rings */}
       {markers.map((m) => (
         <div
           key={m.id}
@@ -170,7 +170,7 @@ export function CobePulseGlobe({
             transition: "opacity 0.4s, filter 0.4s",
           }}
         >
-          {/* Pulsing green rings */}
+          {/* Two offset rings create the pulsing glow effect */}
           <span style={{
             position: "absolute", inset: 0,
             border: "2px solid #00ff88", borderRadius: "50%", opacity: 0,
@@ -182,7 +182,7 @@ export function CobePulseGlobe({
             animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.5}s`,
           }} />
 
-          {/* '1' or '0' character — replaces the solid dot */}
+          {/* Binary digit label */}
           <span style={{
             fontFamily: "monospace",
             fontWeight: "bold",

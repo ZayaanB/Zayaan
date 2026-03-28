@@ -1,9 +1,8 @@
 'use client';
 
-// ─── Cursor-Driven Particle Typography ────────────────────────────────────────
 // Renders text as interactive particles that scatter on mouse proximity.
-// Mouse events attach to window (not canvas) so pointer-events-none can pass
-// interactions through to layers underneath (e.g. the 3D hero blob).
+// Mouse events attach to window so the canvas can stay pointer-events-none,
+// allowing layers underneath (globe, etc.) to receive interactions.
 import React, { useEffect, useRef } from 'react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
 import { cn } from '@/lib/utils';
@@ -54,7 +53,7 @@ class Particle {
     this.vx *= 0.85;
     this.vy *= 0.85;
 
-    // Subtle idle jitter when at rest
+    // Idle jitter when settled
     const distToOrigin = Math.sqrt(Math.pow(this.x - this.originX, 2) + Math.pow(this.y - this.originY, 2));
     if (distToOrigin < 1 && Math.random() > 0.95) {
       this.vx += (Math.random() - 0.5) * 0.2;
@@ -108,7 +107,6 @@ export function CursorDrivenParticleTypography({
 
       containerWidth = container.clientWidth;
       containerHeight = container.clientHeight;
-
       if (containerWidth === 0 || containerHeight === 0) return;
 
       const dpr = window.devicePixelRatio || 1;
@@ -122,7 +120,7 @@ export function CursorDrivenParticleTypography({
       const textColor = color || window.getComputedStyle(container).color || '#000000';
       ctx.clearRect(0, 0, containerWidth, containerHeight);
 
-      // Auto-scale font to fit container width
+      // Scale font to fit container width
       let effectiveFontSize = fontSize;
       ctx.font = `bold ${effectiveFontSize}px ${fontFamily}`;
       const textWidth = ctx.measureText(text).width;
@@ -152,8 +150,8 @@ export function CursorDrivenParticleTypography({
     let staticRendered = false;
 
     const animate = () => {
-      // Lite Mode: snap to origin and freeze
       if (isLiteModeRef.current) {
+        // Lite Mode: freeze particles at origin positions
         if (!staticRendered) {
           ctx.clearRect(0, 0, containerWidth, containerHeight);
           particles.forEach((p) => { p.x = p.originX; p.y = p.originY; p.draw(ctx); });
@@ -181,7 +179,6 @@ export function CursorDrivenParticleTypography({
     const resizeObserver = new ResizeObserver(() => init());
     if (containerRef.current) resizeObserver.observe(containerRef.current);
 
-    // Attach to window so canvas can stay pointer-events-none
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
 
