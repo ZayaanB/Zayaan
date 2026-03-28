@@ -44,7 +44,7 @@ export const HeroFuturistic = () => {
       <div className="h-svh uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
 
         {/* Word-by-word title — each word reveals independently */}
-        <div className="flex flex-wrap gap-x-4 md:gap-x-7 lg:gap-x-10 w-full max-w-[1200px]">
+        <div className="flex flex-nowrap justify-center gap-x-4 md:gap-x-6 w-full">
           {titleWords.map((word, i) => (
             <span
               key={word}
@@ -52,12 +52,13 @@ export const HeroFuturistic = () => {
               style={{
                 opacity: i < visibleWords ? undefined : 0,
                 animationDelay: `${delays[i] || 0}s`,
-                fontSize: 'clamp(2.2rem, 6.5vw, 6.5rem)',
+                fontSize: 'clamp(1.6rem, 3.2vw, 3rem)',
                 fontWeight: 800,
                 color: 'white',
                 display: 'inline-block',
                 lineHeight: 1.1,
                 letterSpacing: '-0.02em',
+                whiteSpace: 'nowrap',
               }}
             >
               {word}
@@ -66,7 +67,7 @@ export const HeroFuturistic = () => {
         </div>
 
         {/* Subtitle */}
-        <div className="text-xs md:text-xl xl:text-2xl 2xl:text-3xl mt-2 overflow-hidden text-white font-bold w-full max-w-[1200px]">
+        <div className="mt-3 overflow-hidden text-white font-bold text-center w-full" style={{ whiteSpace: 'nowrap', fontSize: 'clamp(0.7rem, 1.4vw, 1.2rem)' }}>
           <div
             className={subtitleVisible ? 'hero-fade-in-subtitle' : ''}
             style={{
