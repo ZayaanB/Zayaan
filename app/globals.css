@@ -531,6 +531,8 @@
   margin-top: 5rem;
   padding: 2rem 0;
   border-top: 1px solid var(--p-border);
+  position: relative;
+  z-index: 1;
 }
 .p-footer-inner {
   display: flex;
