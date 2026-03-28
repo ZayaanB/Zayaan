@@ -3,6 +3,7 @@
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
 import { useAspect, useTexture } from '@react-three/drei';
 import { useMemo, useRef, useState, useEffect } from 'react';
+import { useLiteMode } from '@/components/layout/LiteModeProvider';
 import * as THREE from 'three/webgpu';
 import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js';
 
@@ -42,7 +43,9 @@ const PostProcessing = ({
   fullScreenEffect?: boolean;
 }) => {
   const { gl, scene, camera } = useThree();
+  const { isLiteMode } = useLiteMode();
   const progressRef = useRef({ value: 0 });
+  const renderOnce = useRef(false);
 
   const render = useMemo(() => {
     const postProcessing = new (THREE as any).PostProcessing(gl as any);
@@ -77,6 +80,14 @@ const PostProcessing = ({
   }, [camera, gl, scene, strength, threshold, fullScreenEffect]);
 
   useFrame(({ clock }) => {
+    if (isLiteMode) {
+      if (!renderOnce.current) {
+        render.render();
+        renderOnce.current = true;
+      }
+      return;
+    }
+    renderOnce.current = false;
     // Animate the scan line from top to bottom
     progressRef.current.value = (Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5);
     render.render();
@@ -138,11 +149,15 @@ const Scene = () => {
 
   const [w, h] = useAspect(WIDTH, HEIGHT);
 
+  const { isLiteMode } = useLiteMode();
+
   useFrame(({ clock }) => {
+    if (isLiteMode) return;
     uniforms.uProgress.value = (Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5);
   });
 
   useFrame(({ pointer }) => {
+    if (isLiteMode) return;
     uniforms.uPointer.value = pointer;
   });
 
