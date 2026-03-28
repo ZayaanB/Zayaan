@@ -22,11 +22,11 @@ const profileCards = [
   },
   {
     title: 'Competition & Mentorship',
-    body: 'Placed Top 20 globally in Startup Marketing Campaigns at DECA ICDC. Coached 8 students in written events and marketing strategy — around 50% qualified for the conference.',
+    body: 'Placed Top 20 globally in Startup Marketing Campaigns at DECA ICDC. Coached 8 students in written events and marketing strategy, around 50% qualified for the conference.',
   },
   {
     title: 'Robotics & Systems Thinking',
-    body: 'Co-president and founder of NASA HUNCH Canada — the first-ever Canadian school to compete. Built an autonomous Lunar Explorer using C++ and Arduino for complex mission-style design challenges.',
+    body: 'Co-president and founder of NASA HUNCH Canada, the first-ever Canadian school to compete. Built an autonomous Lunar Explorer using C++ and Arduino for complex mission-style design challenges.',
   },
   {
     title: 'Product & Data Mindset',
