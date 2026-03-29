@@ -1,5 +1,5 @@
-:HL["/ZayaanBhanwadia/_next/static/chunks/0c25akxvg4o8d.css","style"]
+:HL["/ZayaanBhanwadia/_next/static/chunks/0pfz~5bsupr.t.css","style"]
 :HL["/ZayaanBhanwadia/_next/static/media/051742360c26797e-s.p.0f97p8c3305p~.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/ZayaanBhanwadia/_next/static/media/1b99372b3eaef0c8-s.p.0gx2haw2tmll8.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/ZayaanBhanwadia/_next/static/media/6bd983bd58a87a3d-s.p.0h108oidc_0fm.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"education","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"4vfbkdjABLtzk3F2TlfHO"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"education","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"cDlDF6ZKzKRN6f4S18Mc0"}
