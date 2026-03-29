@@ -39,9 +39,9 @@ export const HeroFuturistic = () => {
   }, [visibleWords]);
 
   return (
-    <div className="h-svh relative overflow-hidden bg-black">
+    <div className="h-[85vh] relative overflow-hidden bg-black">
       {/* pointer-events-none keeps globe drag functional beneath the text */}
-      <div className="h-svh uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
+      <div className="h-full uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
         <div className="flex flex-nowrap justify-center gap-x-4 md:gap-x-6 w-full">
           {titleWords.map((word, i) => (
             <span

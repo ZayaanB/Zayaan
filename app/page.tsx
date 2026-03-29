@@ -39,7 +39,7 @@ export default function HomePage() {
     <>
       <HeroFuturistic />
 
-      <main className="relative" style={{ paddingTop: '2.5rem', paddingBottom: '4rem', overflow: 'hidden' }}>
+      <main className="relative" style={{ paddingTop: '1rem', paddingBottom: '4rem', overflow: 'hidden' }}>
         {/* Technical Skills */}
         <section className="p-section p-container">
           <div className="p-section-head">
