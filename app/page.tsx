@@ -41,19 +41,19 @@ const skills = [
 const profileCards = [
   {
     title: 'Leadership & Communication',
-    body: 'As an executive at AMACSS, I produce and distribute a departmental newsletter for the CMS Department, reaching over 2,000 students with an open rate above 50%.',
+    body: 'As an executive at AMACSS, I produce and distribute a departmental newsletter that reaches over 2,000 students and achieves an open rate above 50%.',
   },
   {
     title: 'Competition & Mentorship',
-    body: 'Placed Top 20 globally in Startup Marketing Campaigns at DECA ICDC. Coached 8 students in written events and marketing strategy, around 50% qualified for the conference.',
+    body: 'I placed in the Top 20 globally for Startup Marketing Campaigns at DECA ICDC. I coached 8 students in written events and marketing strategy, successfully guiding 50% of them to qualify for the conference.',
   },
   {
     title: 'Robotics & Systems Thinking',
-    body: 'Co-president and founder of NASA HUNCH Canada, the first-ever Canadian school to compete. Built an autonomous Lunar Explorer using C++ and Arduino for complex mission-style design challenges.',
+    body: 'I co-founded and presided over NASA HUNCH Canada, enabling the first-ever Canadian school to compete. I built an autonomous Lunar Explorer using C++ and Arduino to solve complex mission-style design challenges.',
   },
   {
     title: 'Product & Data Mindset',
-    body: 'As VP of Technology at BLINK JA, led a team of 5 to design and maintain a company website generating over $2,300 in online sales, increasing website traffic by 30% through data-driven decisions.',
+    body: 'As VP of Technology at BLINK JA, I led a 5-person team to design and maintain a company website that generated over $2,300 in online sales. I increased website traffic by 30% by making data-driven marketing decisions.',
   },
 ];
 

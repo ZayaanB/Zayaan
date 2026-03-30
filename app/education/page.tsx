@@ -11,26 +11,26 @@ const education = [
     school: 'University of Toronto Scarborough',
     meta: 'BSc Computer Science (Co-op) | 2025 - Present',
     bullets: [
-      'Current GPA: 3.86 / 4.0.',
-      'Scholars Scholarship recipient (CAD $10,000).',
-      'Focus on software engineering, AI applications, and systems development.',
+      'I maintain a current GPA of 3.86 / 4.0.',
+      'I earned the Scholars Scholarship, receiving an award of CAD $10,000.',
+      'I actively focus my studies on software engineering, AI applications, and systems development.',
     ],
   },
   {
     school: 'Victoria Park Collegiate Institute',
     meta: '2021 - 2025',
     bullets: [
-      'Student Council Secretary, DECA Trainer, NASA HUNCH Co-President, Badminton Team Captain.',
-      '97.8% Top 6 Final Average.',
+      'I lead my peers as Student Council Secretary, DECA Trainer, NASA HUNCH Co-President, and Badminton Team Captain.',
+      'I graduated with a 97.8% Top 6 Final Average.',
     ],
   },
   {
     school: 'Academic Focus Areas',
     meta: null,
     bullets: [
-      'Programming and data structures with Java and Python.',
-      'Applied machine learning and data-driven projects.',
-      'Software development workflow with Git, Linux terminal, and modern IDE tools.',
+      'I study programming and data structures utilizing Java and Python.',
+      'I develop applied machine learning models and execute data-driven projects.',
+      'I employ modern software development workflows using Git, the Linux terminal, and professional IDE tools.',
     ],
   },
 ];

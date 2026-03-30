@@ -60,8 +60,8 @@ const timelineData = [
         title="Executive, Association of Mathematics and Computer Science Students (AMACSS)"
         org="University of Toronto Scarborough"
         bullets={[
-          'Produced and distributed a departmental newsletter for the Computer and Mathematical Sciences Department.',
-          'Reached over 2,000 students and achieved an open rate over 50%.',
+          'I produced and distributed a departmental newsletter for the Computer and Mathematical Sciences Department.',
+          'I reached an audience of over 2,000 students and consistently achieved an open rate above 50%.',
         ]}
       />
     ),
@@ -73,8 +73,8 @@ const timelineData = [
         title="International Career Development Conference Qualifier, DECA"
         org="DECA Inc. - International"
         bullets={[
-          'Placed Top 20 internationally in Startup Marketing Campaigns.',
-          'Trained a group of 8 students in written events and marketing strategy, with around 50% qualifying for ICDC.',
+          'I placed in the Top 20 internationally for Startup Marketing Campaigns.',
+          'I trained a group of 8 students in written events and marketing strategy, successfully guiding 50% of them to qualify for ICDC.',
         ]}
       />
     ),
@@ -86,8 +86,8 @@ const timelineData = [
         title="Co-President, NASA HUNCH"
         org="NASA HUNCH Program - Canada"
         bullets={[
-          'Led team to 3rd place, becoming the first ever Canadian school to compete in NASA HUNCH.',
-          'Developed an autonomous Lunar Explorer and CAD simulation using Arduino, capable of traversing lunar terrain.',
+          'I led our team to a 3rd place finish, establishing us as the first-ever Canadian school to compete in NASA HUNCH.',
+          'I developed an autonomous Lunar Explorer and CAD simulation using Arduino that dynamically traverses lunar terrain.',
         ]}
       />
     ),
@@ -99,8 +99,8 @@ const timelineData = [
         title="Vice President of Technology, BLINK JA"
         org="Junior Achievement Company Program - Canada"
         bullets={[
-          'Led a team of 5 to design and maintain a company website, generating over $2,300 in online sales.',
-          'Tracked and analyzed website sales metrics to support executive marketing decisions, increasing website traffic by 30%.',
+          'I led a 5-person team to design and maintain a company website that generated over $2,300 in online sales.',
+          'I tracked and analyzed website sales metrics to support executive marketing decisions, directly increasing website traffic by 30%.',
         ]}
       />
     ),
