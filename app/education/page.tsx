@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const education = [
   {
     school: 'University of Toronto Scarborough',
-    meta: 'BSc Computer Science (Co-op) | 2025 – Present',
+    meta: 'BSc Computer Science (Co-op) | 2025 - Present',
     bullets: [
       'Current GPA: 3.86 / 4.0.',
       'Scholars Scholarship recipient (CAD $10,000).',
@@ -18,7 +18,7 @@ const education = [
   },
   {
     school: 'Victoria Park Collegiate Institute',
-    meta: '2021 – 2025',
+    meta: '2021 - 2025',
     bullets: [
       'Student Council Secretary, DECA Trainer, NASA HUNCH Co-President, Badminton Team Captain.',
       '97.8% Top 6 Final Average.',

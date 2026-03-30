@@ -2,8 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { GlowCard } from '@/components/ui/spotlight-card';
-
+import { ProfileCardStack } from '@/components/ui/profile-card-stack';
 const HeroFuturistic = dynamic(
   () => import('@/components/ui/hero-futuristic').then((m) => m.HeroFuturistic),
   { ssr: false }
@@ -59,28 +58,7 @@ export default function HomePage() {
             <h2 className="p-h2">Quick Profile</h2>
             <p>Highlights from leadership, engineering, and team-based problem solving.</p>
           </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '1.25rem',
-          }}>
-            {profileCards.map((c) => (
-              <GlowCard key={c.title} customSize className="w-full flex flex-col gap-2">
-                <h3 style={{
-                  fontFamily: "'Sora', sans-serif",
-                  fontSize: '1.05rem',
-                  fontWeight: 700,
-                  color: 'var(--p-text)',
-                  margin: 0,
-                }}>
-                  {c.title}
-                </h3>
-                <p style={{ color: 'var(--p-muted)', fontSize: '0.9rem', margin: 0, lineHeight: 1.65 }}>
-                  {c.body}
-                </p>
-              </GlowCard>
-            ))}
-          </div>
+          <ProfileCardStack cards={profileCards} />
         </section>
 
         {/* CTA row */}

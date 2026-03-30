@@ -70,7 +70,7 @@ const projects = [
   {
     title: 'Mock Banking Application',
     meta: 'Java',
-    event: 'Sep 2024 – Jan 2025',
+    event: 'Sep 2024 - Jan 2025',
     badge: null,
     bullets: [
       'Account and transaction management with file I/O persistence.',
@@ -81,7 +81,7 @@ const projects = [
   {
     title: 'Plants vs. Zombies Parody',
     meta: 'Java',
-    event: '2023 – Jan 2024',
+    event: '2023 - Jan 2024',
     badge: null,
     bullets: [
       'Game project demonstrating Java OOP fundamentals.',
