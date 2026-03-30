@@ -1,6 +1,6 @@
 'use client';
 
-// Three.js wave background — 50x50 grid of '0'/'1' sprites that animate as a wave.
+// Three.js wave background - 50x50 grid of '0'/'1' sprites that animate as a wave.
 // Used as a fixed full-screen backdrop on all pages.
 import { cn } from '@/lib/utils';
 import React, { useEffect, useRef } from 'react';
@@ -129,7 +129,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
       }
       hasRenderedLite = false;
 
-      // Wave animation — update Y positions each frame
+      // Wave animation - update Y positions each frame
       const posArray1 = geometry1.attributes.position.array as Float32Array;
       for (let i = 0; i < originalIndices1.length; i++) {
         const pt = originalIndices1[i];

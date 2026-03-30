@@ -13,16 +13,16 @@ const jetbrains = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrai
 
 export const metadata: Metadata = {
   title: { default: 'Zayaan Bhanwadia', template: '%s | Zayaan Bhanwadia' },
-  description: 'Portfolio of Zayaan Bhanwadia — CS student at UTSC building practical software with a clear focus on impact.',
+  description: 'Portfolio of Zayaan Bhanwadia - CS student at UTSC building practical software with a clear focus on impact.',
   icons: { icon: '/favicon.svg' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={`${outfit.variable} ${sora.variable} ${jetbrains.variable} min-h-screen flex flex-col`}>
         <LiteModeProvider>
-          {/* Binary 1/0 wave background — fixed, behind all content */}
+          {/* Binary 1/0 wave background - fixed, behind all content */}
           <GlobalDottedSurface />
           <Nav />
           <div className="flex-1">{children}</div>

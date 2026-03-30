@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback } from "react"
 import createGlobe from "cobe"
 import { useLiteMode } from "@/components/layout/LiteModeProvider"
 
-// Pulse markers — 1s on land, 0s on ocean (visual theme)
+// Pulse markers - 1s on land, 0s on ocean (visual theme)
 interface PulseMarker {
   id: string
   location: [number, number]
@@ -152,7 +152,7 @@ export function CobePulseGlobe({
         }}
       />
 
-      {/* Pulse markers — each shows a '1' or '0' with pulsing rings */}
+      {/* Pulse markers - each shows a '1' or '0' with pulsing rings */}
       {markers.map((m) => (
         <div
           key={m.id}
