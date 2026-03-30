@@ -448,11 +448,14 @@
 }
 .p-card-link:hover { color: var(--p-accent-cyan); }
 
-/* Chips */
-.p-chip-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+/* Chips / Skills Marquee */
+.p-marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .p-chip {
   padding: 0.4rem 0.85rem;

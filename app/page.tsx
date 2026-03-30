@@ -3,15 +3,39 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ProfileCardStack } from '@/components/ui/profile-card-stack';
+import { SkillsMarquee } from '@/components/ui/skills-marquee';
+
+import { FaPython, FaJava, FaLinux, FaDocker, FaGithub } from 'react-icons/fa';
+import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiTailwindcss, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGit, SiVercel } from 'react-icons/si';
+import { TbSql } from 'react-icons/tb';
+import { ScanEye } from 'lucide-react';
 const HeroFuturistic = dynamic(
   () => import('@/components/ui/hero-futuristic').then((m) => m.HeroFuturistic),
   { ssr: false }
 );
 
 const skills = [
-  'Python', 'Java', 'C/C++', 'SQL', 'JavaScript', 'TypeScript',
-  'HTML/CSS', 'OpenCV', 'PyTorch', 'NumPy', 'Tailwind CSS', 'Next.js',
-  'FastAPI', 'Git', 'Linux', 'Docker', 'AWS', 'Supabase', 'PostgreSQL', 'Arduino',
+  { label: 'Python', icon: <FaPython /> },
+  { label: 'Java', icon: <FaJava /> },
+  { label: 'C/C++', icon: <SiCplusplus /> },
+  { label: 'SQL', icon: <TbSql /> },
+  { label: 'JavaScript', icon: <SiJavascript /> },
+  { label: 'TypeScript', icon: <SiTypescript /> },
+  { label: 'HTML/CSS', icon: <SiHtml5 /> },
+  { label: 'OpenCV', icon: <SiOpencv /> },
+  { label: 'PyTorch', icon: <SiPytorch /> },
+  { label: 'NumPy', icon: <SiNumpy /> },
+  { label: 'YOLOv8', icon: <ScanEye size={18} /> },
+  { label: 'Tailwind CSS', icon: <SiTailwindcss /> },
+  { label: 'FastAPI', icon: <SiFastapi /> },
+  { label: 'Git', icon: <SiGit /> },
+  { label: 'GitHub', icon: <FaGithub /> },
+  { label: 'Linux', icon: <FaLinux /> },
+  { label: 'Docker', icon: <FaDocker /> },
+  { label: 'Vercel', icon: <SiVercel /> },
+  { label: 'Supabase', icon: <SiSupabase /> },
+  { label: 'PostgreSQL', icon: <SiPostgresql /> },
+  { label: 'Arduino', icon: <SiArduino /> },
 ];
 
 const profileCards = [
@@ -45,11 +69,7 @@ export default function HomePage() {
             <h2 className="p-h2">Technical Skills</h2>
             <p>Languages and tools from my coursework and project work.</p>
           </div>
-          <div className="p-chip-row">
-            {skills.map((s) => (
-              <span key={s} className="p-chip">{s}</span>
-            ))}
-          </div>
+          <SkillsMarquee skills={skills} />
         </section>
 
         {/* Quick Profile */}
