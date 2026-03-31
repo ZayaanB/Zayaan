@@ -17,10 +17,14 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
   // activeIndex = Top card of the face-up pile
   const [activeIndex, setActiveIndex] = useState(0);
   const [offset, setOffset] = useState(200);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Responsive layout calculation
   useEffect(() => {
-    const handleResize = () => setOffset(window.innerWidth < 640 ? 95 : 200);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+      setOffset(window.innerWidth < 640 ? 95 : 200);
+    };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -54,11 +58,27 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
   }, []);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center pt-8 pb-10 relative">
-      <div 
-        className="w-full max-w-[800px] h-[460px] relative flex justify-center items-center"
-        style={{ perspective: '1500px' }}
-      >
+    <div className="w-full flex flex-col items-center justify-center pt-4 sm:pt-8 pb-10 relative">
+      {/* Mobile-only Flat Stack */}
+      {isMobile ? (
+        <div className="flex flex-col gap-6 w-full max-w-[340px] px-4 mx-auto">
+          {cards.map(card => (
+            <GlowCard key={card.title} customSize className="w-full flex flex-col p-6 gap-3 !bg-[#0b0e17] shadow-lg">
+              <h3 className="text-lg font-bold font-sora tracking-tight text-[#00ff88]">
+                {card.title}
+              </h3>
+              <p className="text-gray-300 leading-relaxed text-[0.9rem]">
+                {card.body}
+              </p>
+            </GlowCard>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div 
+            className="w-full max-w-[800px] h-[460px] relative flex justify-center items-center"
+            style={{ perspective: '1500px' }}
+          >
         {cards.map((card, index) => {
           const isFaceUp = index >= activeIndex;
           
@@ -138,6 +158,8 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
             : "All cards flipped. Click the face-down pile to restart."}
         </p>
       </div>
+        </>
+      )}
     </div>
   );
 }

@@ -87,12 +87,11 @@ export const HeroFuturistic = () => {
         </span>
       </button>
 
-      {/* Globe - pointer events disabled in Lite Mode */}
       <div
         className="absolute inset-0 flex items-center justify-center z-[10]"
         style={{ pointerEvents: isLiteMode ? 'none' : 'auto' }}
       >
-        <div style={{ width: 'min(52vh, 52vw)', position: 'relative' }}>
+        <div className="relative w-[90vw] sm:w-[min(52vh,52vw)]">
           <CobePulseGlobe speed={0.003} />
           {!isLiteMode && <GlobeScanEffect />}
         </div>
