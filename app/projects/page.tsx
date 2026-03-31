@@ -118,7 +118,7 @@ export default function ProjectsPage() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
             gap: '1.25rem',
           }}
         >
@@ -166,6 +166,7 @@ export default function ProjectsPage() {
                 )}
               </div>
 
+              {/* Meta */}
               <div>
                 <p style={{ fontSize: '0.8rem', color: 'var(--p-accent-cyan)', margin: 0, fontWeight: 600 }}>
                   {p.meta}
@@ -175,6 +176,7 @@ export default function ProjectsPage() {
                 </p>
               </div>
 
+              {/* Bullets */}
               <ul style={{
                 color: 'var(--p-muted)',
                 fontSize: '0.875rem',
@@ -186,6 +188,7 @@ export default function ProjectsPage() {
                 {p.bullets.map((b) => <li key={b} style={{ marginBottom: '0.25rem' }}>{b}</li>)}
               </ul>
 
+              {/* Link */}
               {p.link && (
                 <a
                   href={p.link}
