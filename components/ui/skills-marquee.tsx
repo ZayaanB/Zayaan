@@ -24,8 +24,6 @@ export function SkillsMarquee({ skills }: SkillsMarqueeProps) {
       <div className="flex w-max p-marquee-track hover:[animation-play-state:paused]">
         {/* We use two identical blocks that each contain the gap internally.
             This ensures translating exactly -50% perfectly loops back to the start. */}
-        
-        {/* Block 1 */}
         <div className="flex shrink-0 gap-4 items-center pr-4">
           {skills.map((skill, index) => (
             <span 
@@ -38,7 +36,6 @@ export function SkillsMarquee({ skills }: SkillsMarqueeProps) {
           ))}
         </div>
         
-        {/* Block 2 (Duplicate) */}
         <div className="flex shrink-0 gap-4 items-center pr-4" aria-hidden="true">
           {skills.map((skill, index) => (
             <span 
