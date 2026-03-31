@@ -63,7 +63,6 @@ export default function HomePage() {
       <HeroFuturistic />
 
       <main className="relative" style={{ paddingTop: '1rem', paddingBottom: '4rem', overflow: 'hidden' }}>
-        {/* Technical Skills */}
         <section className="p-section p-container">
           <div className="p-section-head">
             <h2 className="p-h2">Technical Skills</h2>
@@ -72,7 +71,6 @@ export default function HomePage() {
           <SkillsMarquee skills={skills} />
         </section>
 
-        {/* Quick Profile */}
         <section className="p-section p-container">
           <div className="p-section-head">
             <h2 className="p-h2">Quick Profile</h2>
@@ -81,7 +79,6 @@ export default function HomePage() {
           <ProfileCardStack cards={profileCards} />
         </section>
 
-        {/* CTA row */}
         <section className="p-section p-container" style={{ textAlign: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <Link className="p-btn p-btn-primary" href="/projects">View Projects</Link>

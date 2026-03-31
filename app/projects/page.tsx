@@ -1,7 +1,15 @@
 import type { Metadata } from 'next';
 import { GlowCard } from '@/components/ui/spotlight-card';
 import { ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 
+import refaiImg from '@/project_images/refai.png';
+import haloImg from '@/project_images/halo.png';
+import trustokenImg from '@/project_images/trustoken.png';
+import terminalAiImg from '@/project_images/terminal_ai.png';
+import youtubeImg from '@/project_images/youtube.png';
+import bankImg from '@/project_images/bank.png';
+import pvzImg from '@/project_images/pvz.png';
 export const metadata: Metadata = {
   title: 'Projects',
   description: 'Hackathon wins and personal projects by Zayaan Bhanwadia.',
@@ -19,6 +27,7 @@ const projects = [
       'Placed Top 3 overall for building the best implementation of the Solana API.',
     ],
     link: 'https://github.com/ZayaanB/Ref.AI',
+    image: refaiImg,
   },
   {
     title: 'Halo Healthcare',
@@ -31,6 +40,7 @@ const projects = [
       'Designed a fully PIPEDA-compliant backend architecture using FastAPI and Supabase.',
     ],
     link: 'https://github.com/ZayaanB/Halo-Healthcare',
+    image: haloImg,
   },
   {
     title: 'Sustainability NFT Tokener',
@@ -43,6 +53,7 @@ const projects = [
       'Trained the classification model to achieve a 92% verification accuracy rate.',
     ],
     link: 'https://github.com/ZayaanB/UTRABot',
+    image: trustokenImg,
   },
   {
     title: 'Windows Terminal AI Assistant',
@@ -54,6 +65,7 @@ const projects = [
       'Implemented a safety interception layer that proactively detects and blocks potentially destructive terminal commands.',
     ],
     link: 'https://github.com/ZayaanB/Terminal-Helper',
+    image: terminalAiImg,
   },
   {
     title: 'AI-Powered YouTube Video Analyst',
@@ -66,6 +78,7 @@ const projects = [
       'Trained the detection model to achieve an 80% accuracy rate in identifying clickbait.',
     ],
     link: 'https://github.com/ZayaanB/Youtube-Helper',
+    image: youtubeImg,
   },
   {
     title: 'Mock Banking Application',
@@ -77,6 +90,7 @@ const projects = [
       'Applied strict Object-Oriented design principles and integrated core data structure fundamentals.',
     ],
     link: null,
+    image: bankImg,
   },
   {
     title: 'Plants vs. Zombies Parody',
@@ -88,6 +102,7 @@ const projects = [
       'Focused entirely on architecting clean class structures and designing engaging gameplay mechanics.',
     ],
     link: 'https://github.com/ZayaanB/plantsVsZombies',
+    image: pvzImg,
   },
 ];
 
@@ -108,7 +123,21 @@ export default function ProjectsPage() {
           }}
         >
           {projects.map((p) => (
-            <GlowCard key={p.title} customSize className="flex flex-col gap-3 w-full">
+            <GlowCard key={p.title} customSize className="flex flex-col gap-3 w-full p-5 sm:p-5">
+              {p.image && (
+                <div className="-mx-5 -mt-5 mb-2 relative h-48 overflow-hidden rounded-t-[10px] sm:rounded-t-[12px]">
+                  <Image
+                    src={p.image}
+                    alt={`${p.title} cover`}
+                    fill
+                    unoptimized
+                    className="object-cover object-center transition-transform duration-500 hover:scale-105"
+                  />
+                  {/* Subtle bottom gradient to blend the image border gently into the card */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,18,35,0.9)] to-transparent pointer-events-none" />
+                </div>
+              )}
+
               {/* Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
                 <h3 style={{
@@ -137,7 +166,6 @@ export default function ProjectsPage() {
                 )}
               </div>
 
-              {/* Meta */}
               <div>
                 <p style={{ fontSize: '0.8rem', color: 'var(--p-accent-cyan)', margin: 0, fontWeight: 600 }}>
                   {p.meta}
@@ -147,7 +175,6 @@ export default function ProjectsPage() {
                 </p>
               </div>
 
-              {/* Bullets */}
               <ul style={{
                 color: 'var(--p-muted)',
                 fontSize: '0.875rem',
@@ -159,7 +186,6 @@ export default function ProjectsPage() {
                 {p.bullets.map((b) => <li key={b} style={{ marginBottom: '0.25rem' }}>{b}</li>)}
               </ul>
 
-              {/* Link */}
               {p.link && (
                 <a
                   href={p.link}
