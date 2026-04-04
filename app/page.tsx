@@ -6,36 +6,53 @@ import { ProfileCardStack } from '@/components/ui/profile-card-stack';
 import { SkillsMarquee } from '@/components/ui/skills-marquee';
 
 import { FaPython, FaJava, FaLinux, FaDocker, FaGithub } from 'react-icons/fa';
-import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiTailwindcss, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGit, SiVercel } from 'react-icons/si';
+import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiPandas, SiTailwindcss, SiNextdotjs, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiIbmcloud, SiJetbrains, SiVisualstudiocode } from 'react-icons/si';
 import { TbSql } from 'react-icons/tb';
 import { ScanEye } from 'lucide-react';
+
 const HeroFuturistic = dynamic(
   () => import('@/components/ui/hero-futuristic').then((m) => m.HeroFuturistic),
   { ssr: false }
 );
 
-const skills = [
-  { label: 'Python', icon: <FaPython /> },
+const languages = [
   { label: 'Java', icon: <FaJava /> },
+  { label: 'Python', icon: <FaPython /> },
   { label: 'C/C++', icon: <SiCplusplus /> },
   { label: 'SQL', icon: <TbSql /> },
   { label: 'JavaScript', icon: <SiJavascript /> },
   { label: 'TypeScript', icon: <SiTypescript /> },
   { label: 'HTML/CSS', icon: <SiHtml5 /> },
+  { label: 'Bash', icon: <SiGnubash /> },
+];
+
+const libraries = [
   { label: 'OpenCV', icon: <SiOpencv /> },
   { label: 'PyTorch', icon: <SiPytorch /> },
   { label: 'NumPy', icon: <SiNumpy /> },
-  { label: 'YOLOv8', icon: <ScanEye size={18} /> },
+  { label: 'Pandas', icon: <SiPandas /> },
   { label: 'Tailwind CSS', icon: <SiTailwindcss /> },
+  { label: 'Next.js', icon: <SiNextdotjs /> },
   { label: 'FastAPI', icon: <SiFastapi /> },
+];
+
+const devTools = [
   { label: 'Git', icon: <SiGit /> },
   { label: 'GitHub', icon: <FaGithub /> },
+  { label: 'VS Code', icon: <SiVisualstudiocode /> },
+  { label: 'JetBrains', icon: <SiJetbrains /> },
   { label: 'Linux', icon: <FaLinux /> },
   { label: 'Docker', icon: <FaDocker /> },
-  { label: 'Vercel', icon: <SiVercel /> },
-  { label: 'Supabase', icon: <SiSupabase /> },
-  { label: 'PostgreSQL', icon: <SiPostgresql /> },
   { label: 'Arduino', icon: <SiArduino /> },
+];
+
+const databasesCloud = [
+  { label: 'Vercel', icon: <SiVercel /> },
+  { label: 'Vultr', icon: <SiVultr /> },
+  { label: 'Railway', icon: <SiRailway /> },
+  { label: 'PostgreSQL', icon: <SiPostgresql /> },
+  { label: 'IBM Cloud', icon: <SiIbmcloud /> },
+  { label: 'Supabase', icon: <SiSupabase /> },
 ];
 
 const profileCards = [
@@ -64,11 +81,16 @@ export default function HomePage() {
 
       <main className="relative" style={{ paddingTop: '1rem', paddingBottom: '4rem', overflow: 'hidden' }}>
         <section className="p-section p-container">
-          <div className="p-section-head">
+          <div className="p-section-head mb-8">
             <h2 className="p-h2">Technical Skills</h2>
             <p>Languages and tools from my coursework and project work.</p>
           </div>
-          <SkillsMarquee skills={skills} />
+          <div className="flex flex-col gap-4 w-full" style={{ paddingBottom: '1rem' }}>
+            <SkillsMarquee skills={languages} category="Languages" speed="35s" />
+            <SkillsMarquee skills={libraries} category="Libraries" speed="45s" reverse />
+            <SkillsMarquee skills={devTools} category="Developer Tools" speed="40s" />
+            <SkillsMarquee skills={databasesCloud} category="Cloud / Databases" speed="50s" reverse />
+          </div>
         </section>
 
         <section className="p-section p-container">
