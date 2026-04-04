@@ -86,10 +86,10 @@ export default function HomePage() {
             <p>Languages and tools from my coursework and project work.</p>
           </div>
           <div className="flex flex-col gap-4 w-full" style={{ paddingBottom: '1rem' }}>
-            <SkillsMarquee skills={languages} category="Languages" speed="35s" />
-            <SkillsMarquee skills={libraries} category="Libraries" speed="45s" reverse />
-            <SkillsMarquee skills={devTools} category="Developer Tools" speed="40s" />
-            <SkillsMarquee skills={databasesCloud} category="Cloud / Databases" speed="50s" reverse />
+            <SkillsMarquee skills={languages} category="Languages" speed="90s" />
+            <SkillsMarquee skills={libraries} category="Libraries" speed="110s" reverse />
+            <SkillsMarquee skills={devTools} category="Developer Tools" speed="100s" />
+            <SkillsMarquee skills={databasesCloud} category="Cloud / Databases" speed="120s" reverse />
           </div>
         </section>
 
