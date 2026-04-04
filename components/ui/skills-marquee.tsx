@@ -18,7 +18,7 @@ export function SkillsMarquee({ skills, reverse = false, speed = '40s', category
   return (
     <div className="flex flex-col w-full gap-2 mt-4 first:mt-0">
       {category && (
-        <h3 className="text-sm uppercase tracking-[0.2em] text-[var(--p-accent-cyan)] font-semibold px-4 md:px-8 mb-1">
+        <h3 className="text-sm uppercase tracking-[0.2em] text-[var(--p-primary)] font-semibold px-4 md:px-8 mb-1">
           {category}
         </h3>
       )}
