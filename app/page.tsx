@@ -6,8 +6,8 @@ import { ProfileCardStack } from '@/components/ui/profile-card-stack';
 import { SkillsMarquee } from '@/components/ui/skills-marquee';
 
 import { FaPython, FaJava, FaLinux, FaDocker, FaGithub } from 'react-icons/fa';
-import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiPandas, SiTailwindcss, SiNextdotjs, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiIbmcloud, SiJetbrains, SiVisualstudiocode } from 'react-icons/si';
-import { TbSql } from 'react-icons/tb';
+import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiPandas, SiTailwindcss, SiNextdotjs, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiJetbrains } from 'react-icons/si';
+import { TbSql, TbBrandVscode } from 'react-icons/tb';
 import { ScanEye } from 'lucide-react';
 
 const HeroFuturistic = dynamic(
@@ -39,7 +39,7 @@ const libraries = [
 const devTools = [
   { label: 'Git', icon: <SiGit /> },
   { label: 'GitHub', icon: <FaGithub /> },
-  { label: 'VS Code', icon: <SiVisualstudiocode /> },
+  { label: 'VS Code', icon: <TbBrandVscode /> },
   { label: 'JetBrains', icon: <SiJetbrains /> },
   { label: 'Linux', icon: <FaLinux /> },
   { label: 'Docker', icon: <FaDocker /> },
@@ -51,7 +51,7 @@ const databasesCloud = [
   { label: 'Vultr', icon: <SiVultr /> },
   { label: 'Railway', icon: <SiRailway /> },
   { label: 'PostgreSQL', icon: <SiPostgresql /> },
-  { label: 'IBM Cloud', icon: <SiIbmcloud /> },
+  { label: 'IBM Cloud', icon: <span className="font-bold text-[0.8em]">IBM</span> },
   { label: 'Supabase', icon: <SiSupabase /> },
 ];
 
