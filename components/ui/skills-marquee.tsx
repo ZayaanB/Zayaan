@@ -18,7 +18,7 @@ export function SkillsMarquee({ skills, reverse = false, speed = '40s', category
   return (
     <div className="flex flex-col w-full gap-2 mt-4 first:mt-0">
       {category && (
-        <h3 className="text-[0.7rem] uppercase tracking-[0.2em] text-[var(--p-muted)] font-semibold px-4 md:px-8 mb-1">
+        <h3 className="text-sm uppercase tracking-[0.2em] text-[var(--p-accent)] font-semibold px-4 md:px-8 mb-1">
           {category}
         </h3>
       )}
@@ -35,9 +35,11 @@ export function SkillsMarquee({ skills, reverse = false, speed = '40s', category
         style={{ animationDuration: speed }}
       >
         {/* We use two identical blocks that each contain the gap internally.
-            This ensures translating exactly -50% perfectly loops back to the start. */}
+            By iterating over the skills multiple times per 'half', we guarantee 
+            it's wide enough to not leave dead space on ultra-wide screens. 
+            Translating exactly -50% perfectly loops back to the start. */}
         <div className="flex shrink-0 gap-4 items-center pr-4">
-          {skills.map((skill, index) => (
+          {[...skills, ...skills, ...skills, ...skills].map((skill, index) => (
             <span 
               key={`${skill.label}-${index}`} 
               className="p-chip shrink-0 select-none cursor-default flex items-center gap-2"
@@ -49,7 +51,7 @@ export function SkillsMarquee({ skills, reverse = false, speed = '40s', category
         </div>
         
         <div className="flex shrink-0 gap-4 items-center pr-4" aria-hidden="true">
-          {skills.map((skill, index) => (
+          {[...skills, ...skills, ...skills, ...skills].map((skill, index) => (
             <span 
               key={`${skill.label}-dup-${index}`} 
               className="p-chip shrink-0 select-none cursor-default flex items-center gap-2"
