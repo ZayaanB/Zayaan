@@ -37,7 +37,7 @@ const projects = [
     bullets: [
       'Developed an AI clinical assistant using IBM Watsonx APIs to automate patient check-ins and structure data.',
       'Engineered a live monitoring dashboard with a computer vision module for real-time fall detection.',
-      'Built a PIPEDA-compliant backend using FastAPI and Supabase to process healthcare information securely.',
+      'Built a PIPEDA and HIPAA-compliant backend using FastAPI and Supabase to process healthcare information securely.',
     ],
     link: 'https://github.com/ZayaanB/Halo-Healthcare',
     image: haloImg,
