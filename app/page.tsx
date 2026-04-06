@@ -6,9 +6,8 @@ import { ProfileCardStack } from '@/components/ui/profile-card-stack';
 import { SkillsMarquee } from '@/components/ui/skills-marquee';
 
 import { FaPython, FaJava, FaLinux, FaDocker, FaGithub } from 'react-icons/fa';
-import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiPandas, SiTailwindcss, SiNextdotjs, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiJetbrains } from 'react-icons/si';
+import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiTailwindcss, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiJetbrains, SiObsidian, SiFlask } from 'react-icons/si';
 import { TbSql, TbBrandVscode } from 'react-icons/tb';
-import { ScanEye } from 'lucide-react';
 
 const HeroFuturistic = dynamic(
   () => import('@/components/ui/hero-futuristic').then((m) => m.HeroFuturistic),
@@ -30,10 +29,9 @@ const libraries = [
   { label: 'OpenCV', icon: <SiOpencv /> },
   { label: 'PyTorch', icon: <SiPytorch /> },
   { label: 'NumPy', icon: <SiNumpy /> },
-  { label: 'Pandas', icon: <SiPandas /> },
   { label: 'Tailwind CSS', icon: <SiTailwindcss /> },
-  { label: 'Next.js', icon: <SiNextdotjs /> },
   { label: 'FastAPI', icon: <SiFastapi /> },
+  { label: 'Flask', icon: <SiFlask /> },
 ];
 
 const devTools = [
@@ -44,6 +42,7 @@ const devTools = [
   { label: 'Linux', icon: <FaLinux /> },
   { label: 'Docker', icon: <FaDocker /> },
   { label: 'Arduino', icon: <SiArduino /> },
+  { label: 'Obsidian', icon: <SiObsidian /> },
 ];
 
 const databasesCloud = [

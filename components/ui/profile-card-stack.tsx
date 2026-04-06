@@ -82,11 +82,11 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
         {cards.map((card, index) => {
           const isFaceUp = index >= activeIndex;
           
-          let x = isFaceUp ? offset : -offset;
-          let y = getStackOffset(index);
-          let rotateZ = getRotationZ(index);
-          let rotateY = isFaceUp ? 0 : 180;
-          let zIndex = isFaceUp ? (cards.length - index) : (index + 1);
+          const x = isFaceUp ? offset : -offset;
+          const y = getStackOffset(index);
+          const rotateZ = getRotationZ(index);
+          const rotateY = isFaceUp ? 0 : 180;
+          const zIndex = isFaceUp ? (cards.length - index) : (index + 1);
 
           return (
             <motion.div
