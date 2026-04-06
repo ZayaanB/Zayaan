@@ -2,6 +2,19 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@font-face {
+  font-family: 'Google Sans Code';
+  src: url('/ZayaanBhanwadia/fonts/GoogleSansCode-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Google Sans Code';
+  src: url('/ZayaanBhanwadia/fonts/GoogleSansCode-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* ─── Portfolio design tokens ─────────────────────────────────── */
@@ -60,6 +73,7 @@
   --p-transition-fast: 0.2s;
   --p-transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --p-transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --font-google-sans: 'Google Sans Code', ui-monospace, monospace;
 }
 
 .dark {
