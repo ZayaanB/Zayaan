@@ -6,7 +6,7 @@ import { ProfileCardStack } from '@/components/ui/profile-card-stack';
 import { SkillsMarquee } from '@/components/ui/skills-marquee';
 
 import { FaPython, FaJava, FaLinux, FaDocker, FaGithub } from 'react-icons/fa';
-import { SiCplusplus, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiTailwindcss, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiJetbrains, SiObsidian, SiFlask } from 'react-icons/si';
+import { SiCplusplus, SiC, SiJavascript, SiTypescript, SiHtml5, SiOpencv, SiPytorch, SiNumpy, SiTailwindcss, SiFastapi, SiSupabase, SiPostgresql, SiArduino, SiGnubash, SiGit, SiVercel, SiVultr, SiRailway, SiJetbrains, SiObsidian, SiFlask } from 'react-icons/si';
 import { TbSql, TbBrandVscode } from 'react-icons/tb';
 
 const HeroFuturistic = dynamic(
@@ -17,7 +17,8 @@ const HeroFuturistic = dynamic(
 const languages = [
   { label: 'Java', icon: <FaJava /> },
   { label: 'Python', icon: <FaPython /> },
-  { label: 'C/C++', icon: <SiCplusplus /> },
+  { label: 'C', icon: <SiC /> },
+  { label: 'C++', icon: <SiCplusplus /> },
   { label: 'SQL', icon: <TbSql /> },
   { label: 'JavaScript', icon: <SiJavascript /> },
   { label: 'TypeScript', icon: <SiTypescript /> },

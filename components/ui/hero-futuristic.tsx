@@ -52,6 +52,7 @@ export const HeroFuturistic = () => {
                 animationDelay: `${delays[i] || 0}s`,
                 fontSize: 'clamp(1.6rem, 3.2vw, 3rem)',
                 fontWeight: 800,
+                fontFamily: 'var(--font-google-sans)',
                 color: 'white',
                 display: 'inline-block',
                 lineHeight: 1.1,
@@ -66,7 +67,7 @@ export const HeroFuturistic = () => {
 
         <div
           className="mt-3 overflow-hidden text-white font-bold text-center w-full"
-          style={{ whiteSpace: 'nowrap', fontSize: 'clamp(0.7rem, 1.4vw, 1.2rem)' }}
+          style={{ whiteSpace: 'nowrap', fontSize: 'clamp(0.7rem, 1.4vw, 1.2rem)', fontFamily: 'var(--font-google-sans)' }}
         >
           <div
             className={subtitleVisible ? 'hero-fade-in-subtitle' : ''}
