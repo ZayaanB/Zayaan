@@ -33,7 +33,7 @@ const libraries = [
   { label: 'Tailwind CSS', icon: <SiTailwindcss /> },
   { label: 'FastAPI', icon: <SiFastapi /> },
   { label: 'Flask', icon: <SiFlask /> },
-  { label: 'NodeJS', icon: <SiNodejs /> },
+  { label: 'NodeJS', icon: <SiNodedotjs /> },
 ];
 
 const devTools = [
