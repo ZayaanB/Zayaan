@@ -61,7 +61,7 @@ export default function Nav() {
             {isLiteMode ? <Leaf size={16} color="var(--p-primary)" /> : <Zap size={16} color="var(--p-accent-cyan)" />}
             <span>{isLiteMode ? 'Lite' : 'Full'}</span>
           </button>
-          <a className="p-btn p-btn-secondary" href="/ZayaanBhanwadia/documents/resume.pdf" download>
+          <a className="p-btn p-btn-secondary" href="/ZayaanBhanwadia/documents/Zayaan_Bhanwadia_Resume.pdf" download>
             Download Resume
           </a>
         </div>
