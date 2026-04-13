@@ -12,6 +12,7 @@ const GlobeScanEffect = () => (
   </div>
 );
 
+
 export const HeroFuturistic = () => {
   const titleWords = ['ZAYAAN', 'BHANWADIA ', ' · ', 'COMPUTER', 'SCIENCE'];
   const subtitle = 'CS @ UOFT · SWE · AI · Data';
