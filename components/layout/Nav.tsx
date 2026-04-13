@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Leaf, Zap, Menu, X } from 'lucide-react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
-import { CursorDrivenParticleTypography } from '@/components/ui/cursor-driven-particles-typography';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -28,15 +27,8 @@ export default function Nav() {
         <Link className="p-brand" href="/" style={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
           {/* basePath prefix required for GitHub Pages */}
           <Image className="p-brand-icon" src="/ZayaanBhanwadia/favicon.svg" alt="Z logo" width={36} height={36} />
-          <div className="hidden sm:block w-[155px] h-[30px] ml-2 relative overflow-hidden shrink-0">
-            <CursorDrivenParticleTypography
-              text="Zayaan Bhanwadia"
-              fontSize={18}
-              particleDensity={1}
-              particleSize={0.7}
-              dispersionStrength={8}
-              color="#ffffff"
-            />
+          <div className="hidden sm:block ml-2 font-bold text-[var(--p-text)] text-lg shrink-0">
+            Zayaan Bhanwadia
           </div>
           <span className="sm:hidden ml-2 font-bold text-[var(--p-text)] text-sm shrink-0">Zayaan Bhanwadia</span>
         </Link>

@@ -3,6 +3,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 
+import contextSyncImg from '@/project_images/context_sync.png';
 import refaiImg from '@/project_images/refai.png';
 import haloImg from '@/project_images/halo.png';
 import trustokenImg from '@/project_images/trustoken.png';
@@ -15,7 +16,30 @@ export const metadata: Metadata = {
   description: 'Hackathon wins and personal projects by Zayaan Bhanwadia.',
 };
 
-const projects = [
+const projects: Array<{
+  title: string;
+  meta: string;
+  event: string;
+  badge: string | null;
+  bullets: string[];
+  link: string | null;
+  marketplaceLink?: string;
+  image?: any;
+}> = [
+  {
+    title: 'Context Sync Extension',
+    meta: 'TypeScript · VS Code Extension API · Node.js',
+    event: 'Apr 2026 - Present',
+    badge: null,
+    bullets: [
+      'Developed a VS Code extension enabling the sharing of AI conversation context automatically.',
+      'Designed a structured Markdown format for connecting sessions and built a webview chat.',
+      'Integrated with OneDrive/Obsidian vaults for seamless team syncing across sessions and connected to GitHub Copilot.',
+    ],
+    link: 'https://github.com/ZayaanB/Context-Sync',
+    marketplaceLink: 'https://marketplace.visualstudio.com/items?itemName=ZayaanBhanwadia.context-sync&ssr=false#overview',
+    image: contextSyncImg,
+  },
   {
     title: 'Ref.AI',
     meta: 'Next.js · Python · OpenCV · Solana · FastAPI',
@@ -187,27 +211,47 @@ export default function ProjectsPage() {
                 {p.bullets.map((b) => <li key={b} style={{ marginBottom: '0.25rem' }}>{b}</li>)}
               </ul>
 
-              {/* Link */}
-              {p.link && (
-                <a
-                  href={p.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    color: 'var(--p-primary)',
-                    fontSize: '0.82rem',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    marginTop: 'auto',
-                    transition: 'color 0.2s',
-                  }}
-                >
-                  View on GitHub <ExternalLink size={13} />
-                </a>
-              )}
+              {/* Links */}
+              <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
+                {p.link && (
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      color: 'var(--p-primary)',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      transition: 'color 0.2s',
+                    }}
+                  >
+                    View on GitHub <ExternalLink size={13} />
+                  </a>
+                )}
+                {p.marketplaceLink && (
+                  <a
+                    href={p.marketplaceLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      color: 'var(--p-primary)',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                      transition: 'color 0.2s',
+                    }}
+                  >
+                    View on Marketplace <ExternalLink size={13} />
+                  </a>
+                )}
+              </div>
             </GlowCard>
           ))}
         </div>

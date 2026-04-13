@@ -9,7 +9,6 @@ interface PulseMarker {
   id: string
   location: [number, number]
   delay: number
-  char: '1' | '0'
 }
 
 interface CobePulseGlobeProps {
@@ -19,10 +18,8 @@ interface CobePulseGlobeProps {
 }
 
 const defaultMarkers: PulseMarker[] = [
-  { id: "pulse-1", location: [51.51,  -0.13],   delay: 0,   char: '1' }, // London
-  { id: "pulse-2", location: [40.71,  -74.01],  delay: 0.5, char: '1' }, // New York
-  { id: "pulse-3", location: [35.68,  139.65],  delay: 1.0, char: '0' }, // Tokyo
-  { id: "pulse-4", location: [-33.87, 151.21],  delay: 1.5, char: '1' }, // Sydney
+  { id: "pulse-mumbai",  location: [19.0760, 72.8777],  delay: 0 },   // Mumbai
+  { id: "pulse-toronto", location: [43.6532, -79.3832], delay: 0.5 }, // Toronto
 ]
 
 export function CobePulseGlobe({
@@ -182,18 +179,6 @@ export function CobePulseGlobe({
             animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.5}s`,
           }} />
 
-          {/* Binary digit label */}
-          <span style={{
-            fontFamily: "monospace",
-            fontWeight: "bold",
-            fontSize: "14px",
-            color: "#00ff88",
-            textShadow: "0 0 8px #00ff88, 0 0 20px rgba(0,255,136,0.6)",
-            zIndex: 1,
-            lineHeight: 1,
-          }}>
-            {m.char}
-          </span>
         </div>
       ))}
     </div>
