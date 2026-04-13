@@ -67,4 +67,4 @@
           duration-300
           hover:-translate-y-1
           ${s}
-        `.replace(/\s+/g," ").trim(),children:[(0,r.jsx)("div",{"data-glow":!0}),e]})]})}])},1898,e=>{e.v(r=>Promise.all(["static/chunks/042j9iq~boce0.js"].map(r=>e.l(r))).then(()=>r(83975)))}]);
+        `.replace(/\s+/g," ").trim(),children:[(0,r.jsx)("div",{"data-glow":!0}),e]})]})}])},1898,e=>{e.v(r=>Promise.all(["static/chunks/0lq_d464q4lch.js"].map(r=>e.l(r))).then(()=>r(83975)))}]);
