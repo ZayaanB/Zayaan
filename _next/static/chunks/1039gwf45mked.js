@@ -64,7 +64,8 @@
           p-5
           backdrop-blur-[5px]
           transition-transform
-          duration-300
-          hover:-translate-y-1
+          duration-200
+          ease-out
+          hover:-translate-y-0.5
           ${s}
         `.replace(/\s+/g," ").trim(),children:[(0,r.jsx)("div",{"data-glow":!0}),e]})]})}])}]);
