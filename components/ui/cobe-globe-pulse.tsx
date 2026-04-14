@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback } from "react"
 import createGlobe from "cobe"
 import { useLiteMode } from "@/components/layout/LiteModeProvider"
 
-// Pulse markers - 1s on land, 0s on ocean (visual theme)
+// pulse markers use 1s on land and 0s on ocean for the visual theme
 interface PulseMarker {
   id: string
   location: [number, number]
@@ -18,8 +18,8 @@ interface CobePulseGlobeProps {
 }
 
 const defaultMarkers: PulseMarker[] = [
-  { id: "pulse-mumbai",  location: [19.0760, 72.8777],  delay: 0 },   // Mumbai
-  { id: "pulse-toronto", location: [43.6532, -79.3832], delay: 0.5 }, // Toronto
+  { id: "pulse-mumbai",  location: [19.0760, 72.8777],  delay: 0 },   // mumbai
+  { id: "pulse-toronto", location: [43.6532, -79.3832], delay: 0.5 }, // toronto
 ]
 
 export function CobePulseGlobe({
@@ -83,7 +83,7 @@ export function CobePulseGlobe({
       const width = canvas.offsetWidth
       if (width === 0 || globe) return
 
-      // neon green (#00ff88) colour scheme on near-black base
+      // neon green color scheme sits on a near-black base
       globe = createGlobe(canvas, {
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         width, height: width,
@@ -101,7 +101,7 @@ export function CobePulseGlobe({
       })
 
       function animate() {
-        // Pause rotation in Lite Mode or while dragging
+        // pause rotation in lite mode or while dragging
         if (!isLiteModeRef.current && !isDraggingRef.current) phi += speed
         globe!.update({
           phi:   phi + phiOffsetRef.current   + dragOffset.current.phi,
@@ -149,7 +149,7 @@ export function CobePulseGlobe({
         }}
       />
 
-      {/* Pulse markers - each shows a '1' or '0' with pulsing rings */}
+      {/* pulse markers render with pulsing rings */}
       {markers.map((m) => (
         <div
           key={m.id}
@@ -167,7 +167,7 @@ export function CobePulseGlobe({
             transition: "opacity 0.4s, filter 0.4s",
           }}
         >
-          {/* Two offset rings create the pulsing glow effect */}
+          {/* two offset rings create the pulsing glow effect */}
           <span style={{
             position: "absolute", inset: 0,
             border: "2px solid #00ff88", borderRadius: "50%", opacity: 0,

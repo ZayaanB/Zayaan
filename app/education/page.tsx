@@ -3,7 +3,7 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 
 export const metadata: Metadata = {
   title: 'Education',
-  description: 'Academic background and achievements of Zayaan Bhanwadia.',
+  description: 'Academic journey, scholarships, and academic focus.',
 };
 
 const education = [
@@ -11,7 +11,7 @@ const education = [
     school: 'University of Toronto Scarborough',
     meta: 'BSc Computer Science (Co-op) | 2025 - Present',
     bullets: [
-      'Maintained a current GPA of 3.86 / 4.0.',
+      'Maintained a current GPA of 3.7 / 4.0.',
       'Earned the Scholars Scholarship, receiving an award of CAD $10,000.',
       'Focused studies on software engineering, AI applications, and systems development.',
     ],
@@ -39,11 +39,13 @@ export default function EducationPage() {
   return (
     <main className="p-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       <section className="p-section">
+        {/* page intro mirrors metadata copy for ui and seo consistency */}
         <div className="p-section-head">
           <h1 className="p-h1">Education</h1>
-          <p>Academic journey, scholarships, and areas of study.</p>
+          <p>Academic journey, scholarships, and academic focus.</p>
         </div>
 
+        {/* responsive card grid keeps readability stable across breakpoints */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
@@ -51,33 +53,16 @@ export default function EducationPage() {
         }}>
           {education.map((e) => (
             <GlowCard key={e.school} customSize className="w-full flex flex-col gap-2">
-              <h3 style={{
-                fontFamily: "'Sora', sans-serif",
-                fontSize: '1.05rem',
-                fontWeight: 700,
-                color: 'var(--p-text)',
-                margin: 0,
-              }}>
+              <h3 className="p-card-title">
                 {e.school}
               </h3>
               {e.meta && (
-                <p style={{
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  color: 'var(--p-accent-cyan)',
-                  margin: 0,
-                }}>
+                <p className="p-card-meta">
                   {e.meta}
                 </p>
               )}
-              <ul style={{
-                color: 'var(--p-muted)',
-                fontSize: '0.9rem',
-                margin: 0,
-                paddingLeft: '1.2rem',
-                lineHeight: 1.7,
-              }}>
-                {e.bullets.map((b) => <li key={b} style={{ marginBottom: '0.25rem' }}>{b}</li>)}
+              <ul className="p-bullet-list">
+                {e.bullets.map((b) => <li key={b}>{b}</li>)}
               </ul>
             </GlowCard>
           ))}

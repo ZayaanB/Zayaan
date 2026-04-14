@@ -12,11 +12,11 @@ interface GlowCardProps {
   customSize?: boolean;
 }
 
-// Green hue tuned to the site's #00ff88 (hsl ≈ 152°)
+// green hue tuned to the site's #00ff88
 const glowColorMap = {
   blue:   { base: 220, spread: 200 },
   purple: { base: 280, spread: 300 },
-  green:  { base: 152, spread: 58 },  // #00ff88 (152°) → cyan → #00d4ff (~210°)
+  green:  { base: 152, spread: 58 },  // green value transitions toward cyan for pointer motion
   red:    { base: 0,   spread: 200 },
   orange: { base: 30,  spread: 200 },
 };
@@ -27,7 +27,7 @@ const sizeMap = {
   lg: 'w-80 h-96',
 };
 
-// Uses element-relative coords to ensure accurate mouse tracking both inside and outside the card boundary.
+// element-relative coords keep pointer tracking accurate across card bounds
 const beforeAfterStyles = `
   [data-glow]::before,
   [data-glow]::after {
@@ -127,7 +127,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
     '--border-size': 'calc(var(--border, 2) * 1px)',
     '--spotlight-size': 'calc(var(--size, 150) * 1px)',
     '--hue': 'calc(var(--base) + (var(--xp, 0) * var(--spread, 0)))',
-    // element-relative background spotlight (avoids background-attachment: fixed)
+    // element-relative spotlight avoids fixed background jitter
     backgroundImage: `radial-gradient(
       var(--spotlight-size) var(--spotlight-size) at
       calc(var(--x, 50%) * 1px)
@@ -161,8 +161,9 @@ const GlowCard: React.FC<GlowCardProps> = ({
           p-5
           backdrop-blur-[5px]
           transition-transform
-          duration-300
-          hover:-translate-y-1
+          duration-200
+          ease-out
+          hover:-translate-y-0.5
           ${className}
         `.replace(/\s+/g, ' ').trim()}
       >

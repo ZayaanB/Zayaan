@@ -1,6 +1,6 @@
 'use client';
 
-// ─── Lite Mode: global animation toggle persisted to localStorage ─────────────
+// lite mode toggle persisted to localstorage
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface LiteModeContextType {

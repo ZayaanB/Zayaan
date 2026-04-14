@@ -23,10 +23,7 @@ export function SkillsMarquee({ skills, reverse = false, speed = '40s', category
         </h3>
       )}
       <div className="relative w-full overflow-hidden flex items-center marquee-container">
-      {/* 
-        Left and right gradient masks 
-        Fades out the edges so chips smoothly disappear rather than hard clipping.
-      */}
+      {/* edge gradients soften chip clipping at both sides */}
       <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-[--p-bg] to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-[--p-bg] to-transparent z-10 pointer-events-none" />
       
@@ -34,10 +31,7 @@ export function SkillsMarquee({ skills, reverse = false, speed = '40s', category
         className={`flex w-max p-marquee-track hover:[animation-play-state:paused] ${reverse ? 'p-marquee-track-reverse' : ''}`}
         style={{ animationDuration: speed }}
       >
-        {/* We use two identical blocks that each contain the gap internally.
-            By iterating over the skills multiple times per 'half', we guarantee 
-            it's wide enough to not leave dead space on ultra-wide screens. 
-            Translating exactly -50% perfectly loops back to the start. */}
+        {/* duplicate tracks prevent dead space and keep a seamless loop */}
         <div className="flex shrink-0 gap-4 items-center pr-4">
           {[...skills, ...skills, ...skills, ...skills].map((skill, index) => (
             <span 

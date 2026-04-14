@@ -17,9 +17,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ─── Portfolio design tokens ─────────────────────────────────── */
+/* portfolio design tokens */
 :root {
-  /* shadcn required */
+  /* shadcn required tokens */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -53,7 +53,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Portfolio custom tokens */
+  /* portfolio custom tokens */
   --p-bg: #050508;
   --p-bg-soft: #0a0a12;
   --p-surface: rgba(15, 18, 35, 0.9);
@@ -74,6 +74,10 @@
   --p-transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --p-transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   --font-google-sans: 'Google Sans Code', ui-monospace, monospace;
+  --p-text-body-size: 0.95rem;
+  --p-text-body-line: 1.7;
+  --p-text-body-weight: 400;
+  --p-text-paragraph-gap: 0.65rem;
 }
 
 .dark {
@@ -151,7 +155,7 @@
   --radius-xl: calc(var(--radius) * 1.4);
 }
 
-/* ─── Base ─────────────────────────────────────────────────────── */
+/* base */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -170,7 +174,7 @@
   }
 }
 
-/* ─── Hero animations ─────────────────────────────────────────── */
+/* hero animations */
 /* per-word staggered reveal */
 .hero-word-in {
   animation: heroFadeGlitch 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -180,7 +184,7 @@
   animation: heroFadeGlitch 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-/* Globe scan line - clipped to sphere, blends via screen mode */
+/* globe scan line clipped to sphere with screen blend mode */
 .globe-scan-container {
   position: absolute;
   inset: 0;
@@ -252,7 +256,7 @@
   50% { transform: translateY(5px); }
 }
 
-/* ─── Portfolio layout utilities ───────────────────────────────── */
+/* portfolio layout utilities */
 .p-container {
   width: min(1100px, calc(100% - 2.4rem));
   margin: 0 auto;
@@ -260,7 +264,7 @@
   z-index: 1;
 }
 
-/* Nav */
+/* nav */
 .p-nav {
   position: sticky;
   top: 0;
@@ -340,7 +344,7 @@
   gap: 0.6rem;
 }
 
-/* Buttons */
+/* buttons */
 .p-btn {
   display: inline-flex;
   align-items: center;
@@ -378,13 +382,53 @@
   box-shadow: 0 8px 24px var(--p-primary-glow);
 }
 
-/* Sections */
+/* sections */
 .p-section { margin-top: 3rem; }
 .p-section-head { margin-bottom: 1.5rem; }
 .p-section-head h2 { margin-bottom: 0.25rem; }
-.p-section-head p { margin: 0.4rem 0 0; color: var(--p-muted); }
+.p-section-head p {
+  margin: 0.5rem 0 0;
+  color: var(--p-muted);
+  font-size: var(--p-text-body-size);
+  font-weight: var(--p-text-body-weight);
+  line-height: var(--p-text-body-line);
+}
 
-/* Headings */
+/* type rhythm */
+.p-card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--p-text);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  margin: 0;
+}
+.p-card-meta {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--p-accent-cyan);
+  line-height: 1.5;
+  margin: 0;
+}
+.p-body-text {
+  color: var(--p-muted);
+  font-size: var(--p-text-body-size);
+  font-weight: var(--p-text-body-weight);
+  line-height: var(--p-text-body-line);
+  margin: 0;
+}
+.p-bullet-list {
+  color: var(--p-muted);
+  font-size: var(--p-text-body-size);
+  font-weight: var(--p-text-body-weight);
+  line-height: var(--p-text-body-line);
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.p-bullet-list li { margin-bottom: var(--p-text-paragraph-gap); }
+
+/* headings */
 .p-h1 {
   font-family: 'Sora', sans-serif;
   font-size: clamp(2rem, 3.5vw, 3.25rem);
@@ -407,7 +451,7 @@
   color: var(--p-text);
 }
 
-/* Cards */
+/* cards */
 .p-cards {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -462,7 +506,7 @@
 }
 .p-card-link:hover { color: var(--p-accent-cyan); }
 
-/* Chips / Skills Marquee */
+/* chips and skills marquee */
 .p-marquee-track {
   animation: marquee 40s linear infinite;
 }
@@ -496,7 +540,7 @@
   transform: translateY(-2px);
 }
 
-/* Timeline (Experience) */
+/* timeline experience */
 .p-timeline { display: flex; flex-direction: column; gap: 1.5rem; }
 .p-timeline-item {
   background: var(--p-surface);
@@ -550,7 +594,7 @@
 }
 .p-timeline-item li { margin-bottom: 0.25rem; }
 
-/* Footer */
+/* footer */
 .p-footer {
   margin-top: 5rem;
   padding: 2rem 0;
@@ -578,7 +622,7 @@
 }
 .p-footer-links a:hover { color: var(--p-primary); }
 
-/* Mobile nav */
+/* mobile nav */
 @media (max-width: 760px) {
   .p-nav-links-wrap { display: none; }
   .p-nav-links-wrap.open { display: flex; }

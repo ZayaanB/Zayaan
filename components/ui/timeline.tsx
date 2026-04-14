@@ -39,7 +39,7 @@ export const Timeline = ({ data, heading, description }: TimelineProps) => {
 
   return (
     <div ref={containerRef} className="w-full">
-      {/* Header - matches p-container + p-section-head pattern from other pages */}
+      {/* header matches p-container and p-section-head patterns */}
       <div className="p-container" style={{ paddingTop: '2.5rem' }}>
         <div className="p-section-head">
           <h1 className="p-h1">{heading ?? "Timeline"}</h1>
@@ -49,7 +49,7 @@ export const Timeline = ({ data, heading, description }: TimelineProps) => {
         </div>
       </div>
 
-      {/* Entries */}
+      {/* timeline entries */}
       <div ref={ref} className="relative p-container pb-20 md:px-10">
         {data.map((item, index) => (
           <div
@@ -96,14 +96,14 @@ export const Timeline = ({ data, heading, description }: TimelineProps) => {
           </div>
         ))}
 
-        {/* Scroll-fill line */}
+        {/* scroll-fill line */}
         <div
           style={{ height: height + "px" }}
           className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
         >
           <motion.div
             style={{ height: heightTransform, opacity: opacityTransform }}
-            className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-purple-500 via-blue-500 to-transparent from-[0%] via-[10%] rounded-full"
+            className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-blue-500 via-green-500 to-transparent from-[0%] via-[10%] rounded-full"
           />
         </div>
       </div>

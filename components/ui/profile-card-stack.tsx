@@ -14,12 +14,12 @@ interface ProfileCardStackProps {
 }
 
 export function ProfileCardStack({ cards }: ProfileCardStackProps) {
-  // activeIndex = Top card of the face-up pile
+  // activeindex tracks the top card in the face-up pile
   const [activeIndex, setActiveIndex] = useState(0);
   const [offset, setOffset] = useState(200);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Responsive layout calculation
+  // responsive layout adjusts spacing for mobile and desktop stacks
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
@@ -51,7 +51,7 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
     return rot;
   };
 
-  // Generate matrix bg once to avoid hydration mismatch and blinking
+  // generate matrix background once to avoid hydration mismatch and blinking
   const [matrixBg, setMatrixBg] = useState('');
   useEffect(() => {
     setMatrixBg(Array.from({ length: 600 }).map(() => (Math.random() > 0.5 ? '1' : '0')).join(' '));
@@ -59,15 +59,15 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
 
   return (
     <div className="w-full flex flex-col items-center justify-center pt-4 sm:pt-8 pb-10 relative">
-      {/* Mobile-only Flat Stack */}
+      {/* mobile-only flat stack */}
       {isMobile ? (
         <div className="flex flex-col gap-6 w-full max-w-[340px] px-4 mx-auto">
           {cards.map(card => (
             <GlowCard key={card.title} customSize className="w-full flex flex-col p-6 gap-3 !bg-[#0b0e17] shadow-lg">
-              <h3 className="text-lg font-bold font-sora tracking-tight text-[#00ff88]">
+              <h3 className="p-card-title text-[#00ff88]">
                 {card.title}
               </h3>
-              <p className="text-gray-300 leading-relaxed text-[0.9rem]">
+              <p className="p-body-text text-gray-300">
                 {card.body}
               </p>
             </GlowCard>
@@ -109,22 +109,22 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
               style={{ transformStyle: 'preserve-3d' }}
               title={isFaceUp ? "Click to flip card" : "Click to view card"}
             >
-              {/* FACE UP - FRONT */}
+              {/* face-up front */}
               <div 
                 className="w-full h-full absolute top-0 left-0"
                 style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
               >
                 <GlowCard customSize className="w-full h-full flex flex-col p-8 gap-4 shadow-xl !bg-[#0b0e17]">
-                  <h3 className="text-xl font-bold font-sora mb-2 leading-tight tracking-tight text-[#00ff88]">
+                  <h3 className="p-card-title mb-2 text-[#00ff88]">
                     {card.title}
                   </h3>
-                  <p className="text-gray-300 leading-relaxed text-sm">
+                  <p className="p-body-text text-gray-300">
                     {card.body}
                   </p>
                 </GlowCard>
               </div>
 
-              {/* FACE DOWN - BACK */}
+              {/* face-down back */}
               <div 
                 className="w-full h-full absolute top-0 left-0"
                 style={{ 
@@ -138,7 +138,7 @@ export function ProfileCardStack({ cards }: ProfileCardStackProps) {
                     {matrixBg}
                   </div>
                   
-                  {/* Hexagon/Triangle Logo Motif */}
+                  {/* geometric logo motif for card back */}
                   <div className="z-10 bg-black/60 p-5 border border-[#00ff88]/30 rounded-xl w-20 h-20 flex items-center justify-center backdrop-blur-md shadow-lg rotate-45">
                     <div className="w-10 h-10 border-2 border-[#00ff88] rounded-sm flex items-center justify-center -rotate-45 relative">
                       <div className="absolute w-2 h-2 bg-[#00ff88] rounded-full top-1 left-1 animate-pulse" />

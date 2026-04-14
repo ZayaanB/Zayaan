@@ -1,11 +1,11 @@
 'use client';
 
-// Hero: word-by-word title reveal + cobe globe with CSS scan sweep
+// hero uses word-by-word reveal with a cobe globe scan sweep
 import { useEffect, useState } from 'react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
 import { CobePulseGlobe } from '@/components/ui/cobe-globe-pulse';
 
-// mix-blend-mode: screen makes the scan line brighten globe dots as it passes
+// screen blend mode makes the scan line brighten globe dots while passing
 const GlobeScanEffect = () => (
   <div className="globe-scan-container">
     <div className="globe-scan-sweep" />
@@ -19,7 +19,7 @@ export const HeroFuturistic = () => {
 
   const [visibleWords, setVisibleWords] = useState(0);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
-  // Jitter set client-side only to avoid SSR/hydration mismatch
+  // jitter values are client-only to avoid hydration mismatch
   const [delays, setDelays] = useState<number[]>([]);
   const [subtitleDelay, setSubtitleDelay] = useState(0);
   const { isLiteMode } = useLiteMode();
@@ -29,7 +29,7 @@ export const HeroFuturistic = () => {
     setSubtitleDelay(Math.random() * 0.08);
   }, []);
 
-  // Reveal one word every 450 ms, then show subtitle
+  // reveal one word every 450ms, then show subtitle
   useEffect(() => {
     if (visibleWords < titleWords.length) {
       const t = setTimeout(() => setVisibleWords((v) => v + 1), 450);
@@ -41,7 +41,7 @@ export const HeroFuturistic = () => {
 
   return (
     <div className="h-[85vh] relative overflow-hidden bg-black">
-      {/* pointer-events-none keeps globe drag functional beneath the text */}
+      {/* pointer-events-none keeps globe drag functional beneath text */}
       <div className="h-full uppercase items-center w-full absolute z-[60] pointer-events-none px-4 flex justify-center flex-col">
         <div className="flex flex-nowrap justify-center gap-x-4 md:gap-x-6 w-full">
           {titleWords.map((word, i) => (
