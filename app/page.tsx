@@ -94,7 +94,7 @@ export default function HomePage() {
         <section className="p-section p-container">
           <div className="p-section-head">
             <h2 className="p-h2">Quick Profile</h2>
-            <p>Highlights from leadership, engineering, and team-based problem solving.</p>
+            <p>My highlights from recent projects and experiences.</p>
           </div>
           <ProfileCardStack cards={profileCards} />
         </section>

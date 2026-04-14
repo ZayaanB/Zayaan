@@ -3,7 +3,7 @@ import { Timeline } from '@/components/ui/timeline';
 
 export const metadata: Metadata = {
   title: 'Experience',
-  description: 'Work experience and leadership roles of Zayaan Bhanwadia.',
+  description: 'Work experience and leadership roles.',
 };
 
 function ExperienceCard({
@@ -17,35 +17,15 @@ function ExperienceCard({
 }) {
   return (
     <div>
-      <p style={{
-        fontFamily: "'Sora', sans-serif",
-        fontSize: '1.1rem',
-        fontWeight: 700,
-        color: 'var(--p-text)',
-        margin: '0 0 0.3rem',
-        lineHeight: 1.3,
-      }}>
+      <p className="p-card-title" style={{ marginBottom: '0.35rem' }}>
         {title}
       </p>
-      <p style={{
-        fontFamily: "'Outfit', sans-serif",
-        fontSize: '0.9rem',
-        fontWeight: 500,
-        color: 'var(--p-accent-cyan)',
-        margin: '0 0 1rem',
-      }}>
+      <p className="p-card-meta" style={{ marginBottom: '1rem' }}>
         {org}
       </p>
-      <ul style={{
-        color: 'var(--p-muted)',
-        fontFamily: "'Outfit', sans-serif",
-        fontSize: '0.95rem',
-        lineHeight: 1.75,
-        margin: 0,
-        paddingLeft: '1.2rem',
-      }}>
+      <ul className="p-bullet-list">
         {bullets.map((b) => (
-          <li key={b} style={{ marginBottom: '0.35rem' }}>{b}</li>
+          <li key={b}>{b}</li>
         ))}
       </ul>
     </div>
@@ -53,6 +33,7 @@ function ExperienceCard({
 }
 
 const timelineData = [
+  // timeline entries reuse one card component to keep typography and spacing consistent
   {
     title: '2025 - Present',
     content: (
@@ -110,10 +91,11 @@ const timelineData = [
 export default function ExperiencePage() {
   return (
     <main>
+      {/* timeline component owns scroll animation while this page provides content */}
       <Timeline
         data={timelineData}
         heading="Experience"
-        description="Leadership, mentorship, and technical roles that shaped my approach to software and teamwork."
+        description="Leadership, mentorship, and technical roles."
       />
     </main>
   );

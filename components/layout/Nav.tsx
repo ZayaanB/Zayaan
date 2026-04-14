@@ -1,6 +1,6 @@
 'use client';
 
-// ─── Navigation Bar ────────────────────────────────────────────────────────────
+// navigation bar
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -23,9 +23,9 @@ export default function Nav() {
   return (
     <nav className="p-nav">
       <div className="p-container p-nav-inner">
-        {/* Brand */}
+        {/* brand */}
         <Link className="p-brand" href="/" style={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-          {/* basePath prefix required for GitHub Pages */}
+          {/* basepath prefix is required for github pages */}
           <Image className="p-brand-icon" src="/ZayaanBhanwadia/favicon.svg" alt="Z logo" width={36} height={36} />
           <div className="hidden sm:block ml-2 font-bold text-[var(--p-text)] text-lg shrink-0">
             Zayaan Bhanwadia
@@ -33,7 +33,7 @@ export default function Nav() {
           <span className="sm:hidden ml-2 font-bold text-[var(--p-text)] text-sm shrink-0">Zayaan Bhanwadia</span>
         </Link>
 
-        {/* Nav links (Desktop) */}
+        {/* nav links desktop */}
         <div className="hidden md:flex p-nav-links">
           {links.map(({ href, label }) => (
             <Link key={href} href={href} className={`p-nav-link${pathname === href ? ' active' : ''}`}>
@@ -42,7 +42,7 @@ export default function Nav() {
           ))}
         </div>
 
-        {/* Actions (Desktop) */}
+        {/* actions desktop */}
         <div className="hidden md:flex p-nav-actions" style={{ alignItems: 'center', gap: '1rem' }}>
           <button
             onClick={toggleLiteMode}
@@ -58,7 +58,7 @@ export default function Nav() {
           </a>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* mobile toggle */}
         <button 
           className="md:hidden flex items-center justify-center p-2 text-[var(--p-text)] transition-transform active:scale-95"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -68,7 +68,7 @@ export default function Nav() {
         </button>
       </div>
 
-      {/* Mobile Dropdown Panel */}
+      {/* mobile dropdown panel */}
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-[100%] left-0 w-full border-t border-[var(--p-border)] bg-[rgba(6,8,16,0.95)] backdrop-blur-2xl shadow-2xl flex flex-col gap-2 p-4 pb-6 z-50">
           <div className="flex flex-col gap-1 mb-4">

@@ -1,7 +1,7 @@
 'use client';
 
-// Three.js wave background - 50x50 grid of '0'/'1' sprites that animate as a wave.
-// Used as a fixed full-screen backdrop on all pages.
+// three.js wave background uses a 50x50 grid of animated 0/1 sprites
+// used as a fixed full-screen backdrop across pages
 import { cn } from '@/lib/utils';
 import React, { useEffect, useRef } from 'react';
 import { useLiteMode } from '@/components/layout/LiteModeProvider';
@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 type DottedSurfaceProps = Omit<React.ComponentProps<'div'>, 'ref'>;
 
-// Creates a canvas texture containing a single monospace character
+// creates a canvas texture containing a single monospace character
 function createTextTexture(char: string): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = 64;
@@ -68,7 +68,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     renderer.setClearColor(scene.fog.color, 0);
     containerRef.current.appendChild(renderer.domElement);
 
-    // Build interleaved '1' / '0' grid positions
+    // build interleaved 1 and 0 grid positions
     const positions1: number[] = [];
     const colors1: number[] = [];
     const positions0: number[] = [];
@@ -129,7 +129,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
       }
       hasRenderedLite = false;
 
-      // Wave animation - update Y positions each frame
+      // wave animation updates y positions each frame
       const posArray1 = geometry1.attributes.position.array as Float32Array;
       for (let i = 0; i < originalIndices1.length; i++) {
         const pt = originalIndices1[i];

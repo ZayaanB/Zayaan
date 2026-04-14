@@ -13,7 +13,7 @@ import bankImg from '@/project_images/bank.png';
 import pvzImg from '@/project_images/pvz.png';
 export const metadata: Metadata = {
   title: 'Projects',
-  description: 'Hackathon wins and personal projects by Zayaan Bhanwadia.',
+  description: 'Hackathon wins and personal projects.',
 };
 
 const projects: Array<{
@@ -135,7 +135,7 @@ export default function ProjectsPage() {
       <section className="p-section">
         <div className="p-section-head">
           <h1 className="p-h1">Projects</h1>
-          <p>Hackathon builds, personal tools, and coursework. Focused on practical impact.</p>
+          <p>Hackathon builds, personal tools, and coursework.</p>
         </div>
 
         <div
@@ -156,20 +156,14 @@ export default function ProjectsPage() {
                     unoptimized
                     className="object-cover object-center transition-transform duration-500 hover:scale-105"
                   />
-                  {/* Subtle bottom gradient to blend the image border gently into the card */}
+                  {/* subtle bottom gradient blends image edge into the card */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,18,35,0.9)] to-transparent pointer-events-none" />
                 </div>
               )}
 
-              {/* Header */}
+              {/* header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
-                <h3 style={{
-                  fontFamily: "'Sora', sans-serif",
-                  fontSize: '1.05rem',
-                  fontWeight: 700,
-                  color: 'var(--p-text)',
-                  margin: 0,
-                }}>
+                <h3 className="p-card-title">
                   {p.title}
                 </h3>
                 {p.badge && (
@@ -189,29 +183,22 @@ export default function ProjectsPage() {
                 )}
               </div>
 
-              {/* Meta */}
+              {/* meta */}
               <div>
-                <p style={{ fontSize: '0.8rem', color: 'var(--p-accent-cyan)', margin: 0, fontWeight: 600 }}>
+                <p className="p-card-meta" style={{ fontSize: '0.82rem' }}>
                   {p.meta}
                 </p>
-                <p style={{ fontSize: '0.75rem', color: 'var(--p-muted)', margin: '0.15rem 0 0', fontFamily: "'JetBrains Mono', monospace" }}>
+                <p style={{ fontSize: '0.76rem', color: 'var(--p-muted)', margin: '0.25rem 0 0', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.45 }}>
                   {p.event}
                 </p>
               </div>
 
-              {/* Bullets */}
-              <ul style={{
-                color: 'var(--p-muted)',
-                fontSize: '0.875rem',
-                margin: 0,
-                paddingLeft: '1.1rem',
-                lineHeight: 1.65,
-                flexGrow: 1,
-              }}>
-                {p.bullets.map((b) => <li key={b} style={{ marginBottom: '0.25rem' }}>{b}</li>)}
+              {/* bullets */}
+              <ul className="p-bullet-list" style={{ flexGrow: 1 }}>
+                {p.bullets.map((b) => <li key={b}>{b}</li>)}
               </ul>
 
-              {/* Links */}
+              {/* links */}
               <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                 {p.link && (
                   <a
