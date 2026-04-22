@@ -33,8 +33,8 @@ const projects: Array<{
     badge: null,
     bullets: [
       'Developed a VS Code extension enabling the sharing of AI conversation context automatically.',
-      'Designed a structured Markdown format for connecting sessions and built a webview chat.',
-      'Integrated with OneDrive/Obsidian vaults for seamless team syncing across sessions and connected to GitHub Copilot.',
+      'Designed a structured Markdown format for connecting sessions with weighted graph edges.',
+      'Integrated with OneDrive and Obsidian for team syncing across sessions and connected to GitHub Copilot.',
     ],
     link: 'https://github.com/ZayaanB/Context-Sync',
     marketplaceLink: 'https://marketplace.visualstudio.com/items?itemName=ZayaanBhanwadia.context-sync&ssr=false#overview',
