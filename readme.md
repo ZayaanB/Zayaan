@@ -1,7 +1,5 @@
 # My Portfolio Website
 
-![image info](./static/social/share-image.png)
-
 This is my personal portfolio website — an interactive 3D world built to showcase my projects and experience.
 
 ## Inspiration & credits
