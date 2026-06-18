@@ -4,7 +4,6 @@ export class Server
 {
     constructor()
     {
-        // Multiplayer has been removed; the game always runs offline.
         this.connected = false
         this.initData = null
         this.events = new Events()

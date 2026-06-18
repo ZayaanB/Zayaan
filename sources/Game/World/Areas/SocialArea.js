@@ -30,13 +30,10 @@ export class SocialArea extends Area
 
     setStatues()
     {
-        // Social statue meshes present in the model (names cleaned of the "PhysicalDynamic" suffix)
         const socialStatueNames = [ 'x', 'bluesky', 'youtube', 'mail', 'twitch', 'github', 'linkedin', 'discord', 'onlyfans' ]
 
-        // Networks to keep, derived from the social data
         const keptNames = socialData.map(link => link.name.toLowerCase())
 
-        // Kept statue objects, keyed by network name
         const keptObjects = new Map()
 
         for(const object of this.objects.items)
@@ -46,7 +43,6 @@ export class SocialArea extends Area
 
             const name = object.visual.object3D.name.toLowerCase().replace(/\.?\d+$/, '')
 
-            // Remove the fan base model tied to the (removed) OnlyFans feature
             if(name === 'reffan')
             {
                 this.removeObject(object)
@@ -62,10 +58,9 @@ export class SocialArea extends Area
                 this.removeObject(object)
         }
 
-        // Snap the kept statues onto the podium pedestals, spread evenly across the semicircle
         this.statuePositions = new Map()
 
-        const pedestalCount = 8 // pedestals sit at angles i * PI / 7 around the podium
+        const pedestalCount = 8
         const count = socialData.length
 
         for(let i = 0; i < count; i++)
@@ -79,20 +74,14 @@ export class SocialArea extends Area
             const object3D = object.visual.object3D
             const origin = object3D.position
 
-            // Bounding box, used to center the visual on the pedestal and to place the label
             if(!object3D.geometry.boundingBox)
                 object3D.geometry.computeBoundingBox()
             const boundingBox = object3D.geometry.boundingBox
 
-            // Horizontal offset between the statue's origin and its visual center, in world space
-            // (some statue models, e.g. Mail, have an off-center origin)
             const visualOffset = boundingBox
                 ? boundingBox.getCenter(new THREE.Vector3()).multiply(object3D.scale).applyQuaternion(object3D.quaternion)
                 : new THREE.Vector3()
 
-            // Pedestals sit on a fixed-radius semicircle; center each statue's visual on a pedestal.
-            // Some models read slightly off-center, so allow per-statue tweaks:
-            // radialTweak (+ = outward, away from center), forwardTweak (+ = forward, toward the viewer)
             const radialTweak = { mail: 0.1 }
             const forwardTweak = { mail: 0.75 }
             const pedestalRadius = 7.85 + (radialTweak[name] || 0)
@@ -102,18 +91,15 @@ export class SocialArea extends Area
             const pedestalX = this.center.x + Math.cos(angle) * pedestalRadius
             const pedestalZ = this.center.z - Math.sin(angle) * pedestalRadius + (forwardTweak[name] || 0)
 
-            // Offset the origin so the statue's visual center lands on the pedestal center
             const newPosition = new THREE.Vector3(
                 pedestalX - visualOffset.x,
                 origin.y,
                 pedestalZ - visualOffset.z
             )
 
-            // Place the label above the statue's head so the button is never hidden behind it
             const statueTop = boundingBox ? boundingBox.max.y * object3D.scale.y : 1.5
             const labelY = newPosition.y + statueTop + 0.6
 
-            // Move the statue (visual + physics body) onto its pedestal
             object3D.position.copy(newPosition)
 
             if(object.physical)
@@ -140,7 +126,6 @@ export class SocialArea extends Area
         // Physical
         if(object.physical)
         {
-            // Remove from the physics update list so the freed body is never accessed
             const index = this.game.physics.physicals.indexOf(object.physical)
             if(index !== -1)
                 this.game.physics.physicals.splice(index, 1)
@@ -149,7 +134,6 @@ export class SocialArea extends Area
             object.physical = null
         }
 
-        // Remove from the global objects list so it is skipped on update / reset
         this.game.objects.list.forEach((value, key) =>
         {
             if(value === object)
@@ -159,11 +143,6 @@ export class SocialArea extends Area
 
     removeOnlyFansPedestal()
     {
-        // The OnlyFans pedestal is a standalone protrusion baked into the podium mesh
-        // (local x > 10, isolated from the main semicircle) plus a single far collider
-        // on the podium body. Remove both the visual geometry and the collision.
-
-        // Visual: drop the pedestal triangles from the podium mesh
         const podium = this.objects.items.find(object =>
             object.visual && object.visual.object3D.name.startsWith('Cube')
         )
@@ -195,7 +174,6 @@ export class SocialArea extends Area
             }
         }
 
-        // Collision: remove the far collider from the podium physics body
         const podiumBody = this.objects.items.find(object =>
             object.physical && object.physical.type === 'fixed' && object.physical.colliders.length >= 9
         )
@@ -224,7 +202,6 @@ export class SocialArea extends Area
         {
             const link = socialData[i]
 
-            // Align the interactive point with its statue, falling back to a semicircle layout
             const statuePosition = this.statuePositions.get(link.name.toLowerCase())
             const position = statuePosition ? statuePosition.clone() : this.center.clone()
 

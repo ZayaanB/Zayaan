@@ -171,7 +171,6 @@ export class Rendering
 
     getPixelRatio()
     {
-        // Ultra Low renders at a reduced resolution for a large performance gain
         const multiplier = this.game.quality?.level === 2 ? 0.6 : 1
         return this.game.viewport.pixelRatio * multiplier
     }

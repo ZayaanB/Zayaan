@@ -109,7 +109,6 @@ export class Lighting
     {
         this.light = new THREE.DirectionalLight(0xffffff, 5)
         this.light.position.setFromSpherical(this.spherical)
-        // Ultra Low has no shadows; respect the initial quality level
         this.light.castShadow = this.game.quality.level !== 2
 
         this.game.scene.add(this.light)

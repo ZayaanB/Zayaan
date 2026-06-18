@@ -31,7 +31,6 @@ export class LandingArea extends Area
         if(!references || references.length === 0)
             return
 
-        // Gather the original letters: world transform, bounding box, material and palette UV
         const letters = []
         let sharedMaterial = null
         let sharedUv = null
@@ -72,16 +71,13 @@ export class LandingArea extends Area
         if(letters.length === 0)
             return
 
-        // Hide the original letters and freeze their physics
         for(const letter of letters)
             this.game.objects.disable(letter.object)
 
-        // Split the original letters (in authored order) into two rows / words
         const splitIndex = Math.ceil(letters.length / 2)
         const rows = [ letters.slice(0, splitIndex), letters.slice(splitIndex) ]
         const words = [ 'BHANWADIA', 'ZAYAAN' ]
 
-        // Generate the new 3D text once Bruno's font is ready
         const ttfLoader = new TTFLoader()
         ttfLoader.load('fonts/Pally-Bold.ttf', (json) =>
         {
@@ -100,7 +96,6 @@ export class LandingArea extends Area
         if(!word)
             return
 
-        // Row footprint derived from the original letters
         const first = row[0].center
         const last = row[row.length - 1].center
 
@@ -126,7 +121,6 @@ export class LandingArea extends Area
 
         const rowWidth = first.distanceTo(last) + averageWidth
 
-        // Build the extruded text geometry
         const geometry = new TextGeometry(word, {
             font,
             size: 1,
@@ -142,7 +136,6 @@ export class LandingArea extends Area
         const geometrySize = geometry.boundingBox.getSize(new THREE.Vector3())
         geometry.center()
 
-        // Reuse Bruno's exact palette color by pinning every vertex to the original letter UV
         if(sharedUv && geometry.attributes.uv)
         {
             const uvAttribute = geometry.attributes.uv
@@ -151,7 +144,6 @@ export class LandingArea extends Area
             uvAttribute.needsUpdate = true
         }
 
-        // Scale to match the original row height, but shrink if too wide
         const scaleByHeight = letterHeight / geometrySize.y
         const scale = geometrySize.x * scaleByHeight > rowWidth
             ? rowWidth / geometrySize.x
@@ -159,13 +151,11 @@ export class LandingArea extends Area
 
         const scaledSize = geometrySize.clone().multiplyScalar(scale)
 
-        // Orientation: X along the row, Y up
         const up = new THREE.Vector3(0, 1, 0)
         const zAxis = new THREE.Vector3().crossVectors(direction, up).normalize()
         const rotationMatrix = new THREE.Matrix4().makeBasis(direction, up, zAxis)
         const quaternion = new THREE.Quaternion().setFromRotationMatrix(rotationMatrix)
 
-        // Sit the word on the ground at the row's midpoint
         const position = {
             x: midpoint.x,
             y: groundY + scaledSize.y * 0.5,

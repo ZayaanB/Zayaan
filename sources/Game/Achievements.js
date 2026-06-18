@@ -485,6 +485,13 @@ export class Achievements
     {
         this.menu = {}
         this.menu.instance = this.game.menu.items.get('achievements')
+
+        const creditsItem = this.game.menu.items.get('credits')
+        if(creditsItem)
+            creditsItem.events.on('open', () =>
+            {
+                this.setProgress('credits', 1)
+            })
     }
 
     setSounds()

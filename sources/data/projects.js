@@ -7,7 +7,7 @@ export default [
         attributes:
         {
             role: 'Systems Developer',
-            at: 'Personal Project',
+            at: 'Personal',
             with: 'C++ · POSIX · Linux'
         },
         distinctions: [ ],
@@ -24,7 +24,7 @@ export default [
         attributes:
         {
             role: 'Extension Developer',
-            at: '500+ downloads',
+            at: 'VS Code',
             with: 'TypeScript · Node.js'
         },
         distinctions: [ ],
@@ -40,8 +40,8 @@ export default [
         url: 'https://github.com/ZayaanB/Halo-Healthcare',
         attributes:
         {
-            role: 'AI Developer',
-            at: 'Top 10 @ GenAI Genesis',
+            role: 'Hacker',
+            at: 'GenAI Hack',
             with: 'Python · OpenCV · SQL'
         },
         distinctions: [ ],
@@ -57,8 +57,8 @@ export default [
         url: 'https://github.com/ZayaanB/Ref.AI',
         attributes:
         {
-            role: 'Computer Vision Eng.',
-            at: 'Finalist @ Hack Canada',
+            role: 'Hacker',
+            at: 'Hack Canada',
             with: 'Python · YOLOv8 · C'
         },
         distinctions: [ ],

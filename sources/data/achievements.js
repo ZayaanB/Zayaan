@@ -200,6 +200,12 @@ export default
         1
     ],
     [
+        'credits',
+        'Credits go to…',
+        'Visit the <strong>credits</strong> page.',
+        1
+    ],
+    [
         'hacker',
         'Hacker',
         'This one can’t be achieved.',

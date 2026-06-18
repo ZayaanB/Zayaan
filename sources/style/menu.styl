@@ -322,26 +322,18 @@
                         text-transform uppercase
                         white-space nowrap
 
-            // Wider download-resume button (a plain download link, not a panel item)
             &.is-resume
-                width 132px
+                width @css{ clamp(90px, 25.5vw, 132px) }
                 text-decoration none
 
-                @media only screen and (max-width 440px)
-                    width 112px
-
                 .button-inner .icon-container .text-icon
-                    font-size 10px
+                    font-size @css{ clamp(8px, 2.3vw, 10px) }
 
-            // Slightly wider Credits button with a bumped font (kept within bounds)
             &.is-credits
-                width 64px
-
-                @media only screen and (max-width 440px)
-                    width 54px
+                width @css{ clamp(48px, 12.3vw, 64px) }
 
                 .button-inner .icon-container .text-icon
-                    font-size 10px
+                    font-size @css{ clamp(8px, 2.3vw, 10px) }
 
     /**
      * Close

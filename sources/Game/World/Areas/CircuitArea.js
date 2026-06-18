@@ -580,8 +580,6 @@ export class CircuitArea extends Area
 
     setInteractivePoint()
     {
-        // Racing feature removed: no "Start race!" point is created.
-        // Keep a stub so existing show()/hide() calls remain safe.
         this.interactivePoint = { show: () => {}, hide: () => {} }
     }
 
@@ -1334,10 +1332,8 @@ export class CircuitArea extends Area
 
     restart()
     {
-        // Racing feature removed: starting a race is disabled.
         return
-
-        // eslint-disable-next-line no-unreachable
+// eslint-disable-next-line no-unreachable
         if(this.state === CircuitArea.STATE_STARTING)
             return
 

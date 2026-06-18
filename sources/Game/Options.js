@@ -68,7 +68,6 @@ export class Options
         const element = this.element.querySelector('.js-storms-toggle')
         const text = element.querySelector('span')
 
-        // Lightnings are created with the world (after Options), so reference it lazily
         const isEnabled = () => this.game.world?.lightnings
             ? this.game.world.lightnings.enabled
             : (() =>

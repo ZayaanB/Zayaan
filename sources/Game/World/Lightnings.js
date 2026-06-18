@@ -69,7 +69,6 @@ export class Lightnings
     {
         try
         {
-            // Default to disabled unless explicitly turned on
             return window.localStorage.getItem(STORAGE_KEY) === 'true'
         }
         catch(error)

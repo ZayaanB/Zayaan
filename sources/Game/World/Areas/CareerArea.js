@@ -4,6 +4,7 @@ import { color, float, Fn, luminance, max, mix, positionGeometry, step, texture,
 import gsap from 'gsap'
 import { clamp } from 'three/src/math/MathUtils.js'
 import { Area } from './Area.js'
+import careerData from '../../../data/career.js'
 
 export class CareerArea extends Area
 {
@@ -66,69 +67,23 @@ export class CareerArea extends Area
         this.lines.items = []
         this.lines.activeElevation = 2.5
         this.lines.padding = 0.25
-        
-        const lineGroups = this.references.items.get('line')
 
-        const colors = {
+        this.lines.colors = {
             blue: uniform(color('#5390ff')),
             orange: uniform(color('#ff8039')),
             purple: uniform(color('#b65fff')),
             green: uniform(color('#a2ffab'))
         }
 
+        const lineGroups = this.references.items.get('line')
+
         for(const group of lineGroups)
         {
-            const line = {}
-            line.group = group
-            line.size = parseFloat(line.group.userData.size)
-            line.hasEnd = line.group.userData.hasEnd
-            line.color = line.group.userData.color
-            line.texture = this.game.resources[`${line.group.userData.texture}Texture`]
-
-            line.stone = line.group.children.find(child => child.name.startsWith('stone'))
-            line.stone.position.y = 0
-            
-            line.origin = line.group.position.clone()
-            
-            line.isIn = false
-            line.isUp = false
-            line.elevationTarget = 0
-            line.offsetTarget = 0
-            line.labelReveal = uniform(0)
-
-            {
-                line.textMesh = line.stone.children.find(child => child.name.startsWith('careerText'))
-
-                const material = new THREE.MeshLambertNodeMaterial({ transparent: true })
-                
-                const baseColor = colors[line.color]
-
-                material.outputNode = Fn(() =>
-                {
-                    const baseUv = uv().toVar()
-
-                    step(baseUv.x, line.labelReveal).lessThan(0.5).discard()
-
-                    const textureColor = texture(line.texture, baseUv)
-
-                    const alpha = step(0.1, max(textureColor.r, textureColor.g))
-
-                    const emissiveColor = baseColor.div(luminance(baseColor)).mul(1.7)
-
-                    const maskColor = color('#251f2b')
-                    const finalColor = mix(maskColor, emissiveColor, textureColor.r)
-                    
-                    return vec4(finalColor, alpha)
-                })()
-
-                // Mesh
-                line.textMesh.castShadow = false
-                line.textMesh.receiveShadow = false
-                line.textMesh.material = material
-            }
-
-            this.lines.items.push(line)
+            const entry = careerData[group.userData.texture]
+            this.lines.items.push(this.createLine(group, entry))
         }
+
+        this.addExtraLines()
 
         this.lines.items.sort((a, b) => b.origin.z - a.origin.z)
 
@@ -141,10 +96,165 @@ export class CareerArea extends Area
         // Debug
         if(this.game.debug.active)
         {
-            this.game.debug.addThreeColorBinding(this.debugPanel, colors.blue.value, 'blue')
-            this.game.debug.addThreeColorBinding(this.debugPanel, colors.orange.value, 'orange')
-            this.game.debug.addThreeColorBinding(this.debugPanel, colors.purple.value, 'purple')
-            this.game.debug.addThreeColorBinding(this.debugPanel, colors.green.value, 'green')
+            this.game.debug.addThreeColorBinding(this.debugPanel, this.lines.colors.blue.value, 'blue')
+            this.game.debug.addThreeColorBinding(this.debugPanel, this.lines.colors.orange.value, 'orange')
+            this.game.debug.addThreeColorBinding(this.debugPanel, this.lines.colors.purple.value, 'purple')
+            this.game.debug.addThreeColorBinding(this.debugPanel, this.lines.colors.green.value, 'green')
+        }
+    }
+
+    createLine(group, entry)
+    {
+        const line = {}
+        line.group = group
+        line.size = parseFloat(group.userData.size)
+        line.hasEnd = group.userData.hasEnd
+        line.color = group.userData.color
+        line.year = entry ? entry.year : null
+
+        line.stone = group.children.find(child => child.name.startsWith('stone'))
+        line.stone.position.y = 0
+
+        line.origin = group.position.clone()
+
+        line.isIn = false
+        line.isUp = false
+        line.elevationTarget = 0
+        line.offsetTarget = 0
+        line.labelReveal = uniform(0)
+
+        line.textMesh = line.stone.children.find(child => child.name.startsWith('careerText'))
+        line.texture = this.createTextTexture(entry ? entry.lines : [], line.textMesh)
+
+        const material = new THREE.MeshLambertNodeMaterial({ transparent: true })
+        const baseColor = this.lines.colors[line.color] ?? this.lines.colors.blue
+
+        material.outputNode = Fn(() =>
+        {
+            const baseUv = uv().toVar()
+
+            step(baseUv.x, line.labelReveal).lessThan(0.5).discard()
+
+            const textureColor = texture(line.texture, baseUv)
+
+            const alpha = step(0.1, max(textureColor.r, textureColor.g))
+
+            const emissiveColor = baseColor.div(luminance(baseColor)).mul(1.7)
+
+            const maskColor = color('#251f2b')
+            const finalColor = mix(maskColor, emissiveColor, textureColor.r)
+
+            return vec4(finalColor, alpha)
+        })()
+
+        line.textMesh.castShadow = false
+        line.textMesh.receiveShadow = false
+        line.textMesh.material = material
+
+        return line
+    }
+
+    createTextTexture(lines, textMesh)
+    {
+        // Match the canvas aspect to the label plane so the text isn't distorted
+        textMesh.geometry.computeBoundingBox()
+        const size = textMesh.geometry.boundingBox.getSize(new THREE.Vector3())
+        const dims = [ size.x, size.y, size.z ].sort((a, b) => b - a)
+        const aspect = dims[1] > 0 ? dims[0] / dims[1] : 4
+
+        const lineCount = Math.max(lines.length, 1)
+        const height = lineCount * 120
+        const width = Math.max(Math.round(height * aspect), 1)
+
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+
+        const context = canvas.getContext('2d')
+
+        // Panel encoded in the green channel, glyphs in the red channel (matches the baked format)
+        context.fillStyle = '#00ff00'
+        context.fillRect(0, 0, width, height)
+
+        context.fillStyle = '#ff0000'
+        context.textAlign = 'center'
+        context.textBaseline = 'middle'
+
+        const maxWidth = width * 0.9
+        const lineHeight = height / lineCount
+        const fontSize = lineHeight * 0.62
+        context.font = `800 ${fontSize}px "Arial Narrow", "Arial", sans-serif`
+
+        let i = 0
+        for(const line of lines)
+        {
+            const x = width / 2
+            const y = lineHeight * (i + 0.5)
+
+            const measure = context.measureText(line)
+
+            if(measure.width > maxWidth)
+            {
+                const scale = maxWidth / measure.width
+                context.save()
+                context.translate(x, y)
+                context.scale(scale, 1)
+                context.fillText(line, 0, 0)
+                context.restore()
+            }
+            else
+                context.fillText(line, x, y)
+
+            i++
+        }
+
+        const texture = new THREE.Texture(canvas)
+        texture.flipY = false
+        texture.minFilter = THREE.LinearFilter
+        texture.magFilter = THREE.LinearFilter
+        texture.generateMipmaps = false
+        texture.wrapS = THREE.ClampToEdgeWrapping
+        texture.wrapT = THREE.ClampToEdgeWrapping
+        texture.needsUpdate = true
+
+        return texture
+    }
+
+    addExtraLines()
+    {
+        for(const key in careerData)
+        {
+            const entry = careerData[key]
+
+            if(!entry.cloneFrom)
+                continue
+
+            try
+            {
+                const source = this.lines.items.find(line => line.group.userData.texture === entry.cloneFrom)
+
+                if(!source)
+                    continue
+
+                // Continue the path using the spacing between the two most-recent stones
+                const sorted = [ ...this.lines.items ].sort((a, b) => b.origin.z - a.origin.z)
+                const last = sorted[sorted.length - 1]
+                const secondLast = sorted[sorted.length - 2] ?? last
+                const spacing = last.origin.z - secondLast.origin.z
+
+                const group = source.group.clone(true)
+                group.position.copy(last.group.position)
+                group.position.z = last.origin.z + spacing
+                group.userData = { ...source.group.userData, color: entry.color ?? source.color, texture: key }
+
+                source.group.parent.add(group)
+
+                this.lines.items.push(this.createLine(group, entry))
+            }
+            catch(error)
+            {
+                console.warn('CareerArea: could not add extra line', key, error)
+            }
         }
     }
 
@@ -155,7 +265,7 @@ export class CareerArea extends Area
         this.year.originZ = this.year.group.position.z
         this.year.size = 6
         this.year.offsetTarget = 0
-        this.year.start = 2022
+        this.year.start = 2023
         this.year.current = this.year.start
 
         //    Digit indexes
@@ -279,6 +389,12 @@ export class CareerArea extends Area
                 {
                     line.isIn = true
                     gsap.to(line.labelReveal, { value: 1, duration: 1, delay: 0.3, overwrite: true, ease: 'power2.inOut' })
+
+                    if(line.year && line.year !== this.year.current)
+                    {
+                        this.year.current = line.year
+                        this.year.updateDigits(line.year)
+                    }
                 }
             }
 
@@ -364,13 +480,5 @@ export class CareerArea extends Area
 
         const finalPositionZ = this.year.originZ - this.year.offsetTarget
         this.year.group.position.z += (finalPositionZ - this.year.group.position.z) * this.game.ticker.deltaScaled * 10
-
-        const yearCurrent = this.year.start + Math.floor(this.year.offsetTarget)
-
-        if(yearCurrent !== this.year.current)
-        {
-            this.year.current = yearCurrent
-            this.year.updateDigits(this.year.current)
-        }
     }
 }

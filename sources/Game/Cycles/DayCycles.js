@@ -15,16 +15,12 @@ export class DayCycles extends Cycles
 {
     constructor()
     {
-        // Fixed to night (deep night = 0.475) by default. The day/night cycle is off by
-        // default and can be enabled from the options menu. The env var can still override
-        // the night progress used while the cycle is disabled.
-        const nightProgress = import.meta.env.VITE_DAY_CYCLE_PROGRESS ? parseFloat(import.meta.env.VITE_DAY_CYCLE_PROGRESS) : 0.475
-        super('🕜 Day Cycles', 4 * 60, nightProgress, false)
+        const dayProgress = import.meta.env.VITE_DAY_CYCLE_PROGRESS ? parseFloat(import.meta.env.VITE_DAY_CYCLE_PROGRESS) : 0.1
+        super('🕜 Day Cycles', 4 * 60, dayProgress, false)
 
-        this.nightProgress = nightProgress
+        this.dayProgress = dayProgress
         this.enabled = false
 
-        // Restore the persisted preference (instantly, no transition on load).
         if(this.readPersisted())
             this.setEnabled(true, 0)
     }
@@ -55,11 +51,6 @@ export class DayCycles extends Cycles
         catch(error) {}
     }
 
-    // Enable/disable the day/night cycle.
-    //  - When enabled, the progress advances with real time (day/dusk/night/dawn).
-    //  - When disabled, it stays locked to night.
-    //  - duration > 0 gradually blends between the night look and the live cycle by fading
-    //    the progress override; duration === 0 applies the change instantly (used on load).
     setEnabled(enabled, duration = 3)
     {
         this.enabled = enabled
@@ -70,23 +61,20 @@ export class DayCycles extends Cycles
         if(duration === 0)
         {
             this.override.strength = 0
-            this.forcedProgress = enabled ? null : this.nightProgress
+            this.forcedProgress = enabled ? null : this.dayProgress
             return
         }
 
         if(enabled)
         {
-            // Hold on night, switch to the live cycle underneath, then fade the night
-            // override out so the world eases into the current time of day.
-            this.override.progress = this.nightProgress
+            this.override.progress = this.dayProgress
             this.override.strength = 1
             this.forcedProgress = null
             gsap.to(this.override, { strength: 0, duration, ease: 'sine.inOut', overwrite: true })
         }
         else
         {
-            // Ease the live cycle toward night, then lock it once fully night.
-            this.override.progress = this.nightProgress
+            this.override.progress = this.dayProgress
             gsap.to(this.override, {
                 strength: 1,
                 duration,
@@ -94,7 +82,7 @@ export class DayCycles extends Cycles
                 overwrite: true,
                 onComplete: () =>
                 {
-                    this.forcedProgress = this.nightProgress
+                    this.forcedProgress = this.dayProgress
                     this.override.strength = 0
                 }
             })
