@@ -1,5 +1,12 @@
 export default [
     {
+        title: 'Intact Financial',
+        subtitle: 'Software Automation Developer Intern',
+        url: 'https://www.linkedin.com/in/zayaan-bhan',
+        image: 'intact.png',
+        imageMini: 'intact-mini.png'
+    },
+    {
         title: 'KorraNet Creative Inc.',
         subtitle: 'Full-Stack Developer Intern',
         url: 'https://www.linkedin.com/in/zayaan-bhan',

@@ -89,6 +89,8 @@ export class TextCanvas
         this.context.textBaseline = 'middle'
         this.context.fillStyle = '#ffffff'
 
+        const maxWidth = this.width * 0.96
+
         let i = 0
         for(const line of this.lines)
         {
@@ -103,7 +105,19 @@ export class TextCanvas
             else if(this.horizontalAlign === 'right')
                 x = this.width
 
-            this.context.fillText(line, x, y)
+            const measure = this.context.measureText(line)
+
+            if(measure.width > maxWidth)
+            {
+                const scale = maxWidth / measure.width
+                this.context.save()
+                this.context.translate(x, y)
+                this.context.scale(scale, 1)
+                this.context.fillText(line, 0, 0)
+                this.context.restore()
+            }
+            else
+                this.context.fillText(line, x, y)
 
             i++
         }
