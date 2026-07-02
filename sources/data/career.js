@@ -6,5 +6,5 @@ export default {
     careerImmersiveGarden: { lines: [ 'KORRANET CREATIVE', 'FULL-STACK INTERN' ], year: 2026 },
     careerOnlineTeacher:   { lines: [ 'OPEN-SOURCE', 'PROJECTS', 'C++ · TS · PYTHON' ], year: 2026 },
 
-    intact:                { lines: [ 'INTACT FINANCIAL', 'SOFTWARE AUTO. DEV', 'INTERN' ], color: 'blue', cloneFrom: 'careerUzik', year: 2026 },
+    freshbooks:            { lines: [ 'FRESHBOOKS', 'FULL STACK DEV', 'INTERN' ], color: 'blue', cloneFrom: 'careerUzik', year: 2026 },
 }
