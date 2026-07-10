@@ -1,13 +1,20 @@
 export default [
     {
-        title: 'FreshBooks',
+        title: 'FreshBooks (Incoming)',
         subtitle: 'Full Stack Developer Intern',
         url: 'https://www.linkedin.com/in/zayaan-bhan',
         image: 'freshbooks.png',
         imageMini: 'freshbooks-mini.png'
     },
     {
-        title: 'KorraNet Creative Inc.',
+        title: 'FlyRank AI',
+        subtitle: 'Backend AI Engineer Intern',
+        url: 'https://www.linkedin.com/in/zayaan-bhan',
+        image: 'flyrank.png',
+        imageMini: 'flyrank-mini.png'
+    },
+    {
+        title: 'KorraNet Creative',
         subtitle: 'Full-Stack Developer Intern',
         url: 'https://www.linkedin.com/in/zayaan-bhan',
         image: 'korranet.png',
