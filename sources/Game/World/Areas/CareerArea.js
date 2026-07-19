@@ -107,8 +107,8 @@ export class CareerArea extends Area
     {
         const line = {}
         line.group = group
-        line.size = parseFloat(group.userData.size)
-        line.hasEnd = group.userData.hasEnd
+        line.size = entry && typeof entry.size === 'number' ? entry.size : parseFloat(group.userData.size)
+        line.hasEnd = entry && typeof entry.hasEnd === 'boolean' ? entry.hasEnd : group.userData.hasEnd
         line.color = group.userData.color
         line.year = entry ? entry.year : null
 
@@ -236,15 +236,12 @@ export class CareerArea extends Area
                 if(!source)
                     continue
 
-                // Continue the path using the spacing between the two most-recent stones
-                const sorted = [ ...this.lines.items ].sort((a, b) => b.origin.z - a.origin.z)
-                const last = sorted[sorted.length - 1]
-                const secondLast = sorted[sorted.length - 2] ?? last
-                const spacing = last.origin.z - secondLast.origin.z
+                // Place the clone along the source lane, right after the source stone's travel by default
+                const offsetZ = typeof entry.offsetZ === 'number' ? entry.offsetZ : - (source.size + 1)
 
                 const group = source.group.clone(true)
-                group.position.copy(last.group.position)
-                group.position.z = last.origin.z + spacing
+                group.position.copy(source.group.position)
+                group.position.z = source.origin.z + offsetZ
                 group.userData = { ...source.group.userData, color: entry.color ?? source.color, texture: key }
 
                 source.group.parent.add(group)
@@ -263,7 +260,11 @@ export class CareerArea extends Area
         this.year = {}
         this.year.group = this.references.items.get('year')[0]
         this.year.originZ = this.year.group.position.z
-        this.year.size = 6
+
+        // Follow the player along the whole timeline (up to the furthest stone end)
+        const furthestEnd = Math.min(...this.lines.items.map(line => line.origin.z - line.size))
+        this.year.size = Math.max(this.year.originZ - furthestEnd - 0.55, 1)
+
         this.year.offsetTarget = 0
         this.year.start = 2023
         this.year.current = this.year.start
