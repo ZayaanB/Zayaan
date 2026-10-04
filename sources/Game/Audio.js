@@ -466,28 +466,6 @@ export class Audio
             }
         })
 
-        // Oven fire (Project Area + Cookie Area)
-        {
-            const positions = []
-            if(this.game.world.areas?.cookie)
-                positions.push(this.game.world.areas.cookie.references.items.get('spawner')[0].position)
-            if(this.game.world.areas?.projects)
-                positions.push(this.game.world.areas.projects.references.items.get('oven')[0].position)
-
-            if(positions.length)
-            {
-                this.game.audio.register({
-                    group: 'ovenFire',
-                    path: 'sounds/fire/Mountain Audio - Fire Burning in a Wood Stove 1.mp3',
-                    autoplay: true,
-                    loop: true,
-                    volume: 0.8,
-                    positions: positions,
-                    distanceFade: 13,
-                })
-            }
-        }
-
         // Campfire (Lab Area + Bonfire Area)
         {
             const positions = []

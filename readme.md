@@ -69,3 +69,33 @@ Will do the following
 - https://gltf-transform.dev/cli
 - https://github.com/KhronosGroup/KTX-Software?tab=readme-ov-file
 - https://github.khronos.org/KTX-Software/ktxtools/toktx.html
+
+
+## Personal exhibits: local checks
+
+Start with `npm run dev -- --port 5175 --open false` and open the URL printed by Vite.
+Refresh an already-open tab after changes. Press **M** (or click the map icon), then
+click a location label to travel there. Drive close to a prompt and press **Enter**;
+on touch devices, use the interact button. Use **Escape** to close project overviews.
+
+- **Ref.AI Table Tennis:** replaces bowling. Select **Play Ref.AI rally** and watch
+  the six-second rally, ball trail, and point award. Play again to increase the score.
+  **About Ref.AI** opens the overview and GitHub link.
+- **Halo Healthcare:** the open pavilion replacing the cookie factory. **Run Halo scan**
+  moves a scanning bar across the bed, then changes the monitor to **Scan complete**.
+  **About Halo Healthcare** opens the project overview and GitHub link.
+- **Computing Workshop:** its own map destination in the northwestern racing infield.
+  Approach **KV Store data flow** or **Context Sync data flow** and press Enter to
+  animate the racks or chat screens. **Explore the workshop** opens both project summaries.
+  The **Projects** map destination keeps the original carousel, with the racks removed.
+
+
+The exhibits use original code-generated geometry in
+`sources/Game/World/PersonalModels.js`, with shared materials and proportions.
+The demos illustrate the projects; they do not execute the hosted projects' backends.
+
+Run `node scripts/checkPersonalExhibits.mjs` for interaction and integration checks,
+`node scripts/checkStartup.mjs` for the start/audio/map regression check,
+and `npm run build` for the production build. The check uses a lightweight game harness
+and covers rally completion, scan completion, map spawns, collider definitions,
+forge removal, overview actions, data-flow switching, and an unobstructed project view.

@@ -267,7 +267,7 @@
                                 <div class="title">Project Highlights</div>
                                 <p class="text"><strong>Embedded Key-Value Store:</strong> C++, CMake, multithreading, and Linux. Built 16-way sharded locking for 5× read throughput (8M to 40M ops/sec), concurrent reads during disk writes, compaction that reduced disk usage by 45%+, and crash recovery through a checksummed write-ahead log.</p>
                                 <p class="text"><strong>Context Sync Extension:</strong> TypeScript and the VS Code Extension API. Reached 750+ downloads, reduced token use by 25%+ with weighted-graph context selection, and compacted chat summaries by 30%+ with a Markdown schema.</p>
-                                <p class="text">Explore the <strong>Projects</strong> area for these projects, <strong>Halo Healthcare</strong>, and my <strong>Table Tennis Referee</strong>.</p>
+                                <p class="text">Explore my <strong>Computing Workshop</strong>, <strong>Halo Healthcare pavilion</strong>, and <strong>Ref.AI table tennis court</strong>. Open the map and click a location to travel there. Drive up to a prompt and press Enter to interact.</p>
                                 <details class="text">
                                     <summary><strong>Technical Skills</strong></summary>
                                     <p>Python, Java, JavaScript, C++, C, TypeScript, SQL, Bash, HTML/CSS.</p>
@@ -787,6 +787,31 @@
         <!-- Modals -->
         <div class="js-modals modals">
 
+            <div class="js-modal modal personal-exhibit-modal" data-name="ref-ai">
+                <div class="container"><div class="content">
+                    <button class="js-close close js-main-focus" aria-label="Close project overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
+                    <h2 class="title">Ref.AI — Table Tennis Referee</h2>
+                    <p class="text">An automated table tennis referee project built with <strong>Python, YOLOv8, and C</strong> at Hack Canada.</p><p class="text">The court demonstrates a tracked rally: watch the ball trail, then see the scoreboard award a point. This animation illustrates the project; it does not run the vision model in your browser.</p><p class="text"><a href="https://github.com/ZayaanB/Ref.AI" target="_blank" rel="noreferrer">View Ref.AI on GitHub ↗</a></p>
+                </div></div>
+            </div>
+
+            <div class="js-modal modal personal-exhibit-modal" data-name="halo-healthcare">
+                <div class="container"><div class="content">
+                    <button class="js-close close js-main-focus" aria-label="Close project overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
+                    <h2 class="title">Halo Healthcare — Clinical AI</h2>
+                    <p class="text">A clinical AI assistant project built with <strong>Python, OpenCV, and SQL</strong>.</p><p class="text">The former cookie factory is now a pavilion with an examination bed, scanner, clinical monitor, and records workstation. Use <strong>Run Halo scan</strong> to watch a fictional six-second scan and its completion message.</p><p class="text"><a href="https://github.com/ZayaanB/Halo-Healthcare" target="_blank" rel="noreferrer">View Halo Healthcare on GitHub ↗</a></p>
+                </div></div>
+            </div>
+
+            <div class="js-modal modal personal-exhibit-modal" data-name="computing-workshop">
+                <div class="container"><div class="content">
+                    <button class="js-close close js-main-focus" aria-label="Close project overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
+                    <h2 class="title">Zayaan’s Computing Workshop</h2>
+                    <p class="text"><strong>Embedded Key-Value Store:</strong> C++, CMake, multithreading, and Linux. Sixteen-way sharded locking delivers 5× read throughput; compaction reduces disk usage by 45%+, with crash recovery through a checksummed write-ahead log.</p><p class="text"><strong>Context Sync:</strong> a VS Code extension with 750+ downloads. Weighted-graph context selection reduces token use by 25%+, and its Markdown schema compacts summaries by 30%+.</p><p class="text">Use <strong>KV Store data flow</strong> or <strong>Context Sync data flow</strong> at this workshop to animate the racks and chat screens. The original <strong>Projects</strong> landmark still has the full project carousel.</p><p class="text"><a href="https://github.com/ZayaanB/kvstore" target="_blank" rel="noreferrer">KV Store on GitHub ↗</a> · <a href="https://github.com/ZayaanB/Context-Sync" target="_blank" rel="noreferrer">Context Sync on GitHub ↗</a></p>
+                </div></div>
+            </div>
+
+
             <!-- Circuit end -->
             <div class="js-modal modal circuit-end" data-name="circuit-end">
                 <div class="container">
@@ -919,6 +944,8 @@
 
                 <div class="js-map-container map-container">
                     <img class="js-texture texture" loading="lazy">
+                    <img class="rink-map" src="ui/map/skating-rink.svg" alt="Skating rink beside Career">
+                    <img class="js-pool-tint texture pool-tint" alt="" aria-hidden="true" loading="lazy">
                     <div class="js-player player"></div>
                 </div>
             </div>

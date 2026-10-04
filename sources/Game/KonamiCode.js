@@ -53,7 +53,7 @@ export class KonamiCode
     {
         const files = [
             'vehicle/oldSchool.glb',
-            'vehicle/default.glb'
+            'vehicle/formula.glb'
         ]
         
         const resources = await this.game.resourcesLoader.load([

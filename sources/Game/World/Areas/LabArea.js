@@ -9,6 +9,7 @@ import { remapClamp, safeMod, signedModDelta } from '../../utilities/maths.js'
 import { Inputs } from '../../Inputs/Inputs.js'
 import { MeshDefaultMaterial } from '../../Materials/MeshDefaultMaterial.js'
 import { Area } from './Area.js'
+import { experienceCard } from '../ExperienceCards.js'
 
 export class LabArea extends Area
 {
@@ -469,8 +470,9 @@ export class LabArea extends Area
 
                 loader.load(
                     path,
-                    (loadedTexture) =>
+                    (sourceTexture) =>
                     {
+                        const loadedTexture=experienceCard(sourceTexture,labData.find(project=>project.image===key))
                         loadedTexture.colorSpace = THREE.SRGBColorSpace
                         loadedTexture.flipY = false
                         loadedTexture.magFilter = THREE.LinearFilter
@@ -842,8 +844,9 @@ export class LabArea extends Area
 
                         loader.load(
                             `lab/images/${project.imageMini}`,
-                            (loadedTexture) =>
+                            (sourceTexture) =>
                             {
+                                const loadedTexture=experienceCard(sourceTexture,project)
                                 const alpha = uniform(0)
                                 const textureColor = texture(loadedTexture).rgb
                                 gsap.to(alpha, { value: 1, duration: 1, overwrite: true })
