@@ -46,7 +46,7 @@ export class Map
             { name: 'Credits', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
             { name: 'Ref.AI Table Tennis', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },
             { name: 'Career', respawnName: 'career', offset: { x: 0, y: -0.06 } },
-            { name: 'Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
+            { name: 'UTFR Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
             { name: 'Halo Healthcare', respawnName: 'healthcare', offset: { x: -0.02, y: -0.01 } },
             { name: 'Experiences', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
             { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },

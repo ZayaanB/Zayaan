@@ -54,8 +54,8 @@ const area={constructor:{STATE_CLOSED:5},state:5,game,objects:{items:[oven,displ
 api.setupWorkshop(area)
 assert(disabled.includes(oven));assert(!disabled.includes(display))
 game.player.position.set(-60,0,-40);area.workshop.update();assert(area.workshop.model.packets.every(m=>m.visible))
-area.navigation.current.title='Context Sync Extension';area.workshop.update();assert(labels.includes('750+ DOWNLOADS'))
-game.ticker.elapsedScaled=23;area.workshop.update();assert(area.workshop.model.packets.every(m=>!m.visible))
+area.navigation.current.title='Context Sync Extension';area.workshop.update();assert(!labels.includes('750+ DOWNLOADS'),'KV Store must stay independent of the project carousel')
+game.ticker.elapsedScaled=23;area.workshop.update();assert(area.workshop.model.packets.every(m=>m.visible),'Idle data flow stays visible')
 points.find(p=>p.label==='Explore the workshop').callback();assert.equal(opened.at(-1),'computing-workshop')
 assert(spawns.has('workshop'))
 assert(area.workshop.model.root.position.distanceTo(area.model.position)>90,'Computing props must be far from Projects')
@@ -65,8 +65,7 @@ for(const rack of area.workshop.model.racks) {
  assert(bounds.max.x < -55,'Racks belong in the race infield, not at Projects')
 }
 points.find(p=>p.label==='KV Store data flow').callback();area.workshop.update()
-points.find(p=>p.label==='Context Sync data flow').callback();area.workshop.update()
-assert(labels.includes('750+ DOWNLOADS'))
+assert(!points.some(p=>p.label==='Context Sync data flow'),'No Context Sync button on KV Store')
 for(const plane of [halo.model.sign,halo.model.monitor,halo.model.records]) {
  const {canvas}=plane.userData.label
  assert(Math.abs(canvas.width/canvas.height-plane.geometry.parameters.width/plane.geometry.parameters.height)<0.003,'Sign textures must preserve physical aspect ratio')

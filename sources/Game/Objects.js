@@ -1,4 +1,5 @@
 import { Game } from './Game.js'
+import { colliderVertices, colliderIndices } from './Physics/colliderGeometry.js'
 
 let i = 0
 export class Objects
@@ -167,12 +168,12 @@ export class Objects
                 if(_child.name.match(/^trimesh/i))
                 {
                     collider.shape = 'trimesh'
-                    collider.parameters = [ _child.geometry.attributes.position.array, _child.geometry.index.array ]
+                    collider.parameters = [ colliderVertices(_child.geometry), colliderIndices(_child.geometry) ]
                 }
                 else if(_child.name.match(/^hull/i))
                 {
                     collider.shape = 'hull'
-                    collider.parameters = [ _child.geometry.attributes.position.array, _child.geometry.index.array ]
+                    collider.parameters = [ colliderVertices(_child.geometry) ]
                 }
                 else if(_child.name.match(/^cuboid/i))
                 {
