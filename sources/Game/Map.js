@@ -44,13 +44,15 @@ export class Map
             { name: 'Achievements', respawnName: 'achievements', offset: { x: 0, y: -0.01 } },
             { name: 'Pool of Doom', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
             { name: 'Credits', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
-            { name: 'Bowling', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },
+            { name: 'Ref.AI Table Tennis', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },
             { name: 'Career', respawnName: 'career', offset: { x: 0, y: -0.06 } },
             { name: 'Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
-            { name: 'Cookie', respawnName: 'cookie', offset: { x: -0.02, y: -0.01 } },
+            { name: 'Halo Healthcare', respawnName: 'healthcare', offset: { x: -0.02, y: -0.01 } },
             { name: 'Experiences', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
             { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
             { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
+            { name: 'Context Sync', respawnName: 'contextsync', offset: { x: 0, y: 0 } },
+            { name: 'Computing Workshop', respawnName: 'workshop', offset: { x: 0, y: 0.01 } },
             { name: 'Social', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
             { name: 'Time Machine', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },
         ]
@@ -99,22 +101,24 @@ export class Map
     {
         this.texture = {}
         this.texture.element = this.element.querySelector('.js-texture')
+        this.texture.poolTint = this.element.querySelector('.js-pool-tint')
         this.texture.previousUrl = null
 
-        this.texture.element.addEventListener('load', () =>
-        {
-            this.texture.element.classList.add('is-visible')
-        })
+        for(const element of [this.texture.element,this.texture.poolTint])
+            element.addEventListener('load', () => element.classList.add('is-visible'))
         
         this.texture.update = () =>
         {
-            const url = this.game.dayCycles.intervalEvents.get('night').inInterval ? 'ui/map/map-night.webp' : 'ui/map/map-day.webp'
+            const url = this.game.dayCycles.intervalEvents.get('night').inInterval ? 'ui/map/map-night.webp?v=pool-tint-2' : 'ui/map/map-day.webp?v=pool-tint-2'
 
             if(url !== this.texture.previousUrl)
             {
-                this.texture.element.classList.remove('is-visible')
                 this.texture.previousUrl = url
-                this.texture.element.src = url
+                for(const element of [this.texture.element,this.texture.poolTint])
+                {
+                    element.classList.remove('is-visible')
+                    element.src = url
+                }
             }
         }
     }

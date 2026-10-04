@@ -232,7 +232,7 @@ export class VisualVehicle
 
             for(const wheel of this.wheels.items)
             {
-                if(wheel.painted)
+                if(wheel.painted && !wheel.painted.userData.fixedPaint)
                     wheel.painted.material = material
             }
         }

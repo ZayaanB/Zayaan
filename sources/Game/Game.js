@@ -133,7 +133,7 @@ export class Game
             [
                 [ 'foliageTexture',                        `foliage/foliageSDF.${compressedTextureExtension}${cb}`,                              compressedTextureFormat, (resource) => { resource.minFilter = THREE.NearestFilter; resource.magFilter = THREE.NearestFilter; resource.generateMipmaps = false; } ],
                 [ 'bushesReferences',                      `bushes/bushesReferences${compressedModelSuffix}.glb${cb}`,                           'gltf' ],
-                [ 'vehicle',                               `vehicle/default${compressedModelSuffix}.glb${cb}`,                                   'gltf' ],
+                [ 'vehicle',                               `vehicle/formula.glb${cb}`,                                                       'gltf' ],
                 [ 'playgroundVisual',                      `playground/playgroundVisual${compressedModelSuffix}.glb${cb}`,                       'gltf' ],
                 [ 'playgroundPhysical',                    `playground/playgroundPhysical${compressedModelSuffix}.glb${cb}`,                     'gltf' ],
                 [ 'flowersReferencesModel',                `flowers/flowersReferences${compressedModelSuffix}.glb${cb}`,                         'gltf' ],
@@ -229,13 +229,14 @@ export class Game
             if(this.world.explosiveCrates)
                 this.world.explosiveCrates.reset()
 
-            // Bowling
+            // Ref.AI
             if(this.world.areas.bowling)
                 this.world.areas.bowling.restart()
 
-            // Cookie
+            // Halo Healthcare
             if(this.world.areas.cookie)
-                this.world.areas.cookie.cookies.instancedGroup.needsUpdate = true
+                this.world.areas.cookie.reset()
+                this.world.contextSync?.reset()
 
             // Toilet
             if(this.world.areas.toilet)
@@ -271,4 +272,3 @@ export class Game
         })
     }
 }
-

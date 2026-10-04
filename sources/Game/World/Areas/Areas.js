@@ -1,13 +1,12 @@
 import { Game } from '../../Game.js'
 import { AltarArea } from './AltarArea.js'
-import { CookieArea } from './CookieArea.js'
 import { LandingArea } from './LandingArea.js'
 import { ProjectsArea } from './ProjectsArea.js'
 import { LabArea } from './LabArea.js'
 import { CareerArea } from './CareerArea.js'
 import { SocialArea } from './SocialArea.js'
 import { ToiletArea } from './ToiletArea.js'
-import { BowlingArea } from './BowlingArea.js'
+import { HealthcareExhibit, TableTennisArea } from '../PersonalExhibits.js'
 import { CircuitArea } from './CircuitArea.js'
 import { BehindTheSceneArea } from './BehindTheSceneArea.js'
 import { AchievementsArea } from './AchievementsArea.js'
@@ -23,10 +22,10 @@ export class Areas
             [ 'achievements', AchievementsArea ],
             [ 'altar', AltarArea ],
             [ 'behindTheScene', BehindTheSceneArea ],
-            [ 'bowling', BowlingArea ],
+            [ 'bowling', TableTennisArea ],
             [ 'career', CareerArea ],
             [ 'circuit', CircuitArea ],
-            [ 'cookie', CookieArea ],
+            [ 'cookie', HealthcareExhibit ],
             [ 'lab', LabArea ],
             [ 'landing', LandingArea ],
             [ 'projects', ProjectsArea ],

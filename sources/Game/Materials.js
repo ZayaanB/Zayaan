@@ -30,7 +30,7 @@ export class Materials
         this.createEmissiveGradient('emissiveGreenRadialGradient', '#f8ffa6', '#74ff00', 1.5, true, this.debugPanel?.addFolder({ title: 'emissiveGreenRadialGradient' }))
         this.createEmissiveGradient('emissiveWhiteRadialGradient', '#ffffff', '#666666', 2.7, false, this.debugPanel?.addFolder({ title: 'emissiveWhiteRadialGradient' }))
         
-        this.createGradient('redGradient', '#f2f8ff', '#bcd8ff', this.debugPanel?.addFolder({ title: 'redGradient' }))
+        this.createGradient('redGradient', '#ff5550', '#a80e29', this.debugPanel?.addFolder({ title: 'redGradient' }))
     }
 
     createPalette()

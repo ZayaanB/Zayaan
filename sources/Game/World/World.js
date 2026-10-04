@@ -26,6 +26,8 @@ import { PoleLights } from './PoleLights.js'
 import { Lanterns } from './Lanterns.js'
 import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
+import { contextFoliageReferences, rinkFoliageReferences } from '../../data/exhibits.js'
+import { ContextSyncExhibit, SkatingRink } from './PersonalExhibits.js'
 import { Scenery } from './Scenery.js'
 
 export class World
@@ -65,9 +67,9 @@ export class World
             this.snow = new Snow()
             this.visualTornado = new VisualTornado()
             this.bushes = new Bushes()
-            this.birchTrees = new Trees('Birch Tree', this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, '#ff4f2b', '#ff903f')
+            this.birchTrees = new Trees('Birch Tree', this.game.resources.birchTreesVisualModel.scene, contextFoliageReferences(this.game.resources.birchTreesReferencesModel.scene.children, 'birch'), '#ff4f2b', '#ff903f')
             this.oakTrees = new Trees('Oak Tree', this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, '#b4b536', '#d8cf3b')
-            this.cherryTrees = new Trees('Cherry Tree', this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, '#ff6d6d', '#ff9990')
+            this.cherryTrees = new Trees('Cherry Tree', this.game.resources.cherryTreesVisualModel.scene, rinkFoliageReferences(this.game.resources.cherryTreesReferencesModel.scene.children, 'cherry'), '#ff6d6d', '#ff9990')
             this.flowers = new Flowers()
             this.bricks = new Bricks()
             this.fences = new Fences()
@@ -77,6 +79,8 @@ export class World
             this.lanterns = new Lanterns()
             this.scenery = new Scenery()
             this.areas = new Areas()
+            this.contextSync = new ContextSyncExhibit()
+            this.skatingRink = new SkatingRink()
         }
     }
 

@@ -32,26 +32,26 @@ export default
     ],
     [
         'cookie',
-        'Wake & bake',
-        'Accept <strong>1</strong> cookies.',
+        'First scan',
+        'Complete <strong>1</strong> Halo demo scan.',
         1
     ],
     [
         'cookie',
-        'Making some dough',
-        'Accept <strong>10</strong> cookies.',
+        'Clinical explorer',
+        'Complete <strong>10</strong> Halo demo scans.',
         10
     ],
     [
         'cookie',
-        'So baked right now',
-        'Accept <strong>100</strong> cookies.',
+        'Scan specialist',
+        'Complete <strong>100</strong> Halo demo scans.',
         100
     ],
     [
         'cookie',
-        'Cookie Clicker',
-        'Accept <strong>1000</strong> cookies.',
+        'Halo regular',
+        'Complete <strong>1000</strong> Halo demo scans.',
         1000
     ],
     [
@@ -105,8 +105,8 @@ export default
     ],
     [
         'strike',
-        'F*** it, dude. Let\'s go bowling',
-        'Accomplished a strike.',
+        'A point for computer vision',
+        'Complete a tracked rally at the <strong>Ref.AI table tennis</strong> court.',
         1
     ],
     [

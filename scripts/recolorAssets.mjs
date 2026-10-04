@@ -1,4 +1,5 @@
 import sharp from 'sharp'
+import fs from 'node:fs/promises'
 import { fileURLToPath } from 'url'
 import path from 'path'
 
@@ -17,29 +18,11 @@ async function writeBoth(buffer, width, height, baseNoExt)
 // --- 1) Map: recolor the red Pool-of-Doom glow to blue (channel swap on red-dominant pixels in a bbox) ---
 async function recolorMap(file)
 {
-    const src = path.join(root, 'scripts/_asset_backup', file.replace('ui/', '') + '.png')
-    const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
-    const { width, height } = info
-    // Bounding box around the pool (top-right of the 1024 map)
-    const box = { x0: 825, x1: 970, y0: 295, y1: 435 }
-    for(let y = box.y0; y < box.y1; y++)
-    {
-        for(let x = box.x0; x < box.x1; x++)
-        {
-            const i = (y * width + x) * 4
-            const r = data[i], g = data[i + 1], b = data[i + 2]
-            // Red-dominant -> swap red/blue, then lighten toward white for a lighter blue glow
-            if(r > 110 && r > g + 25 && r > b + 20)
-            {
-                let nr = b, ng = g, nb = r
-                const t = 0.4 // lighten amount
-                data[i] = Math.round(nr + (255 - nr) * t)
-                data[i + 1] = Math.round(ng + (255 - ng) * t)
-                data[i + 2] = Math.round(nb + (255 - nb) * t)
-            }
-        }
-    }
-    await writeBoth(data, width, height, file)
+    // Preserve the original landscape. The map UI now tints only the pool glow
+    // through a soft radial mask; a broad pixel recolor also changed the land.
+    const relative = file.replace('ui/', '')
+    for(const extension of ['png', 'webp'])
+        await fs.copyFile(path.join(root, 'scripts/_asset_backup', `${relative}.${extension}`), S(`${file}.${extension}`))
 }
 
 // --- 2) Home preview: recolor the deep-red car body to near-white ---

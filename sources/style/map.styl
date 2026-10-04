@@ -328,3 +328,18 @@
                     
                     @media only screen and (max-width 520px)
                         display initial
+
+.map .pool-tint
+    pointer-events none
+    filter hue-rotate(195deg)
+    // Soft, circular glow correction. The landscape stays on the original image.
+    mask-image radial-gradient(ellipse 3.8% 3.8% at 89.4% 35.4%, #000 60%, transparent 100%)
+    -webkit-mask-image radial-gradient(ellipse 3.8% 3.8% at 89.4% 35.4%, #000 60%, transparent 100%)
+
+.map .rink-map
+    position absolute
+    left 51.56%
+    top 46.09%
+    width 8.34%
+    height 6.78%
+    pointer-events none
