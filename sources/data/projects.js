@@ -8,7 +8,7 @@ export default [
         {
             role: 'Systems Developer',
             at: 'Personal',
-            with: 'C++ · POSIX · Linux'
+            with: 'C++ · CMake · Linux'
         },
         distinctions: [ ],
         images:
@@ -25,7 +25,7 @@ export default [
         {
             role: 'Extension Developer',
             at: 'VS Code',
-            with: 'TypeScript · Node.js'
+            with: 'TypeScript · VS Code API'
         },
         distinctions: [ ],
         images:
