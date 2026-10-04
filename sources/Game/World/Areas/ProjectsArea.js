@@ -34,7 +34,6 @@ export class ProjectsArea extends Area
         
         this.state = ProjectsArea.STATE_CLOSED
 
-        this.setSounds()
         this.setInteractivePoint()
         this.setInputs()
         this.setCinematic()
@@ -61,25 +60,6 @@ export class ProjectsArea extends Area
             this.debugPanel.addButton({ title: 'open', label: 'open' }).on('click', () => { this.open() })
             this.debugPanel.addButton({ title: 'close', label: 'close' }).on('click', () => { this.close() })
         }
-    }
-
-    setSounds()
-    {
-        this.sounds = {}
-        this.sounds.anvil = this.game.audio.register({
-            path: 'sounds/anvil/METLImpt_Anvil Single Hammer Strike Hammers_GENHD1-01372.mp3',
-            autoplay: false,
-            loop: false,
-            volume: 0.5,
-            antiSpam: 0.1,
-            positions: this.references.items.get('anvil')[0].position,
-            distanceFade: 18,
-            onPlay: (item) =>
-            {
-                item.volume = 0.1 + Math.random() * 0.1
-                item.rate = 1 + Math.random() * 0.02
-            }
-        })
     }
 
     setInteractivePoint()

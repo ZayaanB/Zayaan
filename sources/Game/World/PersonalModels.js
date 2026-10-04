@@ -11,6 +11,12 @@ export function kit(name)
         material.name = `personal_${key}`
         return [key, material]
     }))
+    // Preserve luminous accents through the world's matte material conversion.
+    for(const [name, color] of [['glow', '#8fffe4'], ['amberGlow', '#ffc878']])
+    {
+        materials[name] = new THREE.MeshBasicMaterial({color})
+        materials[name].userData.prevent = true
+    }
     const colliders = []
     function mesh(name, geometry, position, material = 'dark', parent = root)
     {
@@ -102,7 +108,7 @@ export function buildWorkshop()
             const y=0.42+row*0.36
             k.box('serverDrawer',[1.06,0.27,0.055],[x,y,z+0.45],'blue')
             k.box('drawerHandle',[0.3,0.035,0.035],[x-0.17,y,z+0.49],'white')
-            indicators.push(k.box('activityLight',[0.05,0.05,0.03],[x+0.39,y,z+0.49],'mint'))
+            indicators.push(k.box('activityLight',[0.05,0.05,0.03],[x+0.39,y,z+0.49],'glow'))
         }
         const fan = new THREE.Group(); fan.position.set(x,2.51,z+0.47); k.root.add(fan)
         for(const angle of [0,Math.PI/2])
@@ -129,9 +135,13 @@ export function buildWorkshop()
     {
         chats.push(k.display('chatContext',[1.02,0.74],[x,2.95,z]))
     }
-    const packets=Array.from({length:6},(_,i)=>k.sphere(`dataPacket${i}`,0.075,[-1.5,1.8,0.7],'light'))
+    const packets=Array.from({length:6},(_,i)=>k.sphere(`dataPacket${i}`,0.095,[-1.5,1.8,0.7],'glow'))
     const sign=k.display('workshopSign',[2.6,0.65],[0,3.8,-3.1])
-    return { ...k, fans, indicators, racks, terminal, chats, packets, sign }
+    const links=[]
+    for(const x of [-1.2,1.2])
+        links.push(k.box('rackDataRail',[0.055,0.035,2.5],[x,0.075,-0.65],'glow'))
+    k.box('chatDataRail',[1.8,0.035,0.035],[0,2.66,-0.43],'glow')
+    return { ...k, fans, indicators, racks, terminal, chats, packets, sign, links }
 }
 
 export function buildHealthcare()
@@ -180,14 +190,17 @@ export function buildContextBridge()
         k.box('terminalKeyboard',[1,0.06,0.35],[x,1.31,0.55],'dark')
     }
     k.box('linkBase',[4.6,0.18,0.3],[0,0.85,0.25],'dark')
-    k.box('illuminatedLink',[4.6,0.07,0.13],[0,0.98,0.25],'mint')
+    k.box('illuminatedLink',[4.6,0.07,0.13],[0,0.98,0.25],'glow')
     k.cylinder('memoryPedestal',0.65,0.8,[0,0.45,0.25],'dark')
     for(const y of [0.95,2.3]) k.cylinder('capsuleRing',0.7,0.16,[0,y,0.25],'white')
     for(const x of [-0.55,0.55]) k.box('capsuleStrut',[0.12,1.25,0.12],[x,1.6,0.25],'teal')
-    const memory=k.box('compressedMemory',[0.55,0.55,0.55],[0,1.6,0.25],'mint')
-    const cards=Array.from({length:6},(_,i)=>k.box(`contextCard${i}`,[0.18,0.18,0.18],[-2.35,1.6+i*0.08,0.4],'mint'))
+    const memory=k.box('compressedMemory',[0.55,0.55,0.55],[0,1.6,0.25],'glow')
+    const cards=Array.from({length:6},(_,i)=>k.box(`contextCard${i}`,[0.18,0.18,0.18],[-2.35,1.6+i*0.08,0.4],'glow'))
     const sign=k.display('contextBridgeSign',[3.6,1.15],[0,3.65,-1.8])
-    return {...k,terminals,memory,cards,sign}
+    const pulses=Array.from({length:10},(_,i)=>k.sphere(`linkPulse${i}`,0.065,[0,1.05,0.25],'glow'))
+    const orbit=k.mesh('memoryOrbit',new THREE.TorusGeometry(0.46,0.025,6,32),[0,1.6,0.25],'glow')
+    orbit.rotation.x=Math.PI/3
+    return {...k,terminals,memory,cards,sign,pulses,orbit}
 }
 
 
@@ -221,4 +234,76 @@ export function buildSkatingRink()
     k.box('rinkSignFrame',[2.1,0.9,0.18],[3,1.55,7],'wood')
     const sign=k.panel('rinkSign',[1.88,0.68],[3,1.55,7.1])
     return {...k,ice,sign}
+}
+
+
+// An original vehicle-armored sentinel: broad shoulders, wheel assemblies,
+// articulated forearms, turbine backpack and a visible chest monogram.
+export function buildSentinel()
+{
+    const k=kit('zbSentinel')
+    k.box('sentinelStage',[7,0.35,5.4],[0,0.175,0],'dark',true)
+    for(const x of [-3.1,3.1]) k.box('stageLight',[0.08,0.025,4.8],[x,0.365,0],'glow')
+    const torso=new THREE.Group();torso.position.set(0,4.65,0);k.root.add(torso)
+    const part=(name,size,pos,mat='teal',parent=torso)=>k.mesh(name,new THREE.BoxGeometry(...size),pos,mat,parent)
+    for(const side of [-1,1])
+    {
+        const x=side*0.95
+        k.box('armoredFoot',[1.25,0.55,1.9],[x,0.65,0.35],'teal',true)
+        k.box('toeArmor',[1.1,0.22,0.7],[x,0.96,0.9],'white')
+        k.box('shin',[0.9,1.5,0.9],[x,1.65,0],'teal',true)
+        k.box('shinInset',[0.55,0.8,0.12],[x,1.7,0.51],'dark')
+        k.box('shinLight',[0.09,0.65,0.03],[x,1.7,0.59],'glow')
+        k.sphere('kneeJoint',0.4,[x,2.55,0],'dark')
+        k.box('kneeShield',[0.85,0.5,0.22],[x,2.6,0.48],'white')
+        k.box('thigh',[0.8,1.2,0.8],[x,3.2,0],'dark',true)
+        k.box('thighArmor',[0.85,0.85,0.25],[x,3.2,0.47],'white')
+        part('hipPlate',[1.05,0.6,0.9],[side*0.8,-0.85,0],'teal')
+    }
+    part('waist',[1.3,0.5,0.8],[0,-0.6,0],'dark')
+    part('torsoCore',[2.1,1.55,1.25],[0,0.35,0],'dark')
+    for(const side of [-1,1])
+    {
+        const plate=part('chestArmor',[1.2,0.75,0.3],[side*0.63,0.8,0.76],'teal')
+        plate.rotation.z=-side*0.16
+        part('chestVent',[0.5,0.23,0.08],[side*0.78,0.88,0.96],'glow')
+        part('collarFin',[0.32,0.9,0.75],[side*1.03,1.33,-0.12],'white').rotation.z=-side*0.25
+    }
+    const badge=k.mesh('zbChestBadge',new THREE.PlaneGeometry(1.1,0.64),[0,0.25,1.01],'screen',torso)
+    const reactor=k.mesh('chestReactor',new THREE.IcosahedronGeometry(0.23,0),[0,-0.35,0.8],'glow',torso)
+    const head=new THREE.Group();head.position.set(0,1.75,0);torso.add(head)
+    part('helmet',[1.12,0.96,0.95],[0,0,0],'teal',head)
+    part('helmetCrest',[0.22,0.4,0.7],[0,0.57,-0.05],'white',head)
+    part('faceMask',[0.64,0.4,0.12],[0,-0.21,0.52],'white',head)
+    part('visor',[0.88,0.16,0.08],[0,0.12,0.52],'glow',head)
+    for(const side of [-1,1]) part('earFin',[0.18,1.1,0.25],[side*0.66,0.2,0],'coral',head)
+    const arms=[],wheels=[],wings=[], turbines=[]
+    for(const side of [-1,1])
+    {
+        const arm=new THREE.Group();arm.position.set(side*1.65,1,0);torso.add(arm);arms.push(arm)
+        part('shoulderArmor',[1.25,0.85,1.25],[side*0.1,0,0],'coral',arm)
+        part('shoulderCap',[1.35,0.18,1.35],[side*0.1,0.52,0],'white',arm)
+        part('upperArm',[0.58,1.05,0.65],[0,-0.8,0],'dark',arm)
+        k.mesh('elbow',new THREE.IcosahedronGeometry(0.34,1),[0,-1.4,0],'white',arm)
+        const forearm=new THREE.Group();forearm.position.set(0,-1.4,0);arm.add(forearm);arm.userData.forearm=forearm
+        part('forearmArmor',[0.85,0.95,0.85],[0,-0.5,0.05],'teal',forearm)
+        part('forearmLight',[0.14,0.55,0.06],[0,-0.5,0.51],'glow',forearm)
+        part('fist',[0.65,0.5,0.7],[0,-1.2,0.05],'dark',forearm)
+        for(let i=0;i<3;i++) part('knuckle',[0.14,0.25,0.1],[-0.2+i*0.2,-1.2,0.44],'white',forearm)
+        const wheel=k.mesh('shoulderWheel',new THREE.CylinderGeometry(0.48,0.48,0.24,12),[side*0.74,0,-0.1],'dark',arm)
+        wheel.rotation.z=Math.PI/2;wheels.push(wheel)
+        k.mesh('wheelHub',new THREE.CylinderGeometry(0.24,0.24,0.255,8),[0,0,0],'white',wheel)
+        const wing=new THREE.Group();wing.position.set(side*0.95,0.6,-0.7);torso.add(wing);wings.push(wing)
+        part('vehicleWing',[0.9,1.85,0.2],[side*0.4,0.35,0],'teal',wing)
+        part('wingStripe',[0.1,1.5,0.04],[side*0.48,0.35,-0.13],'glow',wing)
+        wing.rotation.z=-side*0.35
+        const turbine=k.mesh('backpackTurbine',new THREE.TorusGeometry(0.38,0.12,6,12),[side*0.6,0.5,-1],'white',torso)
+        const rotor=new THREE.Group();rotor.position.copy(turbine.position);torso.add(rotor);turbines.push(rotor)
+        for(let i=0;i<3;i++) part('turbineBlade',[0.58,0.07,0.05],[0,0,0],'glow',rotor).rotation.z=i*Math.PI/3
+    }
+    const halo=k.mesh('powerHalo',new THREE.TorusGeometry(2.6,0.035,6,64),[0,0.4,0],'glow');halo.rotation.x=Math.PI/2
+    const sparks=Array.from({length:8},(_,i)=>k.sphere(`energySpark${i}`,0.09,[0,0.5,0],'glow'))
+    k.colliders.push({shape:'cuboid',parameters:[1.65,2.5,0.85],position:{x:0,y:3.6,z:0}})
+    const sign=k.display('sentinelSign',[2.5,0.65],[0,0.85,2.5])
+    return {...k,torso,head,arms,wheels,wings,turbines,badge,reactor,halo,sparks,sign}
 }

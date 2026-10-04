@@ -1,7 +1,7 @@
 import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import { InteractivePoints } from '../InteractivePoints.js'
-import { buildCourt, buildHealthcare, buildWorkshop, buildContextBridge, buildSkatingRink } from './PersonalModels.js'
+import { buildCourt, buildHealthcare, buildWorkshop, buildContextBridge, buildSkatingRink, buildSentinel } from './PersonalModels.js'
 import { healthcareSite, workshopSite, contextSite } from '../../data/exhibits.js'
 
 export function mountExhibit(game, model, position, physics = {})
@@ -171,41 +171,27 @@ export function setupWorkshop(area)
     }
     const origin=new THREE.Vector3(workshopSite.x,workshopSite.y,workshopSite.z)
     const model=mountExhibit(game,buildWorkshop(),origin)
-    screenLabel(model.sign,['COMPUTING','WORKSHOP'])
-    screenLabel(model.terminal,['KV STORE','16 SHARDS'])
-    screenLabel(model.chats[0],['SOURCE','CHAT'])
-    screenLabel(model.chats[1],['SHARED','CHAT'])
-    let startedAt=null, previousTitle=null, selectedTitle=null, previousProjectTitle=null
+    screenLabel(model.sign,['KV STORE','DATA CENTER'])
+    screenLabel(model.terminal,['KV STORE','16 SHARDS','DURABLE WRITES'])
+    screenLabel(model.chats[0],['READS','16 SHARDS'])
+    screenLabel(model.chats[1],['WRITES','DURABLE WAL'])
+    let startedAt=null
     const start=()=>{startedAt=game.ticker.elapsedScaled}
     game.respawns.items.set('workshop',{name:'workshop',position:new THREE.Vector3(workshopSite.x,4,workshopSite.z+4.8),rotation:Math.PI})
     exhibitPoint(game,origin.clone().add(new THREE.Vector3(0,1.5,3.3)),'Explore the workshop',()=>{start();game.modals.open('computing-workshop')})
-    exhibitPoint(game,origin.clone().add(new THREE.Vector3(-3.2,1.5,0.8)),'KV Store data flow',()=>{selectedTitle='Embedded Key-Value Store';start()})
-    exhibitPoint(game,origin.clone().add(new THREE.Vector3(3.2,1.5,0.8)),'Context Sync data flow',()=>{selectedTitle='Context Sync Extension';start()})
+    exhibitPoint(game,origin.clone().add(new THREE.Vector3(-3.2,1.5,0.8)),'KV Store data flow',start)
     area.workshop={model,update:()=>{
-        const projectTitle=area.navigation?.current?.title
-        if(projectTitle!==previousProjectTitle)
-        {
-            previousProjectTitle=projectTitle
-            selectedTitle=projectTitle
-        }
-        const title=selectedTitle
-        if(title!==previousTitle)
-        {
-            previousTitle=title; start()
-            screenLabel(model.terminal,title==='Context Sync Extension'?['CONTEXT SYNC','750+ DOWNLOADS']:['KV STORE','16 SHARDS','DURABLE WRITES'])
-        }
         const nearby=game.player.position.distanceTo(origin)<22
         if(!nearby) return
         const time=game.ticker.elapsedScaled
         model.fans.forEach(f=>f.rotation.z=time*2)
         const active=startedAt!==null&&time-startedAt<8
-        model.indicators.forEach((m,i)=>m.visible=!active||Math.sin(time*4+i)>-0.4)
-        const sync=title==='Context Sync Extension'
+        model.indicators.forEach((m,i)=>{m.visible=true;m.scale.setScalar(Math.sin(time*(active?9:2.5)+i*2.3)>0.2?1:0.45)})
         model.packets.forEach((m,i)=>{
-            m.visible=active
-            const t=((time-startedAt)*0.3+i/6)%1
-            if(sync) m.position.set(-0.9+t*1.8,2.95+Math.sin(t*Math.PI)*0.35,-0.4)
-            else m.position.set(-t*1.2,1.8+Math.sin(t*Math.PI)*0.6,0.5-t*2.05)
+            m.visible=true
+            const t=(time*(active?0.5:0.14)+i/6)%1
+            m.scale.setScalar(active?1.25:0.75)
+            m.position.set((i%2?1:-1)*t*1.2,1.8+Math.sin(t*Math.PI)*0.6,0.5-t*2.05)
         })
     }}
     game.ticker.events.on('tick',()=>area.workshop.update(),10)
@@ -235,16 +221,27 @@ export class ContextSyncExhibit
         this.startedAt=null
         screenLabel(this.model.terminals[0],['SOURCE','VS CODE'])
         screenLabel(this.model.terminals[1],['TARGET','READY'])
+        this.phase=null
         this.model.memory.scale.setScalar(1)
         this.model.cards.forEach((card,i)=>{card.position.set(-2.35,1.5+i*0.09,0.4);card.scale.setScalar(1);card.visible=false})
     }
     update()
     {
-        if(this.startedAt===null) return
-        const t=this.game.ticker.elapsedScaled-this.startedAt
-        this.model.memory.rotation.y=t*0.8
+        const time=this.game.ticker.elapsedScaled
+        const active=this.startedAt!==null
+        this.model.memory.rotation.set(0.18*Math.sin(time*0.6),time*(active?1.3:0.4),0.15)
+        this.model.memory.position.y=1.6+Math.sin(time*1.4)*0.09
+        this.model.orbit.rotation.z=time*0.65
+        this.model.pulses.forEach((pulse,i)=>{
+            const progress=(time*(active?0.65:0.16)+i/10)%1
+            pulse.position.set(-2.3+progress*4.6,1.08,0.25)
+            pulse.scale.setScalar(active?1.4:0.8)
+        })
+        if(!active) return
+        const t=time-this.startedAt
         if(t<3)
         {
+            if(this.phase!==0){this.phase=0;screenLabel(this.model.terminals[0],['SOURCE','SENDING']);screenLabel(this.model.terminals[1],['TARGET','RECEIVING'])}
             this.model.cards.forEach((card,i)=>{
                 const progress=THREE.MathUtils.clamp((t-i*0.22)/1.7,0,1)
                 card.position.set(-2.35*(1-progress),1.5+Math.sin(progress*Math.PI)*0.5,0.4)
@@ -254,11 +251,13 @@ export class ContextSyncExhibit
         }
         else if(t<5)
         {
+            if(this.phase!==1){this.phase=1;screenLabel(this.model.terminals[0],['CONTEXT','COMPRESSING'])}
             this.model.cards.forEach(card=>card.visible=false)
             this.model.memory.scale.setScalar(1.6-(t-3)*0.5)
         }
         else if(t<8)
         {
+            if(this.phase!==2){this.phase=2;screenLabel(this.model.terminals[1],['TARGET','RESTORING'])}
             this.model.cards.forEach((card,i)=>{
                 const progress=THREE.MathUtils.clamp((t-5-i*0.2)/1.6,0,1)
                 card.visible=true
@@ -284,5 +283,65 @@ export class SkatingRink
         this.origin=new THREE.Vector3(11,-0.04,-1)
         this.model=mountExhibit(this.game,buildSkatingRink(),this.origin,{friction:0.02,frictionRule:'min'})
         screenLabel(this.model.sign,['SKATING','RINK'],'#fff3df','#87543b')
+    }
+}
+
+
+export class SentinelExhibit
+{
+    constructor()
+    {
+        this.game=Game.getInstance()
+        // Beside the Ref.AI court, leaving the table and its approach open.
+        this.origin=new THREE.Vector3(3,0,66)
+        this.model=mountExhibit(this.game,buildSentinel(),this.origin)
+        screenLabel(this.model.badge,['ZB'],'#bdf7de','#153c49')
+        screenLabel(this.model.sign,['ZB SENTINEL','POWER UP'])
+        this.startedAt=null
+        exhibitPoint(this.game,this.origin.clone().add(new THREE.Vector3(0,1.5,3.8)),'Power up ZB Sentinel',()=>{
+            if(this.startedAt!==null) return
+            this.startedAt=this.game.ticker.elapsedScaled
+            screenLabel(this.model.sign,['ZB SENTINEL','CORE ONLINE'])
+            this.game.world.confetti?.pop(this.origin.clone().add(new THREE.Vector3(0,5,0)))
+        })
+        this.game.ticker.events.on('tick',()=>this.update(),10)
+    }
+    reset()
+    {
+        this.startedAt=null
+        screenLabel(this.model.sign,['ZB SENTINEL','POWER UP'])
+    }
+    update()
+    {
+        if(this.game.player.position.distanceTo(this.origin)>38) return
+        const time=this.game.ticker.elapsedScaled
+        const t=this.startedAt===null?0:time-this.startedAt
+        const active=this.startedAt!==null
+        const power=active?Math.sin(Math.min(t/1.5,1)*Math.PI/2)*THREE.MathUtils.clamp((9-t)/1.5,0,1):0
+        this.model.torso.position.y=4.65+Math.sin(time*1.4)*0.045
+        this.model.head.rotation.y=Math.sin(time*0.4)*0.28
+        this.model.head.rotation.x=-power*0.12
+        this.model.reactor.rotation.set(time,time*0.7,0)
+        this.model.reactor.scale.setScalar(1+Math.sin(time*(active?8:2))*0.12+power*0.6)
+        this.model.arms.forEach((arm,i)=>{
+            const side=i===0?-1:1
+            arm.rotation.z=side*(0.08+power*0.65)
+            arm.rotation.x=Math.sin(time*1.2+i)*0.04-power*0.3
+            arm.userData.forearm.rotation.x=-0.12-power*(0.5+0.15*Math.sin(t*3))
+        })
+        this.model.wings.forEach((wing,i)=>wing.rotation.z=(i===0?1:-1)*(0.35+power*0.65))
+        this.model.turbines.forEach(rotor=>rotor.rotation.z=time*(active?8:2))
+        this.model.wheels.forEach(wheel=>wheel.rotation.y=time*0.3)
+        this.model.halo.scale.setScalar(1+power*0.12+Math.sin(time*2)*0.025)
+        this.model.sparks.forEach((spark,i)=>{
+            const angle=time*(active?1.8:0.35)+i/8*Math.PI*2
+            const radius=2.6+power*0.35
+            spark.position.set(Math.cos(angle)*radius,0.5+power*(1+Math.sin(angle*2))*1.7,Math.sin(angle)*radius)
+        })
+        if(active&&t>=9)
+        {
+            this.startedAt=null
+            screenLabel(this.model.sign,['ZB SENTINEL','POWER UP'])
+        }
     }
 }

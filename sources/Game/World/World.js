@@ -27,7 +27,8 @@ import { Lanterns } from './Lanterns.js'
 import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { contextFoliageReferences, rinkFoliageReferences } from '../../data/exhibits.js'
-import { ContextSyncExhibit, SkatingRink } from './PersonalExhibits.js'
+import { ContextSyncExhibit, SkatingRink, SentinelExhibit } from './PersonalExhibits.js'
+import { UtfrExhibit } from './UtfrExhibit.js'
 import { Scenery } from './Scenery.js'
 
 export class World
@@ -54,6 +55,7 @@ export class World
         }
         else if(step === 1)
         {
+            const formulaTemplate = this.game.resources.vehicle.scene.clone(true)
             this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene)
             this.floor = new Floor()
             this.waterSurface = new WaterSurface()
@@ -81,6 +83,8 @@ export class World
             this.areas = new Areas()
             this.contextSync = new ContextSyncExhibit()
             this.skatingRink = new SkatingRink()
+            this.sentinel = new SentinelExhibit()
+            this.utfr = new UtfrExhibit(formulaTemplate)
         }
     }
 

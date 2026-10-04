@@ -46,7 +46,6 @@ export class CircuitArea extends Area
         this.setStartAnimation()
         this.setRespawn()
         this.setBounds()
-        this.setAirDancers()
         this.setBanners()
         this.setMenu()
         this.setEndModal()
@@ -688,76 +687,20 @@ export class CircuitArea extends Area
         this.bounds.isOut = false
     }
 
-    setAirDancers()
-    {
-        const baseAirDancers = this.references.items.get('airDancers')
-        const height = 5
-        const colorNode = uniform(color('#d684ff'))
-
-        const material = baseAirDancers[0].material.clone()
-
-        const rotation = float(0).toVarying()
-        const intensity = float(0).toVarying()
-        
-        material.positionNode = Fn(() =>
-        {
-            const newPosition = positionGeometry.toVar()
-
-            const localTime = this.game.ticker.elapsedScaledUniform
-
-            intensity.assign(
-                localTime
-                    .mul(0.34)
-                    .sub(positionGeometry.y.div(height * 2))
-                    .fract()
-                    .sub(0.5)
-                    .mul(2)
-                    .abs()
-            )
-
-            const heightFade = positionGeometry.y.div(height)
-
-            const rotation1 = sin(localTime.mul(0.678)).mul(0.7)
-            const rotation2 = sin(localTime.mul(1.4)).mul(0.35)
-            const rotation3 = sin(localTime.mul(2.4)).mul(0.2)
-            rotation.assign(add(rotation1, rotation2, rotation3).mul(heightFade).mul(intensity).mul(this.game.wind.strength.remap(0, 1, 0.25, 1)))
-
-            const rotationCenter = vec2(0, 0)
-            newPosition.xy.assign(rotateUV(newPosition.xy, rotation, rotationCenter))
-            
-            return newPosition
-        })()
-
-        material.normalNode = Fn(() =>
-        {
-            const newNormalGeometry = normalGeometry.toVar()
-            newNormalGeometry.xy.assign(rotateUV(newNormalGeometry.xy, rotation, vec2(0)))
-            return newNormalGeometry
-        })()
-
-        // material.outputNode = Fn(() =>
-        // {
-        //     return vec4(vec3(intensity), 1)
-        // })()
-
-        for(const baseAirDancer of baseAirDancers)
-        {
-            baseAirDancer.material = material
-        }
-
-        // Debug
-        if(this.game.debug.active)
-        {
-            const debugPanel = this.debugPanel.addFolder({ title: 'airDancers' })
-            this.game.debug.addThreeColorBinding(debugPanel, colorNode.value, 'color')
-            
-            // debugPanel.addBinding(doorIntensity, 'value', { label: 'intensity', min: 0, max: 5, step: 0.01 })
-        }
-    }
-
     setBanners()
     {
         this.banners = this.references.items.get('banners')
+        const canvas=document.createElement('canvas')
+        canvas.width=256;canvas.height=1024
+        const context=canvas.getContext('2d')
+        context.fillStyle='#8e2836';context.fillRect(0,0,256,1024)
+        context.strokeStyle='#fff3e5';context.lineWidth=10;context.strokeRect(12,12,232,1000)
+        context.fillStyle='#fff3e5';context.font='800 160px Nunito, sans-serif';context.textAlign='center'
+        for(const [i,letter] of [...'UTFR'].entries())context.fillText(letter,128,210+i*220)
+        const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace
+        const material=new THREE.MeshBasicMaterial({map,side:THREE.DoubleSide})
+        material.userData.prevent=true
+        for(const banner of this.banners)banner.material=material
     }
 
     setLeaderboard()

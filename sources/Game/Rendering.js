@@ -185,6 +185,7 @@ export class Rendering
     {
         // this.renderer.render(this.game.scene, this.game.view.camera)
         this.postProcessing.render()
+        this.game.menu.captureScenePreviews()
 
         if(this.stats)
             this.stats.update()

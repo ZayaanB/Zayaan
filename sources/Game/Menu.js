@@ -20,6 +20,7 @@ export class Menu
         // this.pending = null
         this.default = null
         this.events = new Events()
+        this.sceneSnapshotPending = false
 
         this.setTrigger()
         this.setClose()
@@ -168,6 +169,42 @@ export class Menu
 
     }
 
+    captureScenePreviews()
+    {
+        if(!this.sceneSnapshotPending || !this.game.player || !this.game.view?.camera)
+            return
+
+        const source = this.game.rendering.renderer.domElement
+        if(!source.width || !source.height)
+            return
+
+        // Copy immediately after rendering, before the GPU drawing buffer clears.
+        // Project the actual vehicle so both crops work with camera offsets and zoom.
+        const focus = this.game.player.position.clone()
+        focus.y += 0.75
+        focus.project(this.game.view.camera)
+        const centerX = (focus.x * 0.5 + 0.5) * source.width
+        const centerY = (-focus.y * 0.5 + 0.5) * source.height
+        if(!Number.isFinite(centerX) || !Number.isFinite(centerY))
+            return
+
+        for(const [name, scale] of [['options', 0.95], ['controls', 0.45]])
+        {
+            const canvas = this.items.get(name)?.previewElement.querySelector('.js-scene-snapshot')
+            const context = canvas?.getContext('2d')
+            if(!context)
+                continue
+
+            const aspect = canvas.width / canvas.height
+            const height = Math.min(source.height * scale, source.width / aspect)
+            const width = height * aspect
+            const x = Math.max(0, Math.min(source.width - width, centerX - width / 2))
+            const y = Math.max(0, Math.min(source.height - height, centerY - height / 2))
+            context.drawImage(source, x, y, width, height, 0, 0, canvas.width, canvas.height)
+        }
+        this.sceneSnapshotPending = false
+    }
+
     open(name = null)
     {
         let _name = name
@@ -240,6 +277,7 @@ export class Menu
         // Need open
         if(this.state === Menu.CLOSED || this.state === Menu.CLOSING)
         {
+            this.sceneSnapshotPending = true
             this.state = Menu.OPENING
 
             this.element.classList.add('is-displayed')

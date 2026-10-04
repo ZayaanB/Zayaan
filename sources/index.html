@@ -189,12 +189,12 @@
 
                         <!-- Options -->
                         <div class="js-preview preview options-preview">
-                            <img class="background" src="ui/previews/home.webp" loading="lazy" draggable="false">
+                            <canvas class="background js-scene-snapshot" width="600" height="720" role="img" aria-label="Snapshot of your current portfolio scene"></canvas>
                         </div>
 
                         <!-- Controls -->
                         <div class="js-preview preview controls-preview">
-                            <img class="background" src="ui/previews/controls.webp" loading="lazy" draggable="false">
+                            <canvas class="background js-scene-snapshot" width="600" height="720" role="img" aria-label="Close-up snapshot of your current vehicle"></canvas>
                         </div>
 
                         <!-- Achievements -->
@@ -803,11 +803,22 @@
                 </div></div>
             </div>
 
+            <div class="js-modal modal personal-exhibit-modal" data-name="utfr-driverless">
+                <div class="container"><div class="content">
+                    <button class="js-close close js-main-focus" aria-label="Close UTFR overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
+                    <h2 class="title">U of T Formula Racing · Driverless</h2>
+                    <p class="text"><strong>Autonomy Software Engineer — Mapping &amp; Planning.</strong> I develop mapping and path-planning software in C++ and ROS 2.</p>
+                    <p class="text">Replaced FastSLAM with <strong>EKF-SLAM</strong>, reducing localization compute time by <strong>30%</strong> while maintaining accuracy. Built ego-aligned track corridors from <strong>quintic splines</strong> using arc-length sampling over a configurable <strong>15 m horizon</strong>.</p>
+                    <p class="text">Integrated <strong>eight sensors</strong>, including IMU, wheel-speed, and GPS, for simulation data collection and monitoring.</p>
+                    <p class="text">The pit car is a Formula-style demonstrator. Use <strong>Run UTFR mapping demo</strong> at the adjacent table to watch an illustrative sense → plan → drive sequence, or try a timed lap on the circuit.</p>
+                </div></div>
+            </div>
+
             <div class="js-modal modal personal-exhibit-modal" data-name="computing-workshop">
                 <div class="container"><div class="content">
                     <button class="js-close close js-main-focus" aria-label="Close project overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
                     <h2 class="title">Zayaan’s Computing Workshop</h2>
-                    <p class="text"><strong>Embedded Key-Value Store:</strong> C++, CMake, multithreading, and Linux. Sixteen-way sharded locking delivers 5× read throughput; compaction reduces disk usage by 45%+, with crash recovery through a checksummed write-ahead log.</p><p class="text"><strong>Context Sync:</strong> a VS Code extension with 750+ downloads. Weighted-graph context selection reduces token use by 25%+, and its Markdown schema compacts summaries by 30%+.</p><p class="text">Use <strong>KV Store data flow</strong> or <strong>Context Sync data flow</strong> at this workshop to animate the racks and chat screens. The original <strong>Projects</strong> landmark still has the full project carousel.</p><p class="text"><a href="https://github.com/ZayaanB/kvstore" target="_blank" rel="noreferrer">KV Store on GitHub ↗</a> · <a href="https://github.com/ZayaanB/Context-Sync" target="_blank" rel="noreferrer">Context Sync on GitHub ↗</a></p>
+                    <p class="text"><strong>Embedded Key-Value Store:</strong> C++, CMake, multithreading, and Linux. Sixteen-way sharded locking delivers 5× read throughput; compaction reduces disk usage by 45%+, with crash recovery through a checksummed write-ahead log.</p><p class="text">Use <strong>KV Store data flow</strong> at this workshop to animate the server racks. Context Sync has its own separate exhibition. The original <strong>Projects</strong> landmark still has the full project carousel.</p><p class="text"><a href="https://github.com/ZayaanB/kvstore" target="_blank" rel="noreferrer">KV Store on GitHub ↗</a></p>
                 </div></div>
             </div>
 
