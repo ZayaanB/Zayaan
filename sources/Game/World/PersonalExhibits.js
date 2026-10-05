@@ -213,6 +213,7 @@ export class ContextSyncExhibit
             this.reset()
             this.startedAt=this.game.ticker.elapsedScaled
         })
+        exhibitPoint(this.game,this.origin.clone().add(new THREE.Vector3(4.1,1.5,2.4)),'About Context Sync',()=>this.game.modals.open('context-sync'))
         this.reset()
         this.game.ticker.events.on('tick',()=>this.update(),10)
     }
@@ -292,9 +293,10 @@ export class SentinelExhibit
     constructor()
     {
         this.game=Game.getInstance()
-        // Beside the Ref.AI court, leaving the table and its approach open.
-        this.origin=new THREE.Vector3(3,0,66)
+        // Western clearing, with a wide gap to the Ref.AI platform.
+        this.origin=new THREE.Vector3(-7,0,66)
         this.model=mountExhibit(this.game,buildSentinel(),this.origin)
+        this.game.respawns.items.set('sentinel',{name:'sentinel',position:this.origin.clone().add(new THREE.Vector3(0,4,4.9)),rotation:Math.PI})
         screenLabel(this.model.badge,['ZB'],'#bdf7de','#153c49')
         screenLabel(this.model.sign,['ZB SENTINEL','POWER UP'])
         this.startedAt=null

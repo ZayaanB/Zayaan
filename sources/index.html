@@ -98,6 +98,22 @@
             </div>
         </button>
 
+        <aside class="js-minimap minimap" aria-label="Driving minimap">
+            <button class="js-minimap-toggle minimap-toggle" aria-expanded="false" aria-controls="minimap-panel" aria-label="Open minimap">
+                <img src="ui/map.svg" alt="" width="16" height="16"><span>Minimap</span><span class="minimap-chevron" aria-hidden="true">⌃</span>
+            </button>
+            <div class="js-minimap-panel minimap-panel" id="minimap-panel" hidden>
+                <div class="minimap-map" role="img" aria-label="Map with your current position and exhibition landmarks">
+                    <img class="js-minimap-texture minimap-texture" alt="" draggable="false">
+                    <img class="js-minimap-pool minimap-texture minimap-pool" alt="" draggable="false">
+                    <img class="minimap-rink" src="ui/map/skating-rink.svg" alt="" draggable="false">
+                    <div class="js-minimap-landmarks minimap-landmarks"></div>
+                    <div class="js-minimap-player minimap-player" aria-hidden="true"></div>
+                </div>
+                <button class="js-minimap-expand minimap-expand" aria-label="Open full map">Full map ↗</button>
+            </div>
+        </aside>
+
         <!-- Menu -->
         <div class="js-menu menu">
 
@@ -800,6 +816,17 @@
                     <button class="js-close close js-main-focus" aria-label="Close project overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
                     <h2 class="title">Halo Healthcare — Clinical AI</h2>
                     <p class="text">A clinical AI assistant project built with <strong>Python, OpenCV, and SQL</strong>.</p><p class="text">The former cookie factory is now a pavilion with an examination bed, scanner, clinical monitor, and records workstation. Use <strong>Run Halo scan</strong> to watch a fictional six-second scan and its completion message.</p><p class="text"><a href="https://github.com/ZayaanB/Halo-Healthcare" target="_blank" rel="noreferrer">View Halo Healthcare on GitHub ↗</a></p>
+                </div></div>
+            </div>
+
+            <div class="js-modal modal personal-exhibit-modal" data-name="context-sync">
+                <div class="container"><div class="content">
+                    <button class="js-close close js-main-focus" aria-label="Close Context Sync overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
+                    <h2 class="title">Context Sync</h2>
+                    <p class="text">A <strong>VS Code extension</strong> built with TypeScript and the VS Code Extension API, with <strong>750+ downloads</strong>.</p>
+                    <p class="text"><strong>Weighted-graph context selection</strong> reduces token use by <strong>25%+</strong>. A structured Markdown schema compacts chat summaries by <strong>30%+</strong>, helping carry useful context between conversations.</p>
+                    <p class="text">Use <strong>Sync context</strong> at this platform to watch context travel from the source terminal into compressed memory, then transfer to the target terminal.</p>
+                    <p class="text"><a href="https://github.com/ZayaanB/Context-Sync" target="_blank" rel="noreferrer">Context Sync on GitHub ↗</a></p>
                 </div></div>
             </div>
 

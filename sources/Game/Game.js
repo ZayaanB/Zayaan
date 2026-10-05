@@ -193,6 +193,7 @@ export class Game
         this.title = new Title()
         // this.monitoring = new Monitoring()
         this.world.step(1)
+        this.map.setMinimap()
         this.overlay = new Overlay()
 
         // Pre-render if quality high

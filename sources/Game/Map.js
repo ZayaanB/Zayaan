@@ -1,5 +1,24 @@
 import { clamp } from 'three/src/math/MathUtils.js'
 import { Game } from './Game.js'
+import { Minimap } from './Minimap.js'
+
+export const mapLocations = [
+            { name: 'Achievements', respawnName: 'achievements', offset: { x: 0, y: -0.01 } },
+            { name: 'Pool of Doom', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
+            { name: 'Credits', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
+            { name: 'Ref.AI Table Tennis', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },
+            { name: 'ZB Robot', respawnName: 'sentinel', offset: { x: 0.025, y: -0.015 } },
+            { name: 'Career', respawnName: 'career', offset: { x: 0, y: -0.06 } },
+            { name: 'UTFR Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
+            { name: 'Halo Healthcare', respawnName: 'healthcare', offset: { x: -0.02, y: -0.01 } },
+            { name: 'Experiences', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
+            { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
+            { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
+            { name: 'Context Sync', respawnName: 'contextsync', offset: { x: 0, y: 0 } },
+            { name: 'Computing Workshop', respawnName: 'workshop', offset: { x: 0, y: 0.01 } },
+            { name: 'Social', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
+            { name: 'Time Machine', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },
+        ]
 
 export class Map
 {
@@ -23,6 +42,11 @@ export class Map
         })
     }
 
+    setMinimap()
+    {
+        this.minimap = new Minimap(this, mapLocations)
+    }
+
     init()
     {
         this.initiated = true
@@ -40,22 +64,7 @@ export class Map
     setLocations()
     {
         this.locations = {}
-        this.locations.items = [
-            { name: 'Achievements', respawnName: 'achievements', offset: { x: 0, y: -0.01 } },
-            { name: 'Pool of Doom', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
-            { name: 'Credits', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
-            { name: 'Ref.AI Table Tennis', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },
-            { name: 'Career', respawnName: 'career', offset: { x: 0, y: -0.06 } },
-            { name: 'UTFR Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
-            { name: 'Halo Healthcare', respawnName: 'healthcare', offset: { x: -0.02, y: -0.01 } },
-            { name: 'Experiences', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
-            { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
-            { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
-            { name: 'Context Sync', respawnName: 'contextsync', offset: { x: 0, y: 0 } },
-            { name: 'Computing Workshop', respawnName: 'workshop', offset: { x: 0, y: 0.01 } },
-            { name: 'Social', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
-            { name: 'Time Machine', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },
-        ]
+        this.locations.items = mapLocations
 
         for(const item of this.locations.items)
         {
@@ -177,21 +186,9 @@ export class Map
         if(!this.modal.isOpen)
             return
 
-        const playerRoundedX = Math.round(this.game.player.position.x)
-        const playerRoundedY = Math.round(this.game.player.position.z)
-
-        if(playerRoundedX !== this.player.roundedPosition.x || playerRoundedY !== this.player.roundedPosition.y)
-        {
-            this.player.roundedPosition.x = playerRoundedX
-            this.player.roundedPosition.y = playerRoundedY
-
-            const playerCoordinates = this.worldToMap(this.player.roundedPosition)
-            const x = Math.round(playerCoordinates.x * 1000) / 10
-            const y = Math.round(playerCoordinates.y * 1000) / 10
-
-            this.player.element.style.left = `${x}%`
-            this.player.element.style.top = `${y}%`
-            this.player.element.style.transform = `rotate(${-this.game.physicalVehicle.yRotation}rad)`
-        }
+        const coordinates = this.worldToMap(this.game.player.position)
+        this.player.element.style.left = `${coordinates.x * 100}%`
+        this.player.element.style.top = `${coordinates.y * 100}%`
+        this.player.element.style.transform = `rotate(${-this.game.physicalVehicle.yRotation}rad)`
     }
 }

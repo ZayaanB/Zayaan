@@ -1,0 +1,130 @@
+.minimap
+    display none
+    position absolute
+    left @css{ max(16px, env(safe-area-inset-left)) }
+    bottom @css{ max(16px, env(safe-area-inset-bottom)) }
+    width 220px
+    z-index 8
+    color #fff3e5
+    user-select none
+    border 1px solid #fff3e544
+    border-radius 10px
+    background #211c2aee
+    box-shadow 0 6px 24px #00000044
+    overflow hidden
+
+    html.is-started &
+        display block
+
+    html.input-filter-menu &
+    html.input-filter-modal &
+    html.input-filter-cinematic &
+    html.input-filter-intro &
+        display none
+
+    &:not(.is-open)
+        width 128px
+
+    @media (max-width 768px)
+        width 160px
+
+    // Leave the lower touch action bar and steering area available.
+    html.is-mode-touch &
+        &.is-open
+            width 160px
+
+            @media (max-height 420px)
+                width 120px
+
+        bottom @css{ max(110px, calc(20vh + env(safe-area-inset-bottom))) }
+
+    button
+        color inherit
+        font inherit
+        cursor pointer
+
+        &:focus-visible
+            outline 2px solid #87cfb2
+            outline-offset -3px
+
+    .minimap-toggle
+        display flex
+        align-items center
+        gap 8px
+        width 100%
+        min-height 44px
+        padding 8px 12px
+        background transparent
+        border 0
+        font-size 12px
+        letter-spacing 0.5px
+
+    .minimap-chevron
+        margin-left auto
+
+    &.is-open .minimap-chevron
+        transform rotate(180deg)
+
+    .minimap-panel[hidden]
+        display none
+
+    .minimap-map
+        position relative
+        width 100%
+        aspect-ratio 1 / 1
+        overflow hidden
+
+    .minimap-texture
+        position absolute
+        inset 0
+        width 100%
+        height 100%
+        pointer-events none
+
+    .minimap-pool
+        filter hue-rotate(195deg)
+        mask-image radial-gradient(ellipse 3.8% 3.8% at 89.4% 35.4%, #000 60%, transparent 100%)
+        -webkit-mask-image radial-gradient(ellipse 3.8% 3.8% at 89.4% 35.4%, #000 60%, transparent 100%)
+
+    .minimap-rink
+        position absolute
+        left 51.56%
+        top 46.09%
+        width 8.34%
+        height 6.78%
+        pointer-events none
+
+    .minimap-landmarks
+        position absolute
+        inset 0
+
+    .minimap-landmark
+        position absolute
+        width 4px
+        height 4px
+        background #fff3e5
+        border 1px solid #211c2a
+        transform translate(-50%, -50%) rotate(45deg)
+
+        &.is-sentinel
+            width 6px
+            height 6px
+            background #87cfb2
+
+    .minimap-player
+        position absolute
+        width 24px
+        height 24px
+        z-index 2
+        background url('../ui/map/minimap-player.svg') center / contain no-repeat
+        filter drop-shadow(0 1px 3px #000)
+        pointer-events none
+
+    .minimap-expand
+        width 100%
+        min-height 36px
+        padding 8px
+        font-size 11px
+        background #fff3e50a
+        border 0
+        border-top 1px solid #fff3e522
