@@ -96,6 +96,9 @@ assert.equal(area.workshop.model.sign.geometry.parameters.height,0.65)
 for(const label of [area.workshop.model.sign,area.workshop.model.terminal,...area.workshop.model.chats]) {
  assert.equal(label.parent.rotation.x,0);assert.equal(label.parent.rotation.y,0)
 }
+points.find(p=>p.label==='About Context Sync').callback();assert.equal(opened.at(-1),'context-sync')
+const sentinel=new api.SentinelExhibit()
+assert.deepEqual(spawns.get('sentinel').position.toArray(),[-7,4,70.9])
 const syncPoint=points.find(p=>p.label==='Sync context')
 game.ticker.elapsedScaled=30;syncPoint.callback()
 game.ticker.elapsedScaled=32;bridge.update()
