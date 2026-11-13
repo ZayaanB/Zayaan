@@ -6,5 +6,7 @@ export default {
     careerImmersiveGarden: { lines: [ 'FLYRANK AI', 'SOFTWARE ENGINEER INTERN', '(BACKEND AI)' ], year: 2026 },
     careerOnlineTeacher:   { lines: [ 'UOFT FORMULA RACING', 'AUTONOMY SOFTWARE ENG' ], year: 2026, size: 2.25 },
 
-    freshbooks:            { lines: [ 'FRESHBOOKS', 'SOFTWARE DEVELOPER INTERN', '(FULL STACK)' ], color: 'blue', cloneFrom: 'careerOnlineTeacher', year: 2026, offsetZ: - 3.23, size: 2.5, hasEnd: true },
+    freshbooks:            { lines: [ 'FRESHBOOKS', 'SOFTWARE DEVELOPER INTERN', '(FULL STACK)' ], color: 'blue', cloneFrom: 'careerOnlineTeacher', year: 2026, offsetZ: - 3.23, size: 2.5, hasEnd: false },
+    autodesk:              { lines: [ 'AUTODESK', 'SOFTWARE DEVELOPER INTERN', '(BACKEND/PLATFORM)', 'JAN. – APR. 2027' ], color: 'purple', cloneFrom: 'freshbooks', year: 2027, offsetZ: - 3.5, size: 2.5, hasEnd: false },
+    amd:                   { lines: [ 'AMD', 'SOFTWARE ENGINEER INTERN', '(HIP RUNTIME)', 'MAY – AUG. 2027' ], color: 'orange', cloneFrom: 'autodesk', year: 2027, offsetZ: - 3.5, size: 2.5, hasEnd: true },
 }

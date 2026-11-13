@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import { InteractivePoints } from '../InteractivePoints.js'
 import { buildCourt, buildHealthcare, buildWorkshop, buildContextBridge, buildSkatingRink, buildSentinel } from './PersonalModels.js'
-import { healthcareSite, workshopSite, contextSite } from '../../data/exhibits.js'
+import { healthcareSite, workshopSite, contextSite, refAiSite, sentinelSite } from '../../data/exhibits.js'
 
 export function mountExhibit(game, model, position, physics = {})
 {
@@ -61,16 +61,18 @@ export class TableTennisArea
     constructor()
     {
         this.game=Game.getInstance()
-        this.origin=new THREE.Vector3(14,0,68)
+        this.origin=new THREE.Vector3(refAiSite.x,refAiSite.y,refAiSite.z)
         this.model=mountExhibit(this.game,buildCourt(),this.origin)
         this.points=0; this.startedAt=null
         this.game.respawns.getByName('bowling').position.set(14,4,74)
         this.score()
         this.model.trail.forEach(m=>m.visible=false)
+        this.setTracking(false)
         const at=(x,y,z)=>this.origin.clone().add(new THREE.Vector3(x,y,z))
         exhibitPoint(this.game,at(0,1.5,3.9),'Play Ref.AI rally',()=>{
             if(this.startedAt!==null) return
             this.startedAt=this.game.ticker.elapsedScaled
+            this.setTracking(true)
             screenLabel(this.model.score,['REF.AI','Tracking rally…','Computer vision demo'])
         })
         exhibitPoint(this.game,at(4.3,1.5,0.8),'About Ref.AI',()=>this.game.modals.open('ref-ai'))
@@ -80,17 +82,28 @@ export class TableTennisArea
     {
         screenLabel(this.model.score,['REF.AI',`POINTS  ${this.points} : 0`,'Play a tracked rally'])
     }
+    setTracking(active)
+    {
+        this.model.target.visible=active
+        this.model.landingRing.visible=active
+        this.model.trackingRays.visible=active
+        this.model.cameraLabels.forEach((label,i)=>screenLabel(label,[`VISION ${i+1}`,active?'BALL LOCKED':'STANDBY']))
+    }
     restart()
     {
         this.startedAt=null
         this.points=0
         this.model.ball.position.set(0,2.25,2.5)
         this.model.trail.forEach(mesh=>mesh.visible=false)
+        this.setTracking(false)
         this.model.paddles.forEach(paddle=>{paddle.position.x=0;paddle.rotation.z=0})
         this.score()
     }
     update()
     {
+        if(this.game.player.position.distanceTo(this.origin)>35) return
+        const time=this.game.ticker.elapsedScaled
+        this.model.cameraLights.forEach((light,i)=>light.scale.setScalar(0.7+Math.sin(time*3+i)*0.25))
         if(this.game.player.position.distanceTo(this.origin)<14) this.game.achievements.setProgress('areas','bowling')
         if(this.startedAt===null) return
         const t=this.game.ticker.elapsedScaled-this.startedAt
@@ -99,11 +112,23 @@ export class TableTennisArea
             return new THREE.Vector3(Math.sin(phase*0.7)*0.75,1.78+Math.abs(Math.sin(phase))*0.85,Math.cos(phase)*2.48)
         }
         this.model.ball.position.copy(position(t))
+        this.model.target.position.copy(this.model.ball.position)
+        this.model.target.rotation.z=Math.sin(t*0.8)*0.12
+        this.model.landingRing.position.set(this.model.ball.position.x,1.65,this.model.ball.position.z)
+        this.model.landingRing.scale.setScalar(0.8+(this.model.ball.position.y-1.7)*0.3)
+        const rays=this.model.trackingRays.geometry.attributes.position
+        for(let i=0;i<2;i++)
+        {
+            rays.setXYZ(i*2,i===0?-2.1:2.1,3.44,-2.5)
+            rays.setXYZ(i*2+1,this.model.ball.position.x,this.model.ball.position.y,this.model.ball.position.z)
+        }
+        rays.needsUpdate=true
         this.model.trail.forEach((mesh,i)=>{mesh.visible=true;mesh.position.copy(position(Math.max(0,t-i*0.035)))})
         this.model.paddles.forEach((p,i)=>{p.position.x=Math.sin(t*1.47+(i?0:Math.PI))*0.75;p.rotation.z=Math.sin(t*2.1)*0.16})
         if(t>=6)
         {
             this.startedAt=null; this.points++
+            this.setTracking(false)
             this.model.trail.forEach(m=>m.visible=false)
             screenLabel(this.model.score,['REF.AI',`POINTS  ${this.points} : 0`,'Point detected · rally complete'])
             this.game.achievements.setProgress('strike',1)
@@ -139,13 +164,19 @@ export class HealthcareExhibit
         })
         exhibitPoint(this.game,at(3.7,1.5,2.1),'About Halo Healthcare',()=>this.game.modals.open('halo-healthcare'))
         this.game.ticker.events.on('tick',()=>{
+            if(this.game.player.position.distanceTo(this.origin)>35) return
+            const time=this.game.ticker.elapsedScaled
+            this.model.rotor.rotation.z=time*(this.startedAt===null?0.25:1.8)
+            this.model.sweep.position.x=-0.6+(time*0.4%1)*1.2
             if(this.game.player.position.distanceTo(this.origin)<12) this.game.achievements.setProgress('areas','cookie')
             if(this.startedAt===null) return
             const t=this.game.ticker.elapsedScaled-this.startedAt
             this.model.scan.position.z=-1.45+((t%2)/2)*2.55
+            this.model.scannerHalo.position.z=this.model.scan.position.z
             if(t>=6)
             {
                 this.startedAt=null;this.model.scan.visible=false
+                this.model.scannerHalo.position.z=0.2
                 screenLabel(this.model.monitor,['HALO','Scan complete','Explore the project →'])
                 this.game.achievements.addProgress('cookie')
             }
@@ -156,6 +187,7 @@ export class HealthcareExhibit
         this.startedAt=null
         this.model.scan.visible=false
         this.model.scan.position.z=-1.45
+        this.model.scannerHalo.position.z=0.2
         screenLabel(this.model.monitor,['HALO','Ready to scan','Fictional demonstration'])
     }
 }
@@ -163,18 +195,14 @@ export class HealthcareExhibit
 export function setupWorkshop(area)
 {
     const game=area.game
-    // Disable the complete old props (including colliders), not just their meshes.
-    for(const object of area.objects.items)
-    {
-        const name=object.visual?.object3D.name??''
-        if(/oven|blower|anvil|grinder|quench|cube\.024|cube\.065/i.test(name)) game.objects.disable(object)
-    }
     const origin=new THREE.Vector3(workshopSite.x,workshopSite.y,workshopSite.z)
     const model=mountExhibit(game,buildWorkshop(),origin)
     screenLabel(model.sign,['KV STORE','DATA CENTER'])
     screenLabel(model.terminal,['KV STORE','16 SHARDS','DURABLE WRITES'])
     screenLabel(model.chats[0],['READS','16 SHARDS'])
     screenLabel(model.chats[1],['WRITES','DURABLE WAL'])
+    screenLabel(model.journalLabel,['WRITE-AHEAD LOG'],'#ffc878')
+    screenLabel(model.shardLabel,['16 INDEPENDENT SHARDS'])
     let startedAt=null
     const start=()=>{startedAt=game.ticker.elapsedScaled}
     game.respawns.items.set('workshop',{name:'workshop',position:new THREE.Vector3(workshopSite.x,4,workshopSite.z+4.8),rotation:Math.PI})
@@ -186,6 +214,11 @@ export function setupWorkshop(area)
         const time=game.ticker.elapsedScaled
         model.fans.forEach(f=>f.rotation.z=time*2)
         const active=startedAt!==null&&time-startedAt<8
+        model.journal.rotation.y=time*(active?2.5:0.35)
+        model.shards.forEach((shard,i)=>{
+            const lit=(Math.floor(time*(active?8:2))+i*3)%16<4
+            shard.scale.set(lit?1:0.65,1,lit?1:0.65)
+        })
         model.indicators.forEach((m,i)=>{m.visible=true;m.scale.setScalar(Math.sin(time*(active?9:2.5)+i*2.3)>0.2?1:0.45)})
         model.packets.forEach((m,i)=>{
             m.visible=true
@@ -228,11 +261,16 @@ export class ContextSyncExhibit
     }
     update()
     {
+        if(this.game.player.position.distanceTo(this.origin)>40) return
         const time=this.game.ticker.elapsedScaled
         const active=this.startedAt!==null
+        this.model.gyros.forEach((gyro,i)=>{
+            gyro.rotation.set(time*(active?0.9:0.2)+i*0.8,i*Math.PI/3,time*(i%2?-0.3:0.3))
+        })
+        this.model.cage.rotation.set(time*0.15,-time*0.3,Math.PI/4)
+        this.model.portals.forEach((portal,i)=>portal.scale.setScalar(1+Math.sin(time*2+i*Math.PI)*(active?0.035:0.012)))
         this.model.memory.rotation.set(0.18*Math.sin(time*0.6),time*(active?1.3:0.4),0.15)
         this.model.memory.position.y=1.6+Math.sin(time*1.4)*0.09
-        this.model.orbit.rotation.z=time*0.65
         this.model.pulses.forEach((pulse,i)=>{
             const progress=(time*(active?0.65:0.16)+i/10)%1
             pulse.position.set(-2.3+progress*4.6,1.08,0.25)
@@ -294,12 +332,15 @@ export class SentinelExhibit
     {
         this.game=Game.getInstance()
         // Western clearing, with a wide gap to the Ref.AI platform.
-        this.origin=new THREE.Vector3(-7,0,66)
+        this.origin=new THREE.Vector3(sentinelSite.x,sentinelSite.y,sentinelSite.z)
         this.model=mountExhibit(this.game,buildSentinel(),this.origin)
         this.game.respawns.items.set('sentinel',{name:'sentinel',position:this.origin.clone().add(new THREE.Vector3(0,4,4.9)),rotation:Math.PI})
         screenLabel(this.model.badge,['ZB'],'#bdf7de','#153c49')
         screenLabel(this.model.sign,['ZB SENTINEL','POWER UP'])
         this.startedAt=null
+        this.model.shield.visible=false
+        this.model.chargingRing.visible=false
+        this.model.thrusters.forEach(jet=>jet.visible=false)
         exhibitPoint(this.game,this.origin.clone().add(new THREE.Vector3(0,1.5,3.8)),'Power up ZB Sentinel',()=>{
             if(this.startedAt!==null) return
             this.startedAt=this.game.ticker.elapsedScaled
@@ -311,6 +352,9 @@ export class SentinelExhibit
     reset()
     {
         this.startedAt=null
+        this.model.shield.visible=false
+        this.model.chargingRing.visible=false
+        this.model.thrusters.forEach(jet=>jet.visible=false)
         screenLabel(this.model.sign,['ZB SENTINEL','POWER UP'])
     }
     update()
@@ -320,6 +364,18 @@ export class SentinelExhibit
         const t=this.startedAt===null?0:time-this.startedAt
         const active=this.startedAt!==null
         const power=active?Math.sin(Math.min(t/1.5,1)*Math.PI/2)*THREE.MathUtils.clamp((9-t)/1.5,0,1):0
+        this.model.reactorRing.rotation.z=time*0.7
+        this.model.shield.visible=power>0.03
+        this.model.shield.rotation.z=time*0.8
+        this.model.shield.scale.setScalar(0.35+power*0.8)
+        this.model.chargingRing.visible=active
+        this.model.chargingRing.position.y=0.5+(t%2.4)/2.4*5.5
+        this.model.chargingRing.scale.setScalar(0.9+Math.sin(t*2)*0.05)
+        this.model.thrusters.forEach((jet,i)=>{
+            jet.visible=power>0.03
+            jet.scale.set(0.7+power*0.5,0.4+power*(1.3+Math.sin(time*18+i)*0.18),0.7+power*0.5)
+        })
+        this.model.pylons.forEach((light,i)=>light.scale.y=0.4+power*0.6+Math.sin(time*3+i)*0.1)
         this.model.torso.position.y=4.65+Math.sin(time*1.4)*0.045
         this.model.head.rotation.y=Math.sin(time*0.4)*0.28
         this.model.head.rotation.x=-power*0.12

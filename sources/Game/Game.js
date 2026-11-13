@@ -235,6 +235,7 @@ export class Game
             if(this.world.areas.cookie)
                 this.world.areas.cookie.reset()
             this.world.contextSync?.reset()
+            this.world.atlas?.reset()
             this.world.sentinel?.reset()
             this.world.utfr?.reset()
 

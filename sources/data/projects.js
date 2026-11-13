@@ -1,5 +1,19 @@
 export default [
     {
+        title: 'Atlas',
+        titleSmall: [ 'Atlas', 'Explore Earth' ],
+        category: 'project',
+        url: 'https://github.com/ZayaanB/Atlas-HTV',
+        attributes:
+        {
+            role: 'Backend & Gemini Developer',
+            at: 'Hack the Valley',
+            with: 'TypeScript · Fastify · Gemini · PostgreSQL'
+        },
+        distinctions: [ ],
+        images: [ 'atlas.png' ]
+    },
+    {
         title: 'Embedded Key-Value Store',
         titleSmall: [ 'Embedded', 'KV Store' ],
         category: 'project',
