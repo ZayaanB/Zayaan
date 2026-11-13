@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import { mul, max, step, output, color, sin, smoothstep, mix, matcapUV, float, mod, texture, transformNormalToView, uniformArray, varying, vertexIndex, rotateUV, cameraPosition, vec4, atan, vec3, vec2, modelWorldMatrix, Fn, attribute, uniform, normalWorld } from 'three/tsl'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
+import { atlasSite, contextSite, healthcareSite, workshopSite, refAiSite, sentinelSite, utfrPitSite, utfrMappingSite } from '../../data/exhibits.js'
 
 export class Grass
 {
@@ -123,7 +124,25 @@ export class Grass
         // const terrainUv = this.game.terrain.worldPositionToUvNode(bladePosition)
         const terrainData = this.game.terrain.terrainNode(bladePosition)
         const terrainDataGrass = terrainData.g
-        const hidden = step(terrainData.g.sub(0.4), hiddenThreshold)
+        // Clear the 4.5 m Atlas platform, with a small margin for leaning blades.
+        const atlasDistance = bladePosition.sub(vec2(atlasSite.x, atlasSite.z)).length()
+        const underAtlas = step(4.8, atlasDistance).oneMinus()
+        let underExhibit = underAtlas
+        for(const [site, halfWidth, halfDepth, offsetZ] of [
+            [contextSite, 3.5, 2.8, 0],
+            [healthcareSite, 3.75, 3.2, 0],
+            [workshopSite, 2.55, 2.75, -0.3],
+            [refAiSite, 4.5, 4, 0],
+            [sentinelSite, 3.5, 2.7, 0],
+            [utfrPitSite, 3.6, 2.9, 0],
+            [utfrMappingSite, 3, 2.2, 0],
+        ])
+        {
+            const delta = bladePosition.sub(vec2(site.x, site.z + offsetZ)).abs()
+            const inside = step(halfWidth + 0.2, delta.x).oneMinus().mul(step(halfDepth + 0.2, delta.y).oneMinus())
+            underExhibit = max(underExhibit, inside)
+        }
+        const hidden = max(step(terrainData.g.sub(0.4), hiddenThreshold), underExhibit)
 
         // Instance
         const tipnessShadowMix = tipness.oneMinus().mul(terrainDataGrass)

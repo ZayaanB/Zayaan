@@ -7,6 +7,14 @@ export const workshopSite = { x: -60, y: 0.6, z: -40 }
 // Dry coastal clearing beside the northeastern circuit.
 export const contextSite = { x: 70, y: 1, z: -70 }
 
+// Southern clearing inside the lower-left circuit loop, beside the foliage.
+export const atlasSite = { x: -53, y: 0, z: 56 }
+
+export const refAiSite = { x: 14, y: 0, z: 68 }
+export const sentinelSite = { x: -7, y: 0, z: 66 }
+export const utfrPitSite = { x: -26, y: 0, z: -1 }
+export const utfrMappingSite = { x: -27, y: 0, z: 10 }
+
 // Only these specific original foliage instances obstruct the Context Bridge.
 // Filter before instancing so the tree trunk, canopy and collider disappear together.
 export function contextFoliageReferences(references, kind)

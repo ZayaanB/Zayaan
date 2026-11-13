@@ -1,4 +1,5 @@
 import * as THREE from 'three/webgpu'
+import { workshopDetails, healthcareDetails, contextDetails, courtDetails, sentinelDetails } from './ExhibitDetails.js'
 
 // Shared proportions and matte palette for the three original portfolio exhibits.
 export function kit(name)
@@ -59,7 +60,6 @@ export function kit(name)
 export function buildCourt()
 {
     const k = kit('refAiCourt')
-    k.box('courtMat', [9,0.06,8], [0,0.025,0], 'floor')
     k.box('tableTop', [3.4,0.16,5.4], [0,1.55,0], 'teal', true)
     for(const x of [-1.55,1.55]) k.box('sideline', [0.035,0.015,5.15], [x,1.638,0], 'white')
     for(const z of [-2.55,2.55]) k.box('baseline', [3.12,0.015,0.035], [0,1.638,z], 'white')
@@ -90,7 +90,7 @@ export function buildCourt()
     const score = k.panel('scoreboard',[3.1,1.28],[0,3.65,-3.55])
     const ball = k.sphere('trackedBall',0.11,[0,2.25,2.5])
     const trail = Array.from({length:8},(_,i)=>k.sphere(`ballTrail${i}`,0.04,[0,2.25,2.5],'mint'))
-    return { ...k, score, ball, trail, paddles }
+    return { ...k, score, ball, trail, paddles, ...courtDetails(k) }
 }
 
 export function buildWorkshop()
@@ -141,13 +141,12 @@ export function buildWorkshop()
     for(const x of [-1.2,1.2])
         links.push(k.box('rackDataRail',[0.055,0.035,2.5],[x,0.075,-0.65],'glow'))
     k.box('chatDataRail',[1.8,0.035,0.035],[0,2.66,-0.43],'glow')
-    return { ...k, fans, indicators, racks, terminal, chats, packets, sign, links }
+    return { ...k, fans, indicators, racks, terminal, chats, packets, sign, links, ...workshopDetails(k) }
 }
 
 export function buildHealthcare()
 {
     const k=kit('haloHealthcare')
-    k.box('clinicFloor',[7.5,0.06,6.4],[0,0.025,0],'floor')
     // Open pavilion: frame and narrow awning leave the exhibits visible from above.
     for(const x of [-3.4,3.4]) for(const z of [-2.8,2.8]) k.box('pavilionPost',[0.16,3.9,0.16],[x,1.95,z],'wood',true)
     for(const z of [-2.8,2.8]) k.box('pavilionBeam',[7,0.18,0.18],[0,3.88,z],'wood')
@@ -155,9 +154,7 @@ export function buildHealthcare()
     k.box('examinationBed',[1.7,0.3,3.05],[-0.9,1.0,-0.2],'white',true)
     k.box('bedBase',[0.8,0.65,1.75],[-0.9,0.52,-0.2],'dark')
     k.box('bedPillow',[1.25,0.16,0.55],[-0.9,1.23,-1.35],'mint')
-    for(const x of [-2.15,0.35]) k.box('scannerColumn',[0.22,2.75,0.22],[x,1.5,0.2],'white',true)
-    k.box('scannerArch',[2.72,0.32,0.36],[-0.9,2.88,0.2],'white')
-    k.box('scannerEmitter',[2.14,0.07,0.22],[-0.9,2.69,0.2],'mint')
+    for(const x of [-2.15,0.35]) k.box('scannerTrack',[0.18,0.2,3.2],[x,0.3,-0.2],'white',true)
     const scan=k.box('scanBar',[1.6,0.025,0.09],[-0.9,1.19,-1.45],'light')
     k.box('monitorCart',[1.45,0.13,0.85],[2.1,1.05,0.7],'white',true)
     k.box('cartStand',[0.13,0.9,0.13],[2.1,0.54,0.7],'dark')
@@ -173,7 +170,7 @@ export function buildHealthcare()
     k.box('recordMonitor',[1.2,0.75,0.1],[2.1,1.6,-2],'dark')
     const records=k.panel('records',[1.04,0.6],[2.1,1.6,-1.94])
     const sign=k.panel('clinicSign',[4.5,1.05],[0,3.9,-2.19])
-    return { ...k, scan, monitor, records, sign }
+    return { ...k, scan, monitor, records, sign, ...healthcareDetails(k) }
 }
 
 
@@ -192,15 +189,11 @@ export function buildContextBridge()
     k.box('linkBase',[4.6,0.18,0.3],[0,0.85,0.25],'dark')
     k.box('illuminatedLink',[4.6,0.07,0.13],[0,0.98,0.25],'glow')
     k.cylinder('memoryPedestal',0.65,0.8,[0,0.45,0.25],'dark')
-    for(const y of [0.95,2.3]) k.cylinder('capsuleRing',0.7,0.16,[0,y,0.25],'white')
-    for(const x of [-0.55,0.55]) k.box('capsuleStrut',[0.12,1.25,0.12],[x,1.6,0.25],'teal')
     const memory=k.box('compressedMemory',[0.55,0.55,0.55],[0,1.6,0.25],'glow')
     const cards=Array.from({length:6},(_,i)=>k.box(`contextCard${i}`,[0.18,0.18,0.18],[-2.35,1.6+i*0.08,0.4],'glow'))
     const sign=k.display('contextBridgeSign',[3.6,1.15],[0,3.65,-1.8])
     const pulses=Array.from({length:10},(_,i)=>k.sphere(`linkPulse${i}`,0.065,[0,1.05,0.25],'glow'))
-    const orbit=k.mesh('memoryOrbit',new THREE.TorusGeometry(0.46,0.025,6,32),[0,1.6,0.25],'glow')
-    orbit.rotation.x=Math.PI/3
-    return {...k,terminals,memory,cards,sign,pulses,orbit}
+    return {...k,terminals,memory,cards,sign,pulses,...contextDetails(k,cards)}
 }
 
 
@@ -305,5 +298,5 @@ export function buildSentinel()
     const sparks=Array.from({length:8},(_,i)=>k.sphere(`energySpark${i}`,0.09,[0,0.5,0],'glow'))
     k.colliders.push({shape:'cuboid',parameters:[1.65,2.5,0.85],position:{x:0,y:3.6,z:0}})
     const sign=k.display('sentinelSign',[2.5,0.65],[0,0.85,2.5])
-    return {...k,torso,head,arms,wheels,wings,turbines,badge,reactor,halo,sparks,sign}
+    return {...k,torso,head,arms,wheels,wings,turbines,badge,reactor,halo,sparks,sign,...sentinelDetails(k,torso,head,arms)}
 }

@@ -15,6 +15,7 @@ export const mapLocations = [
             { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
             { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },
             { name: 'Context Sync', respawnName: 'contextsync', offset: { x: 0, y: 0 } },
+            { name: 'Atlas Globe', respawnName: 'atlas', offset: { x: 0.015, y: -0.035 } },
             { name: 'Computing Workshop', respawnName: 'workshop', offset: { x: 0, y: 0.01 } },
             { name: 'Social', respawnName: 'social', offset: { x: -0.01, y: -0.04 } },
             { name: 'Time Machine', respawnName: 'timeMachine', offset: { x: 0, y: 0 } },

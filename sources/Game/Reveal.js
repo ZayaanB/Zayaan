@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu'
 import { color, uniform, vec2 } from 'three/tsl'
 import { Game } from './Game.js'
 import gsap from 'gsap'
+import { bindIntroStart } from './utilities/introStart.js'
 
 export class Reveal
 {
@@ -103,18 +104,23 @@ export class Reveal
                 }
                 else
                 {
+                    let started = false
+                    let removePointerStart = () => {}
                     // Next function
                     const next = () =>
                     {
-                        this.updateStep(1)
+                        if(started) return
+                        started = true
+                        removePointerStart()
                         this.game.inputs.events.off('introStart', inputCallback)
                         this.game.rayCursor.removeIntersect(intersect)
+                        this.updateStep(1)
                     }
 
                     // Input callback
-                    const inputCallback = () =>
+                    const inputCallback = (action) =>
                     {
-                        next()
+                        if(action.active) next()
                     }
 
                     // Intsect
@@ -143,6 +149,19 @@ export class Reveal
             // { name: 'forward',               categories: [ 'wandering', 'racing', 'cinematic' ], keys: [ 'Keyboard.ArrowUp', 'Keyboard.KeyW', 'Gamepad.up', 'Gamepad.r2' ] },
             // { name: 'right',                 categories: [ 'wandering', 'racing', 'cinematic' ], keys: [ 'Keyboard.ArrowRight', 'Keyboard.KeyD', 'Gamepad.right' ] },
                     this.game.inputs.events.on('introStart', inputCallback)
+                    removePointerStart = bindIntroStart(this.game.canvasElement, next, event =>
+                    {
+                        const sound = this.game.world.intro.soundButton?.intersect
+                        if(!sound?.active) return false
+                        const bounds = this.game.canvasElement.getBoundingClientRect()
+                        const pointer = new THREE.Vector2(
+                            (event.clientX - bounds.left) / bounds.width * 2 - 1,
+                            -(event.clientY - bounds.top) / bounds.height * 2 + 1
+                        )
+                        const raycaster = new THREE.Raycaster()
+                        raycaster.setFromCamera(pointer, this.game.view.camera)
+                        return raycaster.ray.intersectsSphere(sound.shape)
+                    })
                 }
             })
         }

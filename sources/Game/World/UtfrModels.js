@@ -1,5 +1,6 @@
 import * as THREE from 'three/webgpu'
 import { kit } from './PersonalModels.js'
+import { pitDetails, mappingDetails, gantryDetails } from './UtfrDetails.js'
 
 // Reuse the current Formula car's chassis and wheel geometry; no extra car download.
 export function buildUtfrPit(formula)
@@ -35,7 +36,7 @@ export function buildUtfrPit(formula)
     const scanner=k.mesh('pitSensorSweep',new THREE.TorusGeometry(1.6,0.025,6,48),[-0.61,2.55,0],'glow')
     scanner.rotation.x=-Math.PI/2
     const sensorPulse=k.sphere('pitSensorPulse',0.07,[0,2.55,0],'glow')
-    return {...k,car,sign,plaque,scanner,sensorPulse,liveries}
+    return {...k,car,sign,plaque,scanner,sensorPulse,liveries,...pitDetails(k,car)}
 }
 
 export function mappingPoint(t)
@@ -78,7 +79,7 @@ export function buildUtfrMapping()
     const uncertainty=k.mesh('localizationEllipse',new THREE.TorusGeometry(0.24,0.012,4,24),[0,0,0],'amberGlow',miniCar);uncertainty.rotation.x=-Math.PI/2
     const sign=k.display('utfrMappingSign',[5.4,0.8],[0,2.95,-1.93])
     const status=k.display('mappingStatus',[3.5,0.5],[0,0.65,2.02])
-    return {...k,cones,landmarks,path,miniCar,scan,uncertainty,sign,status}
+    return {...k,cones,landmarks,path,miniCar,scan,uncertainty,sign,status,...mappingDetails(k)}
 }
 
 // A fascia on the existing cantilever start structure preserves race clearance.
@@ -88,5 +89,5 @@ export function buildUtfrGantry()
     for(const x of [-3.4,3.4]) k.box('gantryFasciaBracket',[0.1,0.63,0.1],[x,-0.415,0],'white')
     const sign=k.display('utfrStartGantry',[8.5,1.05],[0,0,0])
     const lightBar=k.box('gantryAccent',[8.5,0.04,0.025],[0,-0.63,0.08],'glow')
-    return {...k,sign,lightBar}
+    return {...k,sign,lightBar,...gantryDetails(k)}
 }

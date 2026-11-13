@@ -22,7 +22,7 @@ export function experienceCard(source, project)
     {
         context.font=`800 ${size}px Nunito, Arial, sans-serif`
         context.fillStyle=color
-        context.fillText(text,480,y)
+        context.fillText(text,480,y,900)
     }
     const result=new THREE.CanvasTexture(canvas)
     result.colorSpace=THREE.SRGBColorSpace

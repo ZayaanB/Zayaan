@@ -29,6 +29,7 @@ import { Benches } from './Benches.js'
 import { contextFoliageReferences, rinkFoliageReferences } from '../../data/exhibits.js'
 import { ContextSyncExhibit, SkatingRink, SentinelExhibit } from './PersonalExhibits.js'
 import { UtfrExhibit } from './UtfrExhibit.js'
+import { AtlasExhibit } from './AtlasExhibit.js'
 import { Scenery } from './Scenery.js'
 
 export class World
@@ -82,6 +83,7 @@ export class World
             this.scenery = new Scenery()
             this.areas = new Areas()
             this.contextSync = new ContextSyncExhibit()
+            this.atlas = new AtlasExhibit()
             this.skatingRink = new SkatingRink()
             this.sentinel = new SentinelExhibit()
             this.utfr = new UtfrExhibit(formulaTemplate)

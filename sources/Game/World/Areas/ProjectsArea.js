@@ -62,6 +62,23 @@ export class ProjectsArea extends Area
         }
     }
 
+    setObjects()
+    {
+        // These props belonged to the original workshop, not the carousel.
+        for(const child of [...this.model.children])
+        {
+            if(/^(mainTablePhysicalDynamic|table002$|medal$)/i.test(child.name.replaceAll('.', '')))
+                child.removeFromParent()
+            // The second table's collider lives in a separate fixed group.
+            if(child.name.replaceAll('.', '') === 'physicalFixed001')
+            {
+                const tableCollider = child.children.find(part => part.name.replaceAll('.', '') === 'cuboid060')
+                tableCollider?.removeFromParent()
+            }
+        }
+        super.setObjects()
+    }
+
     setInteractivePoint()
     {
         this.interactivePoint = this.game.interactivePoints.create(
