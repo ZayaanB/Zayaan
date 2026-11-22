@@ -8,13 +8,13 @@ const root = path.resolve(__dirname, '..')
 
 const escape = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-// Banner SVG (full project / experience image)
-function bannerSvg({ width, height, kind, title, subtitle, footer })
+// Banner SVG (full experience image)
+function bannerSvg({ width, height, title, subtitle, footer })
 {
-    const isProject = kind === 'PROJECT'
-    const a = isProject ? '#2b2233' : '#1f2b2b'
-    const b = isProject ? '#4a3461' : '#27514f'
-    const accent = isProject ? '#D66FFF' : '#37e0c4'
+    const kind = 'EXPERIENCE'
+    const a = '#1f2b2b'
+    const b = '#27514f'
+    const accent = '#37e0c4'
     const margin = 56
     const titleSize = Math.min(96, Math.floor((width - margin * 2) / (title.length * 0.60)))
     const badgeW = Math.round(kind.length * 15.5 + 40)
@@ -61,13 +61,6 @@ function miniSvg({ width, height, title, accent, a, b })
 
 const W = 960, H = 540
 
-const projects = [
-    { file: 'kvstore.png',          title: 'Embedded Key-Value Store', subtitle: 'C++ · POSIX Threads · Linux',     footer: 'Sharded in-memory store with crash-safe write-ahead log' },
-    { file: 'context-sync.png',     title: 'Context Sync Extension',   subtitle: 'TypeScript · VS Code API · Node',  footer: '500+ downloads · syncs AI chat context across editors' },
-    { file: 'halo-healthcare.png',  title: 'Clinical AI Assistant',    subtitle: 'Python · OpenCV · SQL · Watsonx',  footer: 'Top 10 @ GenAI Genesis · 98%+ fall-detection accuracy' },
-    { file: 'refai.png',            title: 'Table Tennis Referee',     subtitle: 'Python · YOLOv8 · OpenCV · C',     footer: 'Finalist @ Hack Canada · 90%+ ball-tracking accuracy' },
-]
-
 const experiences = [
     { file: 'korranet',   title: 'KorraNet Creative Inc.', subtitle: 'Full-Stack Developer Intern', footer: 'May 2026 – Present · Remote · OAuth, secrets, reliability' },
     { file: 'nasa-hunch', title: 'NASA HUNCH Program',     subtitle: 'Co-President',                footer: '2023 – 2025 · 3rd place international · autonomous Lunar Bot' },
@@ -75,21 +68,12 @@ const experiences = [
 
 async function run()
 {
-    const projectsDir = path.join(root, 'static/projects/images')
     const labDir = path.join(root, 'static/lab/images')
-    fs.mkdirSync(projectsDir, { recursive: true })
     fs.mkdirSync(labDir, { recursive: true })
-
-    for(const p of projects)
-    {
-        const svg = bannerSvg({ width: W, height: H, kind: 'PROJECT', ...p })
-        await sharp(Buffer.from(svg)).png().toFile(path.join(projectsDir, p.file))
-        console.log('wrote', p.file)
-    }
 
     for(const e of experiences)
     {
-        const svg = bannerSvg({ width: W, height: H, kind: 'EXPERIENCE', ...e })
+        const svg = bannerSvg({ width: W, height: H, ...e })
         await sharp(Buffer.from(svg)).png().toFile(path.join(labDir, `${e.file}.png`))
         console.log('wrote', `${e.file}.png`)
 

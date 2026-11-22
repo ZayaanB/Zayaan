@@ -425,6 +425,7 @@ export class View
         this.cinematic.active = false
         this.cinematic.progress = 0
         this.cinematic.position = new THREE.Vector3()
+        this.cinematic.basePosition = new THREE.Vector3()
         this.cinematic.target = new THREE.Vector3()
         this.cinematic.dummy = this.camera.clone()
         this.cinematic.nonIdealRatioOffset = 10
@@ -433,19 +434,23 @@ export class View
         // this.cinematic.targetHelper.userData.preventPreRender = true
         // this.game.scene.add(this.cinematic.targetHelper)
 
-        this.cinematic.start = (position, target) =>
+        this.cinematic.updatePosition = () =>
+        {
+            const { position, basePosition, target, nonIdealRatioOffset } = this.cinematic
+            position.copy(basePosition)
+            if(this.ratioOverflow > 0)
+                position.sub(target).setLength(this.ratioOverflow * nonIdealRatioOffset).add(basePosition)
+        }
+
+        this.cinematic.start = (position, target, nonIdealRatioOffset = 10) =>
         {
             this.cinematic.active = true
-            this.cinematic.position = position.clone()
-            this.cinematic.target = target.clone()
+            this.cinematic.basePosition.copy(position)
+            this.cinematic.target.copy(target)
+            this.cinematic.nonIdealRatioOffset = nonIdealRatioOffset
 
             this.cinematic.targetHelper?.position.copy(this.cinematic.target)
-
-            if(this.ratioOverflow > 0)
-            {
-                const delta = this.cinematic.position.clone().sub(this.cinematic.target).setLength(this.ratioOverflow * this.cinematic.nonIdealRatioOffset)
-                this.cinematic.position.add(delta)
-            }
+            this.cinematic.updatePosition()
 
             gsap.to(this.cinematic, { progress: 1, duration: 1.5, ease: 'power2.inOut', overwrite: true })
             gsap.to(this.game.rendering.cheapDOFPass.strength, { value: 0, duration: 1.5, ease: 'power2.inOut', overwrite: true })
@@ -565,6 +570,8 @@ export class View
     resize()
     {
         this.ratioOverflow = Math.max(1, this.idealRatio / this.game.viewport.ratio) - 1
+        if(this.cinematic.active)
+            this.cinematic.updatePosition()
 
         this.camera.aspect = this.game.viewport.width / this.game.viewport.height
         this.camera.updateProjectionMatrix()

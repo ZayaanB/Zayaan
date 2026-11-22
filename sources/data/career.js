@@ -1,12 +1,15 @@
-export default {
-    careerHetic:           { lines: [ 'NASA HUNCH', 'CO-PRESIDENT' ], year: 2023 },
-    careerFreelancer:      { lines: [ 'UNIV. OF TORONTO', 'HBSC COMPUTER SCIENCE' ], year: 2025 },
-    careerUzik:            { lines: [ 'HACK CANADA', 'TABLE TENNIS REF', 'FINALIST' ], year: 2026 },
-    careerIRLTeacher:      { lines: [ 'KORRANET CREATIVE', 'SOFTWARE DEVELOPER INTERN', '(FULL STACK)' ], year: 2026 },
-    careerImmersiveGarden: { lines: [ 'FLYRANK AI', 'SOFTWARE ENGINEER INTERN', '(BACKEND AI)' ], year: 2026 },
-    careerOnlineTeacher:   { lines: [ 'UOFT FORMULA RACING', 'AUTONOMY SOFTWARE ENG' ], year: 2026, size: 2.25 },
+// Four entries share the original last groove, with room between their activation ranges.
+const finalLane = { size: 0.75, compact: true }
+const finalLaneSpacing = -1.52
 
-    freshbooks:            { lines: [ 'FRESHBOOKS', 'SOFTWARE DEVELOPER INTERN', '(FULL STACK)' ], color: 'blue', cloneFrom: 'careerOnlineTeacher', year: 2026, offsetZ: - 3.23, size: 2.5, hasEnd: false },
-    autodesk:              { lines: [ 'AUTODESK', 'SOFTWARE DEVELOPER INTERN', '(BACKEND/PLATFORM)', 'JAN. – APR. 2027' ], color: 'purple', cloneFrom: 'freshbooks', year: 2027, offsetZ: - 3.5, size: 2.5, hasEnd: false },
-    amd:                   { lines: [ 'AMD', 'SOFTWARE ENGINEER INTERN', '(HIP RUNTIME)', 'MAY – AUG. 2027' ], color: 'orange', cloneFrom: 'autodesk', year: 2027, offsetZ: - 3.5, size: 2.5, hasEnd: true },
+export default {
+    careerHetic:           { label: 'NASA HUNCH', year: 2023 },
+    careerFreelancer:      { label: 'University of Toronto', year: 2025 },
+    careerIRLTeacher:      { label: 'SWE @ KorraNet Creative', year: 2026 },
+    careerImmersiveGarden: { label: 'SWE @ FlyRank AI', year: 2026 },
+    careerOnlineTeacher:   { ...finalLane, label: 'SWE @ UTFR', year: 2026 },
+
+    freshbooks:            { ...finalLane, label: 'SWE @ FreshBooks', color: 'blue', cloneFrom: 'careerOnlineTeacher', year: 2026, offsetZ: finalLaneSpacing, hasEnd: false },
+    autodesk:              { ...finalLane, label: 'SWE @ Autodesk', color: 'purple', cloneFrom: 'freshbooks', year: 2027, offsetZ: finalLaneSpacing, hasEnd: false },
+    amd:                   { ...finalLane, label: 'SWE @ AMD', color: 'orange', cloneFrom: 'autodesk', year: 2027, offsetZ: finalLaneSpacing, hasEnd: true },
 }

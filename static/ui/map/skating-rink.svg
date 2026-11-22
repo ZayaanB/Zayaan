@@ -1,1 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 130"><ellipse cx="80" cy="65" rx="77" ry="62" fill="#bdeaf1" stroke="#f5eadb" stroke-width="5"/><ellipse cx="80" cy="65" rx="15" ry="15" fill="none" stroke="#ffffff" stroke-width="1.5"/><path d="M40 20V110M120 20V110" stroke="#ffffff" stroke-width="1.5"/><path d="M28 18Q80 -8 132 18" fill="none" stroke="#397f83" stroke-width="3"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 130">
+  <defs>
+    <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+      <stop offset=".75" stop-color="#2e392f" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#2e392f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ice" cx="44%" cy="43%" r="64%">
+      <stop stop-color="#719da9"/>
+      <stop offset=".55" stop-color="#88b5bc"/>
+      <stop offset=".75" stop-color="#b5cdca"/>
+      <stop offset=".9" stop-color="#cee0d6"/>
+      <stop offset="1" stop-color="#91b4ac"/>
+    </radialGradient>
+    <linearGradient id="boards" x2="0" y2="1">
+      <stop stop-color="#d8b88e"/>
+      <stop offset="1" stop-color="#966a4c"/>
+    </linearGradient>
+    <path id="rails" d="M150 88 A76 61 0 0 1 100 124 M51 121 A76 61 0 1 1 153 49"/>
+    <clipPath id="surface"><ellipse cx="80" cy="65" rx="75" ry="60"/></clipPath>
+  </defs>
+  <ellipse cx="80" cy="67" rx="80" ry="63" fill="url(#shadow)"/>
+  <ellipse cx="80" cy="65" rx="75" ry="60" fill="url(#ice)"/>
+  <g clip-path="url(#surface)" fill="none" stroke-linecap="round">
+    <path d="M-1 56 Q49 5 107 18 M9 123 Q98 73 161 92" stroke="#e8f3eb" stroke-width="9" opacity=".12"/>
+    <path d="M12 42 Q29 12 68 8 M99 11 Q133 21 147 42 M143 92 Q127 115 104 117 M48 115 Q22 103 12 82" stroke="#edf5e9" stroke-width="2.4" opacity=".43"/>
+    <path d="M24 51 Q38 43 62 55 M30 55 Q47 49 68 60 M39 89 Q63 91 79 73 M84 88 Q109 81 127 61 M59 38 Q81 36 111 49 M102 97 Q122 94 134 83" stroke="#e7f4ef" stroke-width=".85" opacity=".55"/>
+  </g>
+  <g fill="none" stroke-linecap="round">
+    <use href="#rails" stroke="#4e4635" stroke-width="6" opacity=".48" transform="translate(0 2)"/>
+    <use href="#rails" stroke="#73583d" stroke-width="4.5"/>
+    <use href="#rails" stroke="url(#boards)" stroke-width="3"/>
+    <use href="#rails" stroke="#f0d3a0" stroke-width=".85" transform="translate(0 -1)"/>
+  </g>
+  <g fill="#446c62" stroke="#d8b88e" stroke-width=".7">
+    <circle cx="150" cy="88" r="2.3"/>
+    <circle cx="100" cy="124" r="2.3"/>
+    <circle cx="51" cy="121" r="2.3"/>
+    <circle cx="153" cy="49" r="2.3"/>
+  </g>
+</svg>

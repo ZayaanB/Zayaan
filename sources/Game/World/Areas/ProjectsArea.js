@@ -174,10 +174,11 @@ export class ProjectsArea extends Area
         this.cinematic = {}
         
         this.cinematic.position = new THREE.Vector3()
-        this.cinematic.positionOffset = new THREE.Vector3(4.65, 4, 4.85)
+        this.cinematic.positionOffset = new THREE.Vector3(5.7, 4.3, 6.15)
         
         this.cinematic.target = new THREE.Vector3()
-        this.cinematic.targetOffset = new THREE.Vector3(-3.0, 1.60, -4.60)
+        this.cinematic.targetOffset = new THREE.Vector3(-3.0, 1.90, -4.60)
+        this.cinematic.nonIdealRatioOffset = 16
 
         const applyPositionAndTarget = () =>
         {
@@ -328,32 +329,49 @@ export class ProjectsArea extends Area
     setImages()
     {
         this.images = {}
-        this.images.initiated = false
-        this.images.width = 1920 * 0.5
-        this.images.height = 1080 * 0.5
         this.images.index = 0
         this.images.direction = ProjectsArea.DIRECTION_NEXT
         this.images.resources = new Map()
-        this.images.loadProgress = uniform(0)
-        this.images.animationProgress = uniform(0)
+        this.images.animationProgress = uniform(1)
         this.images.animationDirection = uniform(0)
 
         // Mesh
         this.images.mesh = this.references.items.get('images')[0]
         this.images.mesh.receiveShadow = true
         this.images.mesh.castShadow = false
-        this.images.mesh.visible = false // Wait for first load to display
+        const loadingMaterial = new THREE.MeshBasicMaterial({ color: '#242637' })
+        this.images.mesh.material = loadingMaterial
 
-        // Finishing initiating and use first image as default resource
-        this.images.init = (key) =>
+        const createDisplayTexture = () =>
         {
-            this.images.initiated = true
+            const canvas = document.createElement('canvas')
+            canvas.width = 960
+            canvas.height = 540
+            const context = canvas.getContext('2d')
+            const displayTexture = new THREE.CanvasTexture(canvas)
+            displayTexture.colorSpace = THREE.SRGBColorSpace
+            displayTexture.flipY = false
+            displayTexture.magFilter = THREE.LinearFilter
+            displayTexture.minFilter = THREE.LinearFilter
+            displayTexture.generateMipmaps = false
+            return {
+                texture: displayTexture,
+                draw(image)
+                {
+                    context.clearRect(0, 0, canvas.width, canvas.height)
+                    context.drawImage(image, 0, 0, canvas.width, canvas.height)
+                    displayTexture.needsUpdate = true
+                }
+            }
+        }
 
-            this.images.mesh.visible = true
-            const resource = this.images.resources.get(key)
-
-            this.images.textureOld = resource.texture.clone()
-            this.images.textureNew = resource.texture.clone()
+        // Keep both GPU allocations fixed when artwork arrives at different resolutions.
+        const init = (image) =>
+        {
+            this.images.previous = createDisplayTexture()
+            this.images.current = createDisplayTexture()
+            this.images.previous.draw(image)
+            this.images.current.draw(image)
 
             // Color node
             const colorNode = Fn(() =>
@@ -366,11 +384,8 @@ export class ProjectsArea extends Area
                 uvOld.x.addAssign(this.images.animationProgress.mul(0.25).mul(this.images.animationDirection))
 
                 // Textures
-                const textureOldColor = texture(this.images.textureOld, uvOld).rgb
-                const textureNewColor = texture(this.images.textureNew, uvNew).rgb
-
-                // Load mix
-                textureNewColor.assign(mix(color('#333333'), textureNewColor, this.images.loadProgress))
+                const textureOldColor = texture(this.images.previous.texture, uvOld).rgb
+                const textureNewColor = texture(this.images.current.texture, uvNew).rgb
 
                 // Reveal
                 const reveal = uv().x.toVar()
@@ -406,25 +421,25 @@ export class ProjectsArea extends Area
             })()
             
             this.images.mesh.material = this.images.material
+            loadingMaterial.dispose()
         }
 
-        // Load ended
-        this.images.loadEnded = (key) =>
+        const show = (image) =>
         {
-            // If first image => init
-            if(!this.images.initiated)
-                this.images.init(key)
-
-            // Current image => Reveal
-            if(this.navigation.current.images[this.images.index] === key)
+            if(this.images.displayed === image) return
+            if(!this.images.current)
             {
-                const resource = this.images.getResourceAndLoad(key)
-                this.images.textureNew.copy(resource.texture)
-                this.images.textureNew.needsUpdate = true
-                gsap.to(this.images.loadProgress, { value: 1, duration: 1, overwrite: true })
-
-                this.images.loadSibling()
+                init(image)
             }
+            else
+            {
+                this.images.previous.draw(this.images.displayed)
+                this.images.current.draw(image)
+                this.images.animationDirection.value = this.images.direction === ProjectsArea.DIRECTION_NEXT ? 1 : -1
+                gsap.fromTo(this.images.animationProgress, { value: 0 }, { value: 1, duration: 1, ease: 'power2.inOut', overwrite: true })
+            }
+            this.images.displayed = image
+            this.images.loadSibling()
         }
 
         // Load sibling
@@ -458,7 +473,7 @@ export class ProjectsArea extends Area
             }
 
             const key = projectsData[projectIndex].images[imageIndex]
-            const resource = this.images.getResourceAndLoad(key)
+            this.images.getResourceAndLoad(key)
         }
 
         // Get resource and load
@@ -473,7 +488,7 @@ export class ProjectsArea extends Area
             if(!resource)
             {
                 resource = {}
-                resource.loaded = false
+                this.images.resources.set(key, resource)
 
                 const loader = this.game.resourcesLoader.getLoader('texture')
 
@@ -481,21 +496,14 @@ export class ProjectsArea extends Area
                     path,
                     (loadedTexture) =>
                     {
-                        loadedTexture.colorSpace = THREE.SRGBColorSpace
-                        loadedTexture.flipY = false
-                        loadedTexture.magFilter = THREE.LinearFilter
-                        loadedTexture.minFilter = THREE.LinearFilter
-                        loadedTexture.generateMipmaps = false
-
-                        resource.texture = loadedTexture
-                        resource.loaded = true
-                        
-                        this.images.loadEnded(key)
-                    }
+                        resource.image = loadedTexture.image
+                        loadedTexture.dispose()
+                        if(this.navigation.current.images[this.images.index] === key)
+                            show(resource.image)
+                    },
+                    undefined,
+                    () => this.images.resources.delete(key)
                 )
-
-                // Save
-                this.images.resources.set(key, resource)
             }
 
 
@@ -510,33 +518,7 @@ export class ProjectsArea extends Area
             // Get resource
             const key = this.navigation.current.images[this.images.index]
             const resource = this.images.getResourceAndLoad(key)
-
-            if(resource.loaded)
-            {
-                this.images.loadSibling()
-                this.images.loadProgress.value = 1
-            }
-            else
-            {
-                this.images.loadProgress.value = 0
-            }
-
-            // Update textures
-            if(this.images.initiated)
-            {
-                this.images.textureOld.copy(this.images.textureNew)
-                this.images.textureOld.needsUpdate = true
-
-                if(resource.loaded)
-                {
-                    this.images.textureNew.copy(resource.texture)
-                    this.images.textureNew.needsUpdate = true
-                }
-            }
-
-            // Animate right away
-            gsap.fromTo(this.images.animationProgress, { value: 0 }, { value: 1, duration: 1, ease: 'power2.inOut', overwrite: true })
-            this.images.animationDirection.value = direction === ProjectsArea.DIRECTION_NEXT ? 1 : -1
+            if(resource.image) show(resource.image)
         }
     }
 
@@ -1038,11 +1020,14 @@ export class ProjectsArea extends Area
         this.distinctions = {}
         this.distinctions.status = 'hidden'
         this.distinctions.group = this.references.items.get('distinctions')[0]
+        this.distinctions.caption = this.references.items.get('el')?.find(mesh => mesh.name.replaceAll('.', '') === 'refel003')
         this.distinctions.names = ['awwwards', 'cssda', 'fwa']
         this.distinctions.items = {}
         this.distinctions.items.awwwards = this.distinctions.group.children.find(_child => _child.name.startsWith('awwwards'))
         this.distinctions.items.fwa = this.distinctions.group.children.find(_child => _child.name.startsWith('fwa'))
         this.distinctions.items.cssda = this.distinctions.group.children.find(_child => _child.name.startsWith('cssda'))
+        for(const item of Object.values(this.distinctions.items))
+            item.visible = false
 
         this.distinctions.positions = [
             [
@@ -1061,6 +1046,14 @@ export class ProjectsArea extends Area
 
         this.distinctions.update = () =>
         {
+            // Area frustum culling controls mesh visibility independently.
+            if(this.distinctions.caption)
+            {
+                this.distinctions.caption.layers.disableAll()
+                if(this.navigation.current.distinctions.length)
+                    this.distinctions.caption.layers.enable(0)
+            }
+
             if(this.distinctions.status === 'hiding')
                 return
 
@@ -1077,6 +1070,8 @@ export class ProjectsArea extends Area
             gsap.delayedCall(1, () =>
             {
                 this.distinctions.status = 'visible'
+                for(const item of Object.values(this.distinctions.items))
+                    item.visible = false
 
                 let i = 0
                 const positions = this.distinctions.positions[this.navigation.current.distinctions.length - 1]
@@ -1208,6 +1203,8 @@ export class ProjectsArea extends Area
 
         // State
         this.state = ProjectsArea.STATE_OPENING
+        if(this.frustum)
+            this.frustum.alwaysVisible = true
 
         if(this.stateTransition)
             this.stateTransition.kill()
@@ -1223,7 +1220,7 @@ export class ProjectsArea extends Area
         this.game.inputs.filters.add('cinematic')
 
         // View cinematic
-        this.game.view.cinematic.start(this.cinematic.position, this.cinematic.target)
+        this.game.view.cinematic.start(this.cinematic.position, this.cinematic.target, this.cinematic.nonIdealRatioOffset)
 
         // Interactive point
         this.game.interactivePoints.temporaryHide()
@@ -1280,6 +1277,8 @@ export class ProjectsArea extends Area
         {
             this.state = ProjectsArea.STATE_CLOSED
             this.stateTransition = null
+            if(this.frustum)
+                this.frustum.alwaysVisible = false
         })
 
         // Input filters

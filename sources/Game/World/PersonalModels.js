@@ -6,7 +6,7 @@ export function kit(name)
 {
     const root = new THREE.Group()
     root.name = name
-    const colors = { dark: '#302a3e', white: '#f5eadb', teal: '#397f83', mint: '#87cfb2', wood: '#b77a59', coral: '#da6559', screen: '#153c49', blue: '#667fab', floor: '#b59883', light: '#bdf7de' }
+    const colors = { dark: '#302a3e', white: '#f5eadb', teal: '#397f83', mint: '#87cfb2', wood: '#b77a59', coral: '#da6559', screen: '#153c49', blue: '#667fab', floor: '#b59883', light: '#bdf7de', steel: '#263f58', iceBlue: '#83b7d3', burgundy: '#762e42' }
     const materials = Object.fromEntries(Object.entries(colors).map(([key, value]) => {
         const material = new THREE.MeshStandardMaterial({ color: value, roughness: 0.9, flatShading: true })
         material.name = `personal_${key}`
@@ -37,6 +37,13 @@ export function kit(name)
     {
         return mesh(name, new THREE.CylinderGeometry(radius, radius, height, 10), position, material)
     }
+    function profile(name, outline, depth, position, material, parent = root)
+    {
+        const shape = new THREE.Shape(outline.map(([x, y]) => new THREE.Vector2(x, y)))
+        const geometry = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false })
+        geometry.translate(0, 0, -depth / 2)
+        return mesh(name, geometry, position, material, parent)
+    }
     function sphere(name, radius, position, material = 'white')
     {
         return mesh(name, new THREE.IcosahedronGeometry(radius, 1), position, material)
@@ -54,13 +61,13 @@ export function kit(name)
         mesh(`${name}Frame`,new THREE.BoxGeometry(size[0]+0.16,size[1]+0.16,0.12),[0,0,0],'dark',group)
         return mesh(name,new THREE.PlaneGeometry(...size),[0,0,0.07],'screen',group)
     }
-    return { root, materials, colliders, mesh, box, cylinder, sphere, panel, display }
+    return { root, materials, colliders, mesh, box, cylinder, profile, sphere, panel, display }
 }
 
 export function buildCourt()
 {
     const k = kit('refAiCourt')
-    k.box('tableTop', [3.4,0.16,5.4], [0,1.55,0], 'teal', true)
+    k.box('tableTop', [3.4,0.16,5.4], [0,1.55,0], 'steel', true)
     for(const x of [-1.55,1.55]) k.box('sideline', [0.035,0.015,5.15], [x,1.638,0], 'white')
     for(const z of [-2.55,2.55]) k.box('baseline', [3.12,0.015,0.035], [0,1.638,z], 'white')
     k.box('centerline', [0.035,0.015,5.15], [0,1.638,0], 'white')
@@ -71,7 +78,7 @@ export function buildCourt()
     for(let i=0;i<4;i++) k.box('netString',[3.65,0.015,0.02],[0,1.66+i*0.15,0],'white')
     for(const x of [-3.3,3.3])
     {
-        k.box('cameraPost',[0.1,3.7,0.1],[x,1.9,-2.5],'dark',true)
+        k.box('cameraPost',[0.24,3.7,0.24],[x,1.9,-2.5],'steel',true)
         k.box('cameraArm',[1.3,0.1,0.1],[x-Math.sign(x)*0.6,3.73,-2.5],'dark')
         k.box('trackingCamera',[0.35,0.2,0.3],[x-Math.sign(x)*1.2,3.6,-2.5],'white')
         k.box('cameraLens',[0.16,0.06,0.16],[x-Math.sign(x)*1.2,3.47,-2.5],'mint')
@@ -88,8 +95,8 @@ export function buildCourt()
     k.box('scoreboardFrame',[3.4,1.55,0.18],[0,3.65,-3.65],'dark')
     k.box('scoreboardPost',[0.16,2.9,0.16],[0,1.5,-3.65],'dark',true)
     const score = k.panel('scoreboard',[3.1,1.28],[0,3.65,-3.55])
-    const ball = k.sphere('trackedBall',0.11,[0,2.25,2.5])
-    const trail = Array.from({length:8},(_,i)=>k.sphere(`ballTrail${i}`,0.04,[0,2.25,2.5],'mint'))
+    const ball = k.sphere('trackedBall',0.11,[0,2.25,2.5],'amberGlow')
+    const trail = Array.from({length:8},(_,i)=>k.sphere(`ballTrail${i}`,0.07 - i * 0.006,[0,2.25,2.5],i < 3 ? 'amberGlow' : 'glow'))
     return { ...k, score, ball, trail, paddles, ...courtDetails(k) }
 }
 
@@ -189,7 +196,7 @@ export function buildContextBridge()
     k.box('linkBase',[4.6,0.18,0.3],[0,0.85,0.25],'dark')
     k.box('illuminatedLink',[4.6,0.07,0.13],[0,0.98,0.25],'glow')
     k.cylinder('memoryPedestal',0.65,0.8,[0,0.45,0.25],'dark')
-    const memory=k.box('compressedMemory',[0.55,0.55,0.55],[0,1.6,0.25],'glow')
+    const memory=k.mesh('compressedMemory',new THREE.OctahedronGeometry(0.42),[0,1.6,0.25],'glow')
     const cards=Array.from({length:6},(_,i)=>k.box(`contextCard${i}`,[0.18,0.18,0.18],[-2.35,1.6+i*0.08,0.4],'glow'))
     const sign=k.display('contextBridgeSign',[3.6,1.15],[0,3.65,-1.8])
     const pulses=Array.from({length:10},(_,i)=>k.sphere(`linkPulse${i}`,0.065,[0,1.05,0.25],'glow'))
@@ -197,10 +204,54 @@ export function buildContextBridge()
 }
 
 
+function rinkIceTexture()
+{
+    const size = 192
+    const pixels = new Uint8Array(size * size * 4)
+    const cuts = [
+        [-0.76, -0.20, 0.49, 0.12], [-0.64, -0.16, 0.50, 0.12],
+        [-0.52, 0.44, 0.69, -0.23], [0.02, 0.37, 0.63, -0.25],
+        [-0.23, -0.43, 0.74, 0.17], [0.18, 0.55, 0.46, -0.10],
+    ]
+    for(let row = 0; row < size; row++)
+    {
+        const z = row / (size - 1) * 2 - 1
+        for(let col = 0; col < size; col++)
+        {
+            const x = col / (size - 1) * 2 - 1
+            const edge = Math.hypot(x, z) + Math.sin(x * 11 + z * 14) * 0.034 + Math.sin(x * 23 - z * 9) * 0.017
+            const frost = THREE.MathUtils.smoothstep(edge, 0.58, 1.02)
+            const sheen = Math.sin(x * 7 - z * 5) * 3 + Math.sin(x * 22 + z * 31) * 1.8
+            let scratch = 0
+            for(const [start, depth, length, curve] of cuts)
+            {
+                const progress = (x - start) / length
+                if(progress <= 0 || progress >= 1) continue
+                const distance = Math.abs(z - depth - curve * progress * progress)
+                scratch = Math.max(scratch, (1 - THREE.MathUtils.smoothstep(distance, 0.003, 0.018)) * Math.sin(Math.PI * progress))
+            }
+            const index = (row * size + col) * 4
+            const highlight = sheen + scratch * 18
+            pixels[index] = 106 + frost * 81 + highlight
+            pixels[index + 1] = 155 + frost * 51 + highlight
+            pixels[index + 2] = 174 + frost * 40 + highlight
+            pixels[index + 3] = 255
+        }
+    }
+    const texture = new THREE.DataTexture(pixels, size, size)
+    texture.colorSpace = THREE.SRGBColorSpace
+    texture.magFilter = THREE.LinearFilter
+    texture.minFilter = THREE.LinearMipmapLinearFilter
+    texture.generateMipmaps = true
+    texture.needsUpdate = true
+    return texture
+}
+
 export function buildSkatingRink()
 {
     const k=kit('skatingRink')
-    k.materials.ice=new THREE.MeshStandardMaterial({color:'#bdeaf1',roughness:0.32,metalness:0.05,flatShading:true})
+    k.materials.ice=new THREE.MeshStandardMaterial({map:rinkIceTexture()})
+    k.materials.ice.name = 'personal_rinkIce'
     const ice=k.mesh('iceSurface',new THREE.CylinderGeometry(1,1,0.22,48),[0,0,0],'ice')
     ice.scale.set(8,1,6.5)
     // An exact oval collider keeps the neighboring shore and paths unchanged.
@@ -217,12 +268,10 @@ export function buildSkatingRink()
         const board=k.box('rinkBoard',[Math.hypot(x2-x1,z2-z1)+0.05,1.15,0.22],[(x1+x2)/2,0.66,(z1+z2)/2],'white')
         board.rotation.y=-Math.atan2(z2-z1,x2-x1)
         k.colliders.push({shape:'cuboid',parameters:[board.geometry.parameters.width/2,0.575,0.11],position:{x:board.position.x,y:board.position.y,z:board.position.z},quaternion:new THREE.Quaternion().setFromEuler(board.rotation)})
-        const trim=k.box('rinkRail',[board.geometry.parameters.width,0.08,0.26],[(x1+x2)/2,1.27,(z1+z2)/2],i%6<3?'teal':'coral')
+        const atEntrance = i === 3 || i === 9 || i === 15 || i === 45
+        const trim=k.box('rinkRail',[board.geometry.parameters.width,0.08,0.26],[(x1+x2)/2,1.27,(z1+z2)/2],atEntrance?'teal':'wood')
         trim.rotation.y=board.rotation.y
     }
-    const circle=k.mesh('iceCenterRing',new THREE.RingGeometry(1.5,1.55,40),[0,0.115,0],'white')
-    circle.rotation.x=-Math.PI/2
-    for(const x of [-4,4]) k.box('iceStripe',[0.06,0.012,8],[x,0.115,0],'white')
     for(const x of [2.25,3.75]) k.box('rinkSignPost',[0.15,1.55,0.15],[x,0.73,7],'wood')
     k.box('rinkSignFrame',[2.1,0.9,0.18],[3,1.55,7],'wood')
     const sign=k.panel('rinkSign',[1.88,0.68],[3,1.55,7.1])
@@ -265,21 +314,24 @@ export function buildSentinel()
     const badge=k.mesh('zbChestBadge',new THREE.PlaneGeometry(1.1,0.64),[0,0.25,1.01],'screen',torso)
     const reactor=k.mesh('chestReactor',new THREE.IcosahedronGeometry(0.23,0),[0,-0.35,0.8],'glow',torso)
     const head=new THREE.Group();head.position.set(0,1.75,0);torso.add(head)
-    part('helmet',[1.12,0.96,0.95],[0,0,0],'teal',head)
+    k.profile('helmet', [[-0.52,-0.42],[-0.64,0.13],[-0.38,0.49],[0.38,0.49],[0.64,0.13],[0.52,-0.42]], 0.95, [0,0,0], 'steel', head)
     part('helmetCrest',[0.22,0.4,0.7],[0,0.57,-0.05],'white',head)
     part('faceMask',[0.64,0.4,0.12],[0,-0.21,0.52],'white',head)
     part('visor',[0.88,0.16,0.08],[0,0.12,0.52],'glow',head)
-    for(const side of [-1,1]) part('earFin',[0.18,1.1,0.25],[side*0.66,0.2,0],'coral',head)
+    for(const side of [-1,1])
+        k.profile('helmetFin', [[0.49,-0.27],[0.53,0.36],[0.81,0.82],[0.75,0.06],[0.65,-0.26]].map(([x,y])=>[side*x,y]), 0.33, [0,0,-0.14], 'coral', head)
     const arms=[],wheels=[],wings=[], turbines=[]
     for(const side of [-1,1])
     {
         const arm=new THREE.Group();arm.position.set(side*1.65,1,0);torso.add(arm);arms.push(arm)
-        part('shoulderArmor',[1.25,0.85,1.25],[side*0.1,0,0],'coral',arm)
-        part('shoulderCap',[1.35,0.18,1.35],[side*0.1,0.52,0],'white',arm)
+        const shoulder = [[-0.52,-0.31],[0.67,-0.36],[0.94,0.26],[0.42,0.67],[-0.41,0.45]]
+        k.profile('shoulderArmor', shoulder.map(([x,y])=>[side*x,y]), 1.3, [0,0,0], 'burgundy', arm)
+        const shoulderPanel = [[-0.37,0.28],[0.4,0.51],[0.75,0.24],[0.59,0.02],[-0.3,-0.1]]
+        k.profile('shoulderPanel', shoulderPanel.map(([x,y])=>[side*x,y]), 0.08, [0,0,0.66], 'white', arm)
         part('upperArm',[0.58,1.05,0.65],[0,-0.8,0],'dark',arm)
         k.mesh('elbow',new THREE.IcosahedronGeometry(0.34,1),[0,-1.4,0],'white',arm)
         const forearm=new THREE.Group();forearm.position.set(0,-1.4,0);arm.add(forearm);arm.userData.forearm=forearm
-        part('forearmArmor',[0.85,0.95,0.85],[0,-0.5,0.05],'teal',forearm)
+        k.profile('forearmArmor', [[-0.47,0.38],[0.47,0.38],[0.39,-0.38],[0.23,-0.51],[-0.23,-0.51],[-0.39,-0.38]], 0.9, [0,-0.5,0.05], 'steel', forearm)
         part('forearmLight',[0.14,0.55,0.06],[0,-0.5,0.51],'glow',forearm)
         part('fist',[0.65,0.5,0.7],[0,-1.2,0.05],'dark',forearm)
         for(let i=0;i<3;i++) part('knuckle',[0.14,0.25,0.1],[-0.2+i*0.2,-1.2,0.44],'white',forearm)
@@ -287,8 +339,11 @@ export function buildSentinel()
         wheel.rotation.z=Math.PI/2;wheels.push(wheel)
         k.mesh('wheelHub',new THREE.CylinderGeometry(0.24,0.24,0.255,8),[0,0,0],'white',wheel)
         const wing=new THREE.Group();wing.position.set(side*0.95,0.6,-0.7);torso.add(wing);wings.push(wing)
-        part('vehicleWing',[0.9,1.85,0.2],[side*0.4,0.35,0],'teal',wing)
-        part('wingStripe',[0.1,1.5,0.04],[side*0.48,0.35,-0.13],'glow',wing)
+        // Swept bodywork opens with the existing power-up animation.
+        const wingOutline = [[0,-0.84],[0.17,0.28],[0.62,1.45],[1.24,2.15],[1.07,0.52],[0.5,-0.68]]
+        k.profile('vehicleWing', wingOutline.map(([x,y])=>[side*x,y]), 0.24, [0,0,0], 'steel', wing)
+        const wingInlay = [[0.3,0.1],[0.79,1.21],[1.06,1.69],[0.91,1.05],[0.39,0.04]]
+        k.profile('wingInlay', wingInlay.map(([x,y])=>[side*x,y]), 0.026, [0,0,0.13], 'glow', wing)
         wing.rotation.z=-side*0.35
         const turbine=k.mesh('backpackTurbine',new THREE.TorusGeometry(0.38,0.12,6,12),[side*0.6,0.5,-1],'white',torso)
         const rotor=new THREE.Group();rotor.position.copy(turbine.position);torso.add(rotor);turbines.push(rotor)

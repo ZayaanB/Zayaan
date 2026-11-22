@@ -27,11 +27,16 @@ export const atlasCities = [
 export function buildAtlas(earthTexture)
 {
     const k = kit('atlasObservatory')
-    k.cylinder('observatoryBase', 4.5, 0.28, [0, 0.14, 0], 'dark')
+    const brass = new THREE.MeshStandardMaterial({ color: '#c58f52', roughness: 0.82, flatShading: true })
+    brass.name = 'personal_atlasBrass'
+    k.materials.brass = brass
+    k.mesh('observatoryBase', new THREE.CylinderGeometry(4.5, 4.5, 0.28, 32), [0, 0.14, 0], 'steel')
     k.colliders.push({ shape: 'cylinder', parameters: [0.14, 4.5], position: { x: 0, y: 0.14, z: 0 } })
-    k.cylinder('observatoryInlay', 4.3, 0.04, [0, 0.30, 0], 'teal')
-    k.cylinder('pedestalFoot', 1.3, 0.24, [0, 0.44, 0], 'dark')
-    k.cylinder('globePedestal', 0.7, 1.6, [0, 1.25, 0], 'dark')
+    k.mesh('observatoryInlay', new THREE.CylinderGeometry(4.28, 4.4, 0.08, 32), [0, 0.30, 0], 'dark')
+    const compass = k.mesh('compassRim', new THREE.TorusGeometry(4.2, 0.035, 6, 80), [0, 0.35, 0], 'brass')
+    compass.rotation.x = Math.PI / 2
+    k.mesh('pedestalFoot', new THREE.CylinderGeometry(1.05, 1.3, 0.28, 12), [0, 0.46, 0], 'brass')
+    k.mesh('globePedestal', new THREE.CylinderGeometry(0.58, 0.92, 1.6, 10), [0, 1.25, 0], 'steel')
     k.colliders.push({ shape: 'cylinder', parameters: [1.1, 1.3], position: { x: 0, y: 1.1, z: 0 } })
     k.cylinder('pedestalCollar', 0.82, 0.10, [0, 1.93, 0], 'glow')
 
@@ -39,8 +44,20 @@ export function buildAtlas(earthTexture)
     tilted.position.y = 4.65
     tilted.rotation.z = THREE.MathUtils.degToRad(23.4)
     k.root.add(tilted)
-    const meridian = k.mesh('meridianFrame', new THREE.TorusGeometry(2.92, 0.045, 8, 80), [0, 0, 0], 'wood', tilted)
+    const meridian = k.mesh('meridianFrame', new THREE.TorusGeometry(2.92, 0.105, 8, 80), [0, 0, 0], 'brass', tilted)
     meridian.rotation.y = Math.PI / 2
+    const cradle = k.mesh('meridianCradle', new THREE.TorusGeometry(3.09, 0.17, 8, 40, Math.PI), [0, 0, 0], 'steel', tilted)
+    cradle.rotation.z = Math.PI
+    const ringTrim = k.mesh('cradleInlay', new THREE.TorusGeometry(3.1, 0.026, 6, 40, Math.PI), [0, 0, 0.15], 'amberGlow', tilted)
+    ringTrim.rotation.z = Math.PI
+    for(const side of [-1, 1])
+    {
+        const hinge = k.mesh('gimbalHinge', new THREE.CylinderGeometry(0.26, 0.26, 0.48, 12), [side * 2.99, 0, 0], 'brass', tilted)
+        hinge.rotation.z = Math.PI / 2
+        k.mesh('axisCap', new THREE.SphereGeometry(0.14, 10, 8), [0, side * 2.88, 0], 'amberGlow', tilted)
+    }
+    const latitudeBand = k.mesh('latitudeBand', new THREE.TorusGeometry(2.67, 0.028, 6, 80), [0, 0, 0], 'iceBlue', tilted)
+    latitudeBand.rotation.x = Math.PI / 2
     const globe = new THREE.Group()
     tilted.add(globe)
 
@@ -71,7 +88,7 @@ export function buildAtlas(earthTexture)
             return a.clone().lerp(b, t).normalize().multiplyScalar(2.44 + Math.sin(t * Math.PI) * 0.40)
         })
         const curve = new THREE.CatmullRomCurve3(points)
-        k.mesh('storyConnection', new THREE.TubeGeometry(curve, 40, 0.012, 4, false), [0, 0, 0], 'glow', globe)
+        k.mesh('storyConnection', new THREE.TubeGeometry(curve, 40, 0.018, 5, false), [0, 0, 0], 'glow', globe)
         const packet = k.mesh('sourceSignal', new THREE.SphereGeometry(0.045, 6, 4), [0, 0, 0], 'amberGlow', globe)
         return { curve, packet }
     })
@@ -83,7 +100,10 @@ export function buildAtlas(earthTexture)
         const mark = k.box('compassTick', [0.035, 0.025, i % 6 === 0 ? 0.4 : 0.18], [Math.sin(angle) * 3.9, 0.335, Math.cos(angle) * 3.9], i % 6 === 0 ? 'glow' : 'white')
         mark.rotation.y = angle
     }
-    k.box('atlasConsole', [3.8, 0.95, 0.5], [0, 0.85, 3.35], 'dark', true)
+    k.box('atlasConsole', [3.8, 0.95, 0.5], [0, 0.85, 3.35], 'steel', true)
+    k.profile('atlasConsoleTrim', [[-1.98,-0.06],[-1.78,0.16],[1.78,0.16],[1.98,-0.06]], 0.48, [0, 1.54, 3.36], 'brass')
+    for(const x of [-1.65, 1.65])
+        k.box('consoleInlay', [0.28, 0.042, 0.03], [x, 0.65, 3.63], 'amberGlow')
     const sign = k.display('atlasSign', [3.5, 0.8], [0, 1.13, 3.62])
-    return { ...k, globe, hotspots, routes, sign }
+    return { ...k, tilted, globe, hotspots, routes, sign }
 }
