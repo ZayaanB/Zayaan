@@ -1,16 +1,16 @@
 export default [
     {
         title: 'AMD',
-        subtitle: 'Software Engineer Intern (HIP Runtime)',
-        role: 'Software Engineer Intern', specialization: 'HIP Runtime', dates: 'May 2027 – Aug. 2027',
+        subtitle: 'Software Engineer Intern (GPU Software/HIP Runtime)',
+        role: 'Software Engineer Intern', specialization: 'GPU Software/HIP Runtime', dates: 'May 2027 – Aug. 2027',
         url: 'https://www.linkedin.com/in/zayaan-bhan',
         image: 'amd.png',
         imageMini: 'amd-mini.png'
     },
     {
         title: 'Autodesk',
-        subtitle: 'Software Developer Intern (Backend/Platform)',
-        role: 'Software Developer Intern', specialization: 'Backend/Platform', dates: 'Jan. 2027 – Apr. 2027',
+        subtitle: 'Software Developer Intern (Backend/Cloud Platform)',
+        role: 'Software Developer Intern', specialization: 'Backend/Cloud Platform', dates: 'Jan. 2027 – Apr. 2027',
         url: 'https://www.linkedin.com/in/zayaan-bhan',
         image: 'autodesk.png',
         imageMini: 'autodesk-mini.png'

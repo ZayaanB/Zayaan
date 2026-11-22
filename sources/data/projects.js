@@ -8,7 +8,7 @@ export default [
         {
             role: 'Backend & Gemini Developer',
             at: 'Hack the Valley',
-            with: 'TypeScript · Fastify · Gemini · PostgreSQL'
+            with: ['TypeScript · Fastify', 'Gemini · PostgreSQL']
         },
         distinctions: [ ],
         images: [ 'atlas.png' ]
@@ -27,7 +27,7 @@ export default [
         distinctions: [ ],
         images:
         [
-            'kvstore.png',
+            'kvstore-cover.webp',
         ]
     },
     {
@@ -44,7 +44,7 @@ export default [
         distinctions: [ ],
         images:
         [
-            'context-sync.png',
+            'context-sync-cover.webp',
         ]
     },
     {
@@ -61,7 +61,7 @@ export default [
         distinctions: [ ],
         images:
         [
-            'halo-healthcare.png',
+            'halo-healthcare-cover.webp',
         ]
     },
     {
@@ -78,7 +78,7 @@ export default [
         distinctions: [ ],
         images:
         [
-            'refai.png',
+            'refai-cover.webp',
         ]
     }
 ]

@@ -13,6 +13,10 @@ export class AtlasExhibit
         const earthTexture = this.game.resourcesLoader.getLoader('texture').load('atlas/earth.png')
         earthTexture.colorSpace = THREE.SRGBColorSpace
         this.model = mountExhibit(this.game, buildAtlas(earthTexture), this.origin)
+        this.model.globe.rotation.y = 0.3
+        this.lastUpdateAt = null
+        this.observer = new THREE.Vector3()
+        this.inverseTilt = this.model.tilted.quaternion.clone().invert()
         this.game.respawns.items.set('atlas', {
             name: 'atlas',
             position: this.origin.clone().add(new THREE.Vector3(0, 4, 6)),
@@ -39,7 +43,8 @@ export class AtlasExhibit
     {
         if(this.game.player.position.distanceTo(this.origin) > 65) return
         const time = this.game.ticker.elapsedScaled
-        this.model.globe.rotation.y = time * 0.075 + 0.3
+        const deltaTime = this.lastUpdateAt === null ? 0 : THREE.MathUtils.clamp(time - this.lastUpdateAt, 0, 0.1)
+        this.lastUpdateAt = time
         const elapsed = this.startedAt === null ? null : time - this.startedAt
         const activeIndex = elapsed === null ? -1 : Math.floor(elapsed / 1.5)
         if(elapsed !== null && activeIndex >= atlasCities.length)
@@ -48,6 +53,21 @@ export class AtlasExhibit
         {
             this.phase = activeIndex
             screenLabel(this.model.sign, ['ATLAS', atlasCities[activeIndex].name, 'ILLUSTRATIVE STORY SCAN'], '#ffc878', '#102c40')
+        }
+
+        const globeRotation = this.model.globe.rotation
+        if(this.startedAt === null)
+        {
+            globeRotation.y += deltaTime * 0.075
+        }
+        else
+        {
+            const marker = this.model.hotspots[this.phase].marker.position
+            this.observer.copy(this.game.view.camera.position).sub(this.origin).sub(this.model.tilted.position).applyQuaternion(this.inverseTilt)
+            const bearing = Math.atan2(marker.z, marker.x) - Math.atan2(this.observer.z, this.observer.x)
+            const difference = bearing - globeRotation.y
+            const shortestTurn = Math.atan2(Math.sin(difference), Math.cos(difference))
+            globeRotation.y += shortestTurn * (1 - Math.exp(-5 * deltaTime))
         }
 
         this.model.hotspots.forEach(({ marker, ring }, i) => {

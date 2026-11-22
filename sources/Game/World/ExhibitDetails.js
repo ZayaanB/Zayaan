@@ -13,16 +13,24 @@ function path(k, name, points, material, radius = 0.025)
 
 export function workshopDetails(k)
 {
-    k.box('labDeck', [5.05, 0.06, 5.45], [0, 0.055, -0.3], 'dark')
-    for(const x of [-2.35, 2.35])
+    k.box('labDeck', [5.05, 0.06, 5.45], [0, 0.055, -0.3], 'steel')
+    k.profile('vaultCrown', [[-2.42, 0], [-1.86, 0.47], [1.86, 0.47], [2.42, 0], [1.9, -0.17], [-1.9, -0.17]], 0.55, [0, 4.43, -2.74], 'steel')
+    k.box('vaultCrownLight', [3.53, 0.055, 0.035], [0, 4.63, -2.45], 'glow')
+    for(const side of [-1, 1])
     {
+        const x = side * 2.35
+        k.box('vaultColumn', [0.32, 4.45, 0.43], [side * 2.23, 2.225, -2.74], 'steel', true)
+        k.box('vaultColumnInlay', [0.07, 3.5, 0.025], [side * 2.23, 2.32, -2.51], 'glow')
+        k.box('vaultDeckApron', [0.13, 0.47, 4.9], [side * 2.46, -0.24, -0.3], 'steel')
         k.box('rackEdgeLight', [0.035, 0.025, 4.9], [x, 0.1, -0.3], 'glow')
-        path(k, 'coolantLoop', [[x, 0.2, -1.9], [x, 2.85, -2.1], [x * 0.75, 3.12, -2.1], [x * 0.52, 2.8, -2.1]], 'teal', 0.065)
+        path(k, 'coolantLoop', [[side * 2.17, 0.2, -1.9], [side * 2.17, 2.85, -2.1], [side * 1.71, 3.26, -2.1], [side * 1.2, 2.77, -2.1]], 'iceBlue', 0.075)
         for(const y of [0.5, 1.15, 1.8, 2.45])
-            k.box('coolantCoupling', [0.18, 0.08, 0.18], [x, y, -2.0], 'white')
+            k.box('coolantCoupling', [0.18, 0.08, 0.18], [side * 2.17, y, -2.0], 'white')
     }
     for(const x of [-1.2, 1.2])
     {
+        k.profile('rackHood', [[-0.63, 0], [-0.43, 0.33], [0.43, 0.33], [0.63, 0]], 0.82, [x, 2.69, -2], 'steel')
+        k.box('rackHoodLight', [0.72, 0.055, 0.04], [x, 2.83, -1.57], 'iceBlue')
         ring(k, 'fanHousing', 0.24, 0.035, [x, 2.51, -1.51], 'teal')
         for(const side of [-1, 1])
             k.box('rackStatusStrip', [0.025, 2.15, 0.025], [x + side * 0.55, 1.45, -1.54], 'glow')
@@ -34,8 +42,9 @@ export function workshopDetails(k)
     for(let i = 0; i < 16; i++)
     {
         const x = (i % 8 - 3.5) * 0.49, z = 1.65 + Math.floor(i / 8) * 0.5
-        k.box('shardSocket', [0.42, 0.08, 0.4], [x, 0.14, z], 'blue')
-        shards.push(k.box('shardActivity', [0.27, 0.025, 0.25], [x, 0.195, z], i < 8 ? 'glow' : 'amberGlow'))
+        k.box('shardSocket', [0.44, 0.16, 0.42], [x, 0.16, z], 'blue')
+        k.box('shardRecess', [0.34, 0.025, 0.32], [x, 0.245, z], 'steel')
+        shards.push(k.box('shardActivity', [0.27, 0.025, 0.25], [x, 0.266, z], i < 8 ? 'glow' : 'amberGlow'))
     }
     const journal = new THREE.Group()
     journal.position.set(1.85, 0.62, 0.65)
@@ -44,20 +53,31 @@ export function workshopDetails(k)
         k.mesh('journalPlatter', new THREE.CylinderGeometry(0.35, 0.35, 0.055, 24), [0, i * 0.15, 0], i % 2 ? 'amberGlow' : 'dark', journal)
     k.box('journalCradle', [0.85, 0.12, 0.85], [1.85, 0.23, 0.65], 'white')
     const journalLabel = k.display('journalLabel', [0.9, 0.38], [1.85, 1.44, 0.65])
-    const shardLabel = k.display('shardLabel', [2.2, 0.38], [0, 0.6, 2.35])
-    for(const x of [-2.05, 2.05]) k.box('headerSupport', [0.08, 3.65, 0.08], [x, 1.9, -2.75], 'teal')
-    k.box('headerTruss', [4.2, 0.12, 0.12], [0, 3.66, -2.75], 'dark')
+    const shardLabel = k.display('shardLabel', [2.2, 0.38], [0, 0.6, 1.3])
+    k.box('vaultSignBacking', [3.43, 0.93, 0.19], [0, 3.8, -3.17], 'steel')
     return { shards, journal, journalLabel, shardLabel }
 }
 
 export function contextDetails(k, cards)
 {
-    k.box('bridgeDeck', [6.95, 0.06, 5.5], [0, 0.07, 0], 'dark')
-    for(const x of [-3.22, 3.22]) k.box('bridgeEdgeLight', [0.045, 0.03, 4.9], [x, 0.12, 0], 'glow')
+    k.box('bridgeDeck', [6.95, 0.06, 5.5], [0, 0.07, 0], 'steel')
+    const gateArm = [[2.9, 0], [3.42, 0], [3.42, 3.34], [2.08, 4.69], [1.45, 4.69], [2.9, 3.05]]
+    const gateInlay = [[3.12, 0.45], [3.2, 0.45], [3.2, 3.24], [1.97, 4.49], [1.86, 4.49], [3.12, 3.21]]
+    k.box('gatewayCrown', [4.17, 0.36, 0.42], [0, 4.51, -1.9], 'steel')
+    for(const side of [-1, 1])
+    {
+        const accent = side < 0 ? 'glow' : 'amberGlow'
+        k.profile('gatewayArm', gateArm.map(([x, y]) => [side * x, y]), 0.45, [0, 0, -1.9], 'steel')
+        k.profile('gatewayInlay', gateInlay.map(([x, y]) => [side * x, y]), 0.028, [0, 0, -1.67], accent)
+        k.box('gatewayFoot', [0.56, 0.2, 0.56], [side * 3.16, 0.13, -1.9], 'steel', true)
+        k.box('bridgeEdgeLight', [0.045, 0.03, 4.9], [side * 3.22, 0.12, 0], accent)
+        k.box('gatewayCrownLight', [1.88, 0.055, 0.025], [side, 4.51, -1.68], accent)
+    }
     const portals = []
     for(const [i, x] of [-2.35, 2.35].entries())
     {
         ring(k, 'terminalPortalFrame', 1.03, 0.085, [x, 2, -0.2], 'dark')
+        ring(k, 'terminalPortalRim', 1.12, 0.045, [x, 2, -0.24], 'iceBlue')
         const portal = ring(k, 'terminalPortal', 1.03, 0.025, [x, 2, -0.09], i ? 'amberGlow' : 'glow')
         portals.push(portal)
         for(let tick = 0; tick < 8; tick++)
@@ -94,7 +114,7 @@ export function contextDetails(k, cards)
     })
     for(const x of [-1.75, 1.75])
         path(k, 'contextConduit', [[x, 0.13, 1.1], [x, 0.13, 1.65], [0, 0.13, 1.65], [0, 0.13, 0.7]], 'teal', 0.035)
-    for(const x of [-1.9, 1.9]) k.box('bridgeSignPost', [0.08, 3.3, 0.08], [x, 1.75, -1.8], 'teal')
+    k.box('gatewaySignMount', [3.94, 0.17, 0.25], [0, 4.35, -1.93], 'steel')
     return { gyros, portals, cage }
 }
 
@@ -148,7 +168,10 @@ export function healthcareDetails(k)
 
 export function courtDetails(k)
 {
-    k.box('courtDeck', [9, 0.1, 8], [0, 0.05, 0], 'dark')
+    k.box('courtDeck', [9, 0.1, 8], [0, 0.05, 0], 'steel')
+    k.box('playingArea', [5.6, 0.025, 6.65], [0, 0.11, 0], 'dark')
+    k.profile('broadcastGantry', [[-3.69,0],[-3.29,0.44],[3.29,0.44],[3.69,0],[3.28,-0.16],[-3.28,-0.16]], 0.54, [0, 5.11, -2.81], 'steel')
+    k.box('broadcastStrip', [6.35, 0.065, 0.03], [0, 5.24, -2.53], 'amberGlow')
     for(const x of [-4.2, 4.2]) k.box('courtBoundaryLight', [0.04, 0.025, 7.4], [x, 0.11, 0], 'glow')
     for(const z of [-3.7, 3.7]) k.box('courtBoundaryLight', [8.4, 0.025, 0.04], [0, 0.11, z], 'glow')
     for(const x of [-1.68, 1.68])
@@ -163,12 +186,19 @@ export function courtDetails(k)
     const cameraLabels = [], cameraLights = []
     for(const x of [-3.3, 3.3])
     {
+        k.box('cameraPylonCap', [0.34, 1.39, 0.54], [x, 4.425, -2.65], 'steel')
+        k.box('cameraPylonLight', [0.11, 1.0, 0.035], [x, 4.43, -2.363], 'glow')
         const lensX = x - Math.sign(x) * 1.2
         const lens = ring(k, 'trackingLensRing', 0.14, 0.022, [lensX, 3.44, -2.5], 'glow')
         lens.rotation.x = Math.PI / 2
         cameraLights.push(k.box('cameraStatus', [0.065, 0.045, 0.045], [lensX + 0.12, 3.62, -2.33], 'amberGlow'))
         cameraLabels.push(k.display('trackingStation', [1.32, 0.64], [x, 2.7, -2.35]))
-        k.box('sensorPostStripe', [0.035, 2.5, 0.035], [x, 1.9, -2.43], 'teal')
+        k.box('sensorPostStripe', [0.04, 2.5, 0.035], [x, 1.9, -2.37], 'glow')
+        for(let i = 0; i < 4; i++)
+        {
+            const dash = k.box('serviceLaneDash', [0.36, 0.014, 0.09], [x, 0.114, 0.35 + i * 0.73], 'iceBlue')
+            dash.rotation.y = Math.sign(x) * Math.PI / 4
+        }
     }
     const target = new THREE.Group()
     k.root.add(target)
@@ -190,8 +220,8 @@ export function courtDetails(k)
     const trackingRays = new THREE.LineSegments(geometry, material)
     trackingRays.frustumCulled = false
     k.root.add(trackingRays)
-    for(const x of [-1.55, 1.55]) k.box('scoreboardSupport', [0.1, 3.15, 0.1], [x, 1.65, -3.65], 'teal')
-    k.box('scoreboardAccent', [3.2, 0.035, 0.025], [0, 4.35, -3.53], 'glow')
+    for(const x of [-1.55, 1.55]) k.box('scoreboardSupport', [0.1, 3.15, 0.1], [x, 1.65, -3.65], 'steel')
+    k.box('scoreboardAccent', [3.2, 0.035, 0.025], [0, 4.35, -3.53], 'amberGlow')
     return { cameraLabels, cameraLights, target, landingRing, trackingRays }
 }
 
@@ -224,6 +254,11 @@ export function sentinelDetails(k, torso, head, arms)
     arms[0].userData.forearm.add(shield)
     ring(k, 'wristShieldOuter', 0.65, 0.022, [0, 0, 0], 'glow', shield)
     ring(k, 'wristShieldInner', 0.48, 0.015, [0, 0, 0], 'amberGlow', shield)
+    const shieldMaterial = new THREE.MeshBasicMaterial({ color: '#8fffe4', side: THREE.DoubleSide, transparent: true, opacity: 0.16, depthWrite: false })
+    shieldMaterial.userData.prevent = true
+    const shieldSurface = new THREE.Mesh(new THREE.CircleGeometry(0.64, 24), shieldMaterial)
+    shieldSurface.name = 'wristShieldSurface'
+    shield.add(shieldSurface)
     for(let i = 0; i < 6; i++)
     {
         const a = i * Math.PI / 3

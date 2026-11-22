@@ -2,6 +2,18 @@ import * as THREE from 'three/webgpu'
 
 export function pitDetails(k, car)
 {
+    k.profile('pitCanopy', [[-3.46, 0], [-2.76, 0.4], [2.76, 0.4], [3.46, 0], [2.9, -0.14], [-2.9, -0.14]], 1.12, [0, 4.49, -2.3], 'burgundy')
+    k.box('canopyLeadingEdge', [5.85, 0.045, 0.035], [0, 4.51, -1.73], 'white')
+    for(const side of [-1, 1])
+    {
+        const x = side * 2.85
+        const shoulder = [[2.68, 0], [2.68, 1.24], [2.36, 1.66], [3.04, 1.66], [3.22, 1.25], [3.22, 0]]
+        k.profile('pitShoulder', shoulder.map(([px, py]) => [side * px, py]), 0.28, [0, 2.78, -2.36], 'coral')
+        k.box('pitColumnLight', [0.065, 1.05, 0.03], [x, 3.37, -2.2], 'amberGlow')
+        k.box('pitDeckFascia', [0.055, 0.19, 4.86], [side * 3.57, 0.16, 0], 'burgundy')
+        for(let i = 0; i < 5; i++)
+            k.box('pitGridMark', [0.41, 0.015, 0.065], [side * 2.12, 0.31, -1.28 + i * 0.64], 'white')
+    }
     const lidar = new THREE.Group()
     lidar.position.set(-0.5, 0.78, 0)
     car.add(lidar)
@@ -45,6 +57,15 @@ export function pitDetails(k, car)
 
 export function mappingDetails(k)
 {
+    const pedestal = [[-1.68, 0], [-2.05, 0.32], [-2.48, 1.03], [2.48, 1.03], [2.05, 0.32], [1.68, 0]]
+    k.profile('mappingConsolePedestal', pedestal, 1.68, [0, 0.23, 0], 'steel')
+    k.box('mappingConsoleFascia', [4.98, 0.18, 0.27], [0, 1.185, 1.77], 'burgundy')
+    for(const side of [-1, 1])
+    {
+        const x = side * 2.25
+        k.box('consoleCornerLight', [0.43, 0.045, 0.015], [x, 1.2, 1.913], 'amberGlow')
+        k.box('consoleFoot', [1.25, 0.15, 2.9], [side * 1.72, 0.23, 0], 'burgundy')
+    }
     const corridorEdges = [-1, 1].map(side => {
         const curve = new THREE.CatmullRomCurve3(Array.from({ length: 64 }, (_, i) => {
             const angle = i / 64 * Math.PI * 2
@@ -66,8 +87,8 @@ export function mappingDetails(k)
     const phaseLights = []
     for(let i = 0; i < 3; i++)
     {
-        k.box('mappingPhaseSocket', [0.75, 0.16, 0.3], [-1.1 + i * 1.1, 0.52, 1.98], 'dark')
-        phaseLights.push(k.box('mappingPhaseLight', [0.58, 0.035, 0.14], [-1.1 + i * 1.1, 0.625, 1.98], 'glow'))
+        k.box('mappingPhaseSocket', [0.75, 0.16, 0.3], [-1.1 + i * 1.1, 1.04, 1.98], 'dark')
+        phaseLights.push(k.box('mappingPhaseLight', [0.58, 0.035, 0.14], [-1.1 + i * 1.1, 1.145, 1.98], 'glow'))
     }
     for(const x of [-2.55, 2.55]) k.box('mappingSignPost', [0.07, 2.4, 0.07], [x, 1.55, -1.93], 'teal')
     const legend = k.display('mappingLegend', [2.6, 0.4], [0, 2.2, -1.86])

@@ -27,6 +27,16 @@ export class CareerArea extends Area
         this.setAchievement()
     }
 
+    setObjects()
+    {
+        for(const child of [...this.model.children])
+        {
+            if(child.name.startsWith('refLine') && !Object.hasOwn(careerData, child.userData.texture))
+                child.removeFromParent()
+        }
+        super.setObjects()
+    }
+
     setSounds()
     {
         this.sounds = {}
@@ -91,6 +101,15 @@ export class CareerArea extends Area
         for(const line of this.lines.items)
         {
             line.index = i++
+            if(line.compact)
+            {
+                // Angle the wider panels across the groove so they occupy less of its length.
+                line.textMesh.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), - Math.PI / 10)
+                line.textMesh.scale.x *= 0.82
+                line.textMesh.position.x -= 0.25
+                line.textMesh.position.z = 0
+            }
+            this.setLineLabel(line)
         }
 
         // Debug
@@ -109,6 +128,8 @@ export class CareerArea extends Area
         line.group = group
         line.size = entry && typeof entry.size === 'number' ? entry.size : parseFloat(group.userData.size)
         line.hasEnd = entry && typeof entry.hasEnd === 'boolean' ? entry.hasEnd : group.userData.hasEnd
+        line.compact = entry?.compact ?? false
+        line.label = entry?.label ?? ''
         line.color = group.userData.color
         line.year = entry ? entry.year : null
 
@@ -124,7 +145,12 @@ export class CareerArea extends Area
         line.labelReveal = uniform(0)
 
         line.textMesh = line.stone.children.find(child => child.name.startsWith('careerText'))
-        line.texture = this.createTextTexture(entry ? entry.lines : [], line.textMesh)
+        return line
+    }
+
+    setLineLabel(line)
+    {
+        const labelTexture = this.createTextTexture(line.label, line.textMesh)
 
         const material = new THREE.MeshLambertNodeMaterial({ transparent: true })
         const baseColor = this.lines.colors[line.color] ?? this.lines.colors.blue
@@ -135,7 +161,7 @@ export class CareerArea extends Area
 
             step(baseUv.x, line.labelReveal).lessThan(0.5).discard()
 
-            const textureColor = texture(line.texture, baseUv)
+            const textureColor = texture(labelTexture, baseUv)
 
             const alpha = step(0.1, max(textureColor.r, textureColor.g))
 
@@ -150,21 +176,20 @@ export class CareerArea extends Area
         line.textMesh.castShadow = false
         line.textMesh.receiveShadow = false
         line.textMesh.material = material
-
-        return line
     }
 
-    createTextTexture(lines, textMesh)
+    createTextTexture(label, textMesh)
     {
-        // Match the canvas aspect to the label plane so the text isn't distorted
+        // The GLB signs share a square mesh. Their X/Z scales set the displayed aspect.
+        textMesh.updateWorldMatrix(true, false)
         textMesh.geometry.computeBoundingBox()
-        const size = textMesh.geometry.boundingBox.getSize(new THREE.Vector3())
-        const dims = [ size.x, size.y, size.z ].sort((a, b) => b - a)
-        const aspect = dims[1] > 0 ? dims[0] / dims[1] : 4
+        const dimensions = textMesh.geometry.boundingBox.getSize(new THREE.Vector3())
+        const axis = new THREE.Vector3()
+        const signWidth = dimensions.x * axis.setFromMatrixColumn(textMesh.matrixWorld, 0).length()
+        const signHeight = dimensions.z * axis.setFromMatrixColumn(textMesh.matrixWorld, 2).length()
 
-        const lineCount = Math.max(lines.length, 1)
-        const height = lineCount * 120
-        const width = Math.max(Math.round(height * aspect), 1)
+        const height = 320
+        const width = Math.round(height * signWidth / signHeight)
 
         const canvas = document.createElement('canvas')
         canvas.width = width
@@ -180,33 +205,13 @@ export class CareerArea extends Area
         context.textAlign = 'center'
         context.textBaseline = 'middle'
 
-        const maxWidth = width * 0.9
-        const lineHeight = height / lineCount
-        const fontSize = lineHeight * 0.62
-        context.font = `800 ${fontSize}px "Arial Narrow", "Arial", sans-serif`
-
-        let i = 0
-        for(const line of lines)
-        {
-            const x = width / 2
-            const y = lineHeight * (i + 0.5)
-
-            const measure = context.measureText(line)
-
-            if(measure.width > maxWidth)
-            {
-                const scale = maxWidth / measure.width
-                context.save()
-                context.translate(x, y)
-                context.scale(scale, 1)
-                context.fillText(line, 0, 0)
-                context.restore()
-            }
-            else
-                context.fillText(line, x, y)
-
-            i++
-        }
+        const maxWidth = width * 0.92
+        const fontSize = height * 0.8
+        context.font = `700 ${fontSize}px Arial, sans-serif`
+        const measuredWidth = context.measureText(label).width
+        if(measuredWidth > maxWidth)
+            context.font = `700 ${Math.floor(fontSize * maxWidth / measuredWidth)}px Arial, sans-serif`
+        context.fillText(label, width / 2, height / 2)
 
         const texture = new THREE.Texture(canvas)
         texture.flipY = false
@@ -389,7 +394,7 @@ export class CareerArea extends Area
                 if(!line.isIn)
                 {
                     line.isIn = true
-                    gsap.to(line.labelReveal, { value: 1, duration: 1, delay: 0.3, overwrite: true, ease: 'power2.inOut' })
+                    gsap.to(line.labelReveal, { value: 1, duration: line.compact ? 0.45 : 1, delay: line.compact ? 0 : 0.3, overwrite: true, ease: 'power2.inOut' })
 
                     if(line.year && line.year !== this.year.current)
                     {
