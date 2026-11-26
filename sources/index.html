@@ -283,15 +283,15 @@
                                 </details>
                                 <div class="title">Project Highlights</div>
                                 <p class="text"><strong>Atlas:</strong> A globe-first investigation app connecting news, places, historical measurements, and dated imagery with source-linked Gemini assistance. Find the <strong>Atlas Globe</strong> on the map to explore its observatory.</p>
-                                <p class="text"><strong>Embedded Key-Value Store:</strong> C++, CMake, multithreading, and Linux. Built 16-way sharded locking for 5× read throughput (8M to 40M ops/sec), concurrent reads during disk writes, compaction that reduced disk usage by 45%+, and crash recovery through a checksummed write-ahead log.</p>
+                                <p class="text"><strong>Embedded Key-Value Store:</strong> A C++20 storage engine with 16 disk-backed shards, automatic compaction, and crash recovery. Batching 1,000 writes per disk sync increased throughput from 4.2K to 1.9M ops/sec in a 95%-read benchmark.</p>
                                 <p class="text"><strong>Context Sync Extension:</strong> TypeScript and the VS Code Extension API. Reached 750+ downloads, reduced token use by 25%+ with weighted-graph context selection, and compacted chat summaries by 30%+ with a Markdown schema.</p>
                                 <p class="text">Explore my <strong>Computing Workshop</strong>, <strong>Halo Healthcare pavilion</strong>, and <strong>Ref.AI table tennis court</strong>. Open the map and click a location to travel there. Drive up to a prompt and press Enter to interact.</p>
                                 <details class="text">
                                     <summary><strong>Technical Skills</strong></summary>
                                     <p>Python, Java, JavaScript, C++, C, TypeScript, SQL, Bash, HTML/CSS.</p>
-                                    <p>FastAPI, Express.js, Node.js, React.js, Ember.js, SQLAlchemy, ROS 2.</p>
-                                    <p>Linux, Docker, Git, GitHub, Claude Code, Jira, Confluence.</p>
-                                    <p>PostgreSQL, MySQL, AWS, Azure, GCP, Vercel, Supabase, MongoDB.</p>
+                                    <p>FastAPI, Django, Express.js, Node.js, React.js, SQLAlchemy, ROS 2.</p>
+                                    <p>PostgreSQL, MySQL, Redis, AWS, Azure, Vercel, Supabase, MongoDB.</p>
+                                    <p>Linux, Docker, Git, GitHub, Prometheus, Grafana, Claude Code, Codex.</p>
                                 </details>
                                 <p class="text"><a href="Zayaan_Bhanwadia_Resume.pdf" download>Download my resume</a> for the full details.</p>
                             </div>
@@ -859,7 +859,13 @@
                 <div class="container"><div class="content">
                     <button class="js-close close js-main-focus" aria-label="Close project overview"><img class="icon is-default" src="ui/close.svg" alt=""></button>
                     <h2 class="title">Zayaan’s Computing Workshop</h2>
-                    <p class="text"><strong>Embedded Key-Value Store:</strong> C++, CMake, multithreading, and Linux. Sixteen-way sharded locking delivers 5× read throughput; compaction reduces disk usage by 45%+, with crash recovery through a checksummed write-ahead log.</p><p class="text">Use <strong>KV Store data flow</strong> at this workshop to animate the server racks. Context Sync has its own separate exhibition. The original <strong>Projects</strong> landmark still has the full project carousel.</p><p class="text"><a href="https://github.com/ZayaanB/kvstore" target="_blank" rel="noreferrer">KV Store on GitHub ↗</a></p>
+                    <p class="text"><strong>Embedded Key-Value Store</strong> · C++20, Linux, CMake, multithreading, Prometheus, and Grafana.</p>
+                    <p class="text">I built a storage engine that splits keys across <strong>16 disk-backed shards</strong> and automatically compacts sorted files so reads have fewer files to check.</p>
+                    <p class="text">Syncing writes in batches of 1,000 raised throughput from <strong>4.2K to 1.9M ops/sec</strong> in a 95%-read benchmark. The engine preserved acknowledged writes through <strong>seven simulated crashes</strong> by syncing checksummed write-ahead logs to disk before confirming each write.</p>
+                    <p class="text">In a simulated shard failure, the engine isolated the damaged shard, kept <strong>15 of 16 shards readable</strong>, and restored the damaged shard from a verified backup.</p>
+                    <p class="text">Prometheus and Grafana track throughput, latency, and errors. Database snapshots feed a local MapReduce runner and can be published to versioned Apache Iceberg tables with Spark.</p>
+                    <p class="text">Use <strong>KV Store data flow</strong> at the workshop to animate the server racks.</p>
+                    <p class="text"><a href="https://github.com/ZayaanB/kvstore" target="_blank" rel="noreferrer">KV Store on GitHub ↗</a> · <a href="https://github.com/ZayaanB/kvstore/blob/main/docs/architecture.md" target="_blank" rel="noreferrer">Architecture and benchmark results ↗</a></p>
                 </div></div>
             </div>
 

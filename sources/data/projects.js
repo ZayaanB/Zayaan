@@ -22,7 +22,7 @@ export default [
         {
             role: 'Systems Developer',
             at: 'Personal',
-            with: 'C++ · CMake · Linux'
+            with: ['C++20 · CMake · Linux', 'Prometheus · Grafana']
         },
         distinctions: [ ],
         images:
